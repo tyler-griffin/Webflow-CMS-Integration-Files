@@ -1,0 +1,112 @@
+
+<?
+
+// Create class for grid layout
+$CLASS_GRID = "";
+if(isset($block->settings["AMSD Layout"]) && $block->settings["AMSD Layout"] == "grid-list") {
+	$CLASS_GRID = " grid";
+}
+
+// AMSD Profile View
+// --------------------------------------------------------------------- //
+if($profile) { 
+	// Use $ITEM instead of $profile to match the AMSD listing loop
+	$ITEM = $profile; ?>
+
+	<div class="profile-meta-info-wrapper">
+		
+		<? if(isset($ITEM->focused_img)) {
+			$itemImage = json_decode($ITEM->focused_img);
+		} ?>
+		<? if($itemImage) { ?>
+			<div class="profile-image-wrapper">
+				<div class="amsd-image" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/800');"></div>
+			</div>
+		<? } ?>
+
+		<div class="profile-meta-text-wrapper">
+			<div class="amsd-title-text"><?= $ITEM->title ?></div>
+			<? if(isset($ITEM->sub_title)) { ?>
+				<p class="amsd-meta-text-profile-page"><?= $ITEM->sub_title ?></p>
+			<? } ?>
+			<? if(isset($ITEM->sub_title)) { ?>
+				<p class="amsd-meta-text-profile-page-small"><?= $ITEM->sub_title ?></p>
+			<? } ?>
+		</div>
+
+	</div>
+
+	<div class="profile-text-wrapper">
+		<?= $ITEM->html ?>
+	</div>
+
+	<div class="back-links-wrapper">
+		<a href="<?= $back ?>" class="back-link cms-btn"><span class="button-icon"><i class="fas fa-chevron-left"></i></span> &nbsp; Back to <?= $page->title ?></a>
+	</div>
+
+<? 
+// AMSD Listing View
+// --------------------------------------------------------------------- //
+} else { 
+?>
+	<? if(sizeof($amsd["data"]) > 0) { ?>
+	
+		<div class="amsd-list <?= $CLASS_GRID ?>">	
+			
+			<? foreach($amsd["data"] as $k => $ITEM) { ?>
+			
+				<? // Generate the profile URL
+				$link = isset($block->settings["Slug"]) && strlen(strip_tags($ITEM->html)) > 2 ? amsdProfileSlug($page, $amsd, $ITEM) : '';
+				$link = isset($ITEM->url) ? $ITEM->url : $link; ?>
+			
+				<div class="amsd-item <?= $CLASS_GRID ?>">
+
+					<? $itemImage = false;
+					if(isset($ITEM->focused_img)) {
+						$itemImage = json_decode($ITEM->focused_img);
+					} ?>
+				
+					<? if($itemImage) { ?>
+						<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-image-link w-inline-block <?= $CLASS_GRID ?>" title="<?= $ITEM->title ?>">
+							<div class="amsd-image <?= $CLASS_GRID ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/800');">
+								<? if($link) { ?><div class="hover-overlay"></div><? } ?>
+							</div>
+						</a>
+					<? } ?>
+
+					<div class="amsd-text-wrapper <?= $CLASS_GRID ?>">
+
+						<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-title-text-link <?= $CLASS_GRID ?>"><?= $ITEM->title ?></a>
+
+						<? if(isset($ITEM->sub_title)) { ?>
+							<p class="amsd-meta-text <?= $CLASS_GRID ?>"><?= $ITEM->sub_title ?></p>
+						<? } ?>
+
+						<? $itemPreviewText = false;
+						if($ITEM->preview_text) {
+							$itemPreviewText = nl2br($ITEM->preview_text);
+						} else if(strlen(strip_tags($ITEM->html)) > 2) {
+							$itemPreviewText = character_limiter(strip_tags($ITEM->html), 300);
+						}
+						if(isset($itemPreviewText)) { ?>
+							<p class="amsd-description-text <?= $CLASS_GRID ?>"><?= $itemPreviewText ?></p>
+						<? } ?>
+
+						<? if($link) { ?>
+							<? if($ITEM->preview_text || strlen(strip_tags($ITEM->html)) > 2  || $link) { ?>
+								<? if(!$CLASS_GRID) { ?>
+									<a href="<?= $link ?>" class="amsd-button cms-btn <?= $CLASS_GRID ?>" title="<?= $ITEM->title ?>"><? if(isset($ITEM->button_text)) { ?><?= $ITEM->button_text ?><? } else { ?>Learn More<? } ?> <span class="button-arrow"><i class="fas fa-chevron-right"></i></span></a>
+								<? } ?>
+							<? } ?>
+						<? } ?>
+
+					</div>
+				
+				</div>
+			
+			<? } ?>
+			
+		</div>
+
+	<? } ?>
+<? } ?>
