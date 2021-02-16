@@ -41,7 +41,7 @@ if($profile) {
 	</div>
 
 	<div class="back-links-wrapper">
-		<a href="<?= $back ?>" class="back-link cms-btn"><span class="button-icon"><i class="fas fa-chevron-left"></i></span> &nbsp; Back to <?= $page->title ?></a>
+		<a href="<?= $back ?>" class="back-link cms-btn"><span class="button-icon"><i class="fas fa-chevron-left"></i></span> Back to <?= $page->title ?></a>
 	</div>
 
 <? 
@@ -93,11 +93,20 @@ if($profile) {
 						<? } ?>
 
 						<? if($link) { ?>
-							<? if($ITEM->preview_text || strlen(strip_tags($ITEM->html)) > 2  || $link) { ?>
-								<? if(!$CLASS_GRID) { ?>
-									<a href="<?= $link ?>" class="amsd-button cms-btn <?= $CLASS_GRID ?>" title="<?= $ITEM->title ?>"><? if(isset($ITEM->button_text)) { ?><?= $ITEM->button_text ?><? } else { ?>Learn More<? } ?> <span class="button-arrow"><i class="fas fa-chevron-right"></i></span></a>
-								<? } ?>
+
+							<? $buttonText = '';
+							if(isset($ITEM->button_text)) {
+								$buttonText = $ITEM->button_text;
+							} else if(isset($ITEM->url)) {
+								$buttonText = 'Visit Link';
+							} else {
+								$buttonText = 'Learn More';
+							} ?>
+
+							<? if(!$CLASS_GRID) { ?>
+								<a href="<?= $link ?>" class="amsd-button cms-btn <?= $CLASS_GRID ?>" title="<?= $ITEM->title ?>"><?= $buttonText ?> <span class="button-arrow"><i class="fas fa-chevron-right"></i></span></a>
 							<? } ?>
+
 						<? } ?>
 
 					</div>

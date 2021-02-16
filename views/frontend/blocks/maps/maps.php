@@ -11,9 +11,7 @@
 		
 	?>
 
-      <? displayMap($block->id); ?>
-	  
-	  <a class="button more-button" href="<?= $DIRECTIONS_URL ?>" target="_blank">Get Directions</a>
+	<? displayMap($block->id); ?>
 
 	<? clr(); ?>
 	

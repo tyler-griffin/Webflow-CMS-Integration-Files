@@ -42,7 +42,7 @@ if($profile) {
 	</div>
 
 	<div class="back-links-wrapper">
-		<a href="<?= $back ?>" class="back-link cms-btn"><span class="button-icon"><i class="fas fa-chevron-left"></i></span> &nbsp; Back to <?= $page->title ?></a>
+		<a href="<?= $back ?>" class="back-link cms-btn"><span class="button-icon"><i class="fas fa-chevron-left"></i></span> Back to <?= $page->title ?></a>
 	</div>
 
 <? 
