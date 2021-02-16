@@ -117,11 +117,16 @@ if($ALBUM) {  ?>
 
 	 	<? foreach($GALLERY["data"] as $k => $ALBUM) { ?>
 
-	 		<a class="w-inline-block gallery-image" href="<?= $page->slug ?>/album/<? echo $ALBUM->slug; ?>">
-				<div class="gallery-image-wrapper" data-img="<? echo $ALBUM->photos[0]->img; ?>"></div>
-	            <div class="album-label">
+	 		<a class="w-inline-block gallery-image" href="<?= $page->slug ?>/album/<? echo $ALBUM->slug; ?>" style="background-image: url('/image/<?= $ALBUM->photos[0]->img ?>/1000');">
+				
+	 			<div class="album-label">
 	                <? echo $ALBUM->title ?>
 	            </div>
+
+				<div class="gallery-image-spacer">
+					<div class="hover-overlay"></div>
+				</div>
+
 	        </a>
 			
 	    <? } clr(); ?>
@@ -132,93 +137,3 @@ if($ALBUM) {  ?>
 <? } ?>
 
 </div>
-
-<script type="text/javascript">
-
-	$(document).ready(function() {
-	
-		// Dynamically load and position the images to be proportional
-	
-		var BLOCK = $(".block[data-id='<?= $block->id ?>']"),
-		  WRAPPERS = $(".gallery-image-wrapper", BLOCK);
-		
-		WRAPPERS.each(function(i,v) {
-		
-			var WRAPPER = $(this);
-			
-			var IMAGE = $("<img />");
-				IMAGE.attr("src", "/image/" + WRAPPER.data("img") + "/1000");
-				
-			WRAPPER.append(IMAGE);
-				
-			IMAGE.load(function() {
-	
-				// Make sure we have relative positioning
-				IMAGE.css("position", "relative");
-
-				// Check actual width of new image
-				var width = IMAGE.width(),
-				   height = IMAGE.height();
-
-				// Check actual width of frame
-				var photoW = WRAPPER.width(),
-					photoH = WRAPPER.height();
-				  
-				// Resize and position image inside frame
-				// to keep all thumbnails appearing to be the same size.
-				  
-				// If image is landscape
-				if(width > height) {
-
-					// Match height to frame
-					IMAGE.height(photoH);
-					
-					// If resized image is wider than frame
-					if(IMAGE.width() < photoW) {
-					
-						// Match width to frame
-						IMAGE.width(photoW); 
-						
-						// Match height to original ratio
-						IMAGE.height(Math.ceil((height / width) * photoW));
-						
-					}
-					
-					// Position image in center of frame, "cropping" the excess
-					IMAGE.css("left", "-" + Math.ceil((IMAGE.width() - photoW) / 2) + "px");
-
-				// If image is portrait
-				} else {
-
-					// Match width to frame
-					IMAGE.width(photoW);
-					
-					// If resized image is taller than frame
-					if(IMAGE.height() < photoH) {
-					
-						// Match height to frame
-						IMAGE.height(photoH);
-						
-						// Match width to original ratio
-						IMAGE.width(Math.ceil((width / height) * photoH));
-						
-					}
-					
-					// Position image in center of frame, "cropping" the excess
-					IMAGE.css("top", "-" + Math.ceil((IMAGE.height() - photoH) / 2) + "px");
-
-				}	
-				
-				IMAGE.addClass("loaded");
-			
-			}).each(function() {
-	
-				if(this.complete) $(this).load();
-				
-			});
-
-		});
-	
-	});
-
-</script>
