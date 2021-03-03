@@ -469,18 +469,21 @@ var FORM_VALIDATOR = function($FORM, OPTIONS) {
 
 			if(typeof(BLOCK["settings"]["Form Success Message"]) != "undefined") {
 
-				var $SUCCESS = $("<div />");
-					$SUCCESS.hide().addClass("contact-form-success-message");
+				var $SUCCESS = $("<div></div>");
+
+				$SUCCESS.hide().addClass("contact-form-success-message");
+
+				$SUCCESS.attr("data-success-message", BLOCK["id"]);
 
 				$SUCCESS.html(BLOCK["data"][0]["html"]);
 
 				$TARGET.before($SUCCESS);
 				$TARGET.hide();
 
-				$("html,body").animate({ scrollTop: $FORM.offset().top - 500 }, 200, function() {
-                    $SUCCESS.slideDown(200, function() {});
-                });
+				$SUCCESS.show();
 
+			    $("html,body").animate({ scrollTop: $('[data-success-message="' + BLOCK["id"] + '"]').offset().top - 200 }, 200, function() {});
+			    
 			}
 
 		});
