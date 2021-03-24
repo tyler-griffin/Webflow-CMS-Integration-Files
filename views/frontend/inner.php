@@ -73,21 +73,20 @@ if(isset($page->settings["Page Banner"])) {
 <div class="main-content-section">
 	<div class="content-container">
 
-		<? printBlocks($page);
-
-		// Sitemap and Page Not Found
+		<? // Sitemap and Page Not Found
 		if($page->type == 200) {
 
-			echo '<div id="sitemap" class="wrapper">';
-
 			printSiteMap();
-
-			echo '</div>';
 
 		// Search results page
 		} else if($page->type == 5) {
 
 			$this->customsearch_model->display_results();
+
+		// Every other interior page
+		} else {
+
+			printBlocks($page);
 
 		} ?>
 
