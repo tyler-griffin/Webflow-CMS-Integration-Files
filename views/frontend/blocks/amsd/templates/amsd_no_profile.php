@@ -1,7 +1,7 @@
 
 <? if(sizeof($amsd["data"]) > 0) { ?>
 	
-	<div class="amsd-list>">	
+	<div class="amsd-list">	
 		
 		<? 
 		
