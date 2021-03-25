@@ -65,7 +65,7 @@ if(isset($page->settings["Page Banner"])) {
 	<div class="title-content-outer-wrapper">
 		<div class="title-content-inner-wrapper">
 			<h1 class="title"><?= $titleText ?></h1>
-			<? if(isset($subtitleText)) { ?><h2 class="subtitle-text"><?= $subtitleText ?></h2><? } ?>
+			<? if(isset($subtitleText)) { ?><div class="subtitle-text"><?= $subtitleText ?></div><? } ?>
 		</div>
 	</div>
 </div>
