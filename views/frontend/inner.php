@@ -39,6 +39,8 @@
 <? // Create variable for title text
 if(isset($page->profile->title)) {
 	$titleText = $page->profile->title;
+} else if(isset($page->profile->event_title)) {
+	$titleText = $page->profile->event_title;
 } else if($page->settings["Title Override"]) {
 	$titleText = $page->settings["Title Override"];
 } else {
