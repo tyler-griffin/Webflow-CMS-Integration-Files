@@ -49,7 +49,7 @@ if($profile) {
 // --------------------------------------------------------------------- //
 } else {
 	// AMSD with Categories
-	$categories = getBlock($block->settings["Category Table Block"]);
+	$categoriesBlock = getBlock($block->settings["Category Table Block"]);
 	$amsd = amsdWithCategories($amsd);
 ?>
 	<? if(sizeof($amsd["data"]) > 0) { ?>
@@ -58,9 +58,9 @@ if($profile) {
 			<form class="amsd-select-form">
 				<label for="month" class="amsd-select-form-label">Filter by Category</label>
 				<select id="category-select" class="input-field select-input category-filter w-select">
-					<option value="/<?= $page->uri ?>">Select a Category</option>
-			        <? foreach($categories["data"] as $k => $category) { ?>
-			        	<option value="/<?= $page->uri ?>/category/<?= $category->slug ?>" <? if(isset($subVal) && $subVal == $category->id) { ?>selected<? } ?>><?= $category->title ?></option>
+					<option value="/<?= $page->uri ?>">All Categories</option>
+			        <? foreach($categoriesBlock["data"] as $k => $CATEGORY) { ?>
+			        	<option value="/<?= $page->uri ?>/category/<?= $CATEGORY->slug ?>" <? if(isset($subVal) && $subVal == $CATEGORY->id) { ?>selected<? } ?>><?= $CATEGORY->title ?></option>
 			        <? } ?>
 				</select>
 			</form>
