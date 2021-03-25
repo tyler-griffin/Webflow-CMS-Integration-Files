@@ -52,19 +52,20 @@ if($profile) {
 	$categoriesBlock = getBlock($block->settings["Category Table Block"]);
 	$amsd = amsdWithCategories($amsd);
 ?>
-	<? if(sizeof($amsd["data"]) > 0) { ?>
 
-		<div class="amsd-select-form-wrapper">
-			<form class="amsd-select-form">
-				<label for="category-select" class="amsd-select-form-label">Filter by Category</label>
-				<select id="category-select" name="category-select" class="input-field select-input category-filter w-select">
-					<option value="/<?= $page->uri ?>">All Categories</option>
-			        <? foreach($categoriesBlock["data"] as $k => $CATEGORY) { ?>
-			        	<option value="/<?= $page->uri ?>/category/<?= $CATEGORY->slug ?>" <? if(isset($subVal) && $subVal == $CATEGORY->id) { ?>selected<? } ?>><?= $CATEGORY->title ?></option>
-			        <? } ?>
-				</select>
-			</form>
-		</div>
+	<div class="amsd-select-form-wrapper">
+		<form class="amsd-select-form">
+			<label for="category-select" class="amsd-select-form-label">Filter by Category</label>
+			<select id="category-select" name="category-select" class="input-field select-input category-filter w-select">
+				<option value="/<?= $page->uri ?>">All Categories</option>
+		        <? foreach($categoriesBlock["data"] as $k => $CATEGORY) { ?>
+		        	<option value="/<?= $page->uri ?>/category/<?= $CATEGORY->slug ?>" <? if(isset($subVal) && $subVal == $CATEGORY->id) { ?>selected<? } ?>><?= $CATEGORY->title ?></option>
+		        <? } ?>
+			</select>
+		</form>
+	</div>
+
+	<? if(sizeof($amsd["data"]) > 0) { ?>
 
 		<script>
 			$("#category-select").on('change', function() {
