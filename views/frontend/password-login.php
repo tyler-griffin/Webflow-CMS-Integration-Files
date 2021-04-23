@@ -54,7 +54,7 @@ if(isset($page->settings["Page Banner"])) {
 				</div>
 
 				<div class="form-input">
-					<button class="cms-btn">Login</button>
+					<button class="cms-btn contact-form-submit">Login</button>
 				</div>
 
 			</form>
