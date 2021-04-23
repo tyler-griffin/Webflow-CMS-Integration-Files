@@ -76,11 +76,13 @@ if(isset($page->settings["Page Banner"])) {
 	<div class="content-container">
 
 		<? // Sitemap and Page Not Found
-		if($page->type == 200) {
+		if($page->type == 200) { ?>
 
-			printSiteMap();
+			<div class="text-block">
+				<? printSiteMap(); ?>
+			</div>
 
-		// Search results page
+		<? // Search results page
 		} else if($page->type == 5) {
 
 			$this->customsearch_model->display_results();
