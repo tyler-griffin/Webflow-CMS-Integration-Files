@@ -136,7 +136,7 @@
 					// Item is a sideout
 					if($SUB->children > 0) {
 
-						echo '<div class="w-dropdown dropdown nested" data-delay="0"' . (M ? '' : ' data-hover="1" ') . '>
+						echo '<div class="w-dropdown dropdown nested" data-delay="0"' . (M ? '' : ' data-hover="true" ') . '>
 
 							<div class="w-dropdown-toggle dropdown-link' . $CLASS_ACTIVE . $CLASS_FIRST_DROPDOWN_LINK . $CLASS_LAST_DROPDOWN_LINK . '">
 								<div class="nested-dropdown-link-text">' . $SUB->title . '</div>
@@ -181,7 +181,7 @@
 				// Item is a dropdown
 				if($ROOT->children > 0) {
 
-					echo '<div class="w-dropdown dropdown" data-delay="0"' . (M ? '' : ' data-hover="1" ') . '>
+					echo '<div class="w-dropdown dropdown" data-delay="0"' . (M ? '' : ' data-hover="true" ') . '>
 
 							<div class="w-dropdown-toggle nav-link dropdown-nav-link' . $CLASS_ACTIVE . $CLASS_LAST . '">
 								<div class="dropdown-nav-link-text">' . $ROOT->title . '</div>
