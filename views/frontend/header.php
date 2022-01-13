@@ -59,6 +59,9 @@
 Example header section, change as needed
 
 	<div class="header-section">
+	
+		<? printBlock(ALERT_BAR_BLOCK_ID); ?>
+
 		<div data-collapse="medium" data-duration="400" role="banner" class="navbar w-nav">
 			<div class="nav-container w-container">
 				<a href="/home" class="logo-home-link w-nav-brand" title="Home">
