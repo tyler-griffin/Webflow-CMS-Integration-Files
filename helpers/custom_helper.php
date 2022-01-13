@@ -173,7 +173,7 @@
 				$CLASS_ACTIVE = $ROOT->id == $C["ROOT"]->id ? " w--current current" : "";
 
 				// Set last class for root items
-				$CLASS_LAST = $ROOT === end($C["NAV"]) ? "" : "";
+				$CLASS_LAST = $ROOT === end($C["NAV"]) ? " last" : "";
 
 				// Add beginning slash to inner page links
 				$ROOT_LINK = $ROOT->type == 2 ? $ROOT->slug : '/' . $ROOT->slug;
