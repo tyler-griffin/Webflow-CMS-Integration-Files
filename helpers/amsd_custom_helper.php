@@ -103,7 +103,7 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
                 $categoriesArray = array();
                 foreach($categoriesBlock["data"] as $k => $CATEGORY) {
-                    $categoriesArray[$CATEGORY->slug] = $CATEGORY->title;
+                    $categoriesArray[$CATEGORY->id] = $CATEGORY->title;
                 }
 
                 $OUTPUT = $FIELD->build($KEY, [ 
