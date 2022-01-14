@@ -97,6 +97,22 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
+        case "categories":
+
+                $categoriesBlock = getBlock($BLOCK["settings"]['Category Table Block']);
+
+                $categoriesArray = array();
+                foreach($categoriesBlock["data"] as $k => $CATEGORY) {
+                    $categoriesArray[$CATEGORY->slug] = $CATEGORY->title;
+                }
+
+                $OUTPUT = $FIELD->build($KEY, [ 
+                    "type" => "checkbox_group",
+                    "options" => $categoriesArray
+                ], false);
+         
+                break;
+
         case "icon":
  
             $OUTPUT = $FIELD->build($KEY, [
