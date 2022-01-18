@@ -65,13 +65,14 @@ if($profile) {
 		</form>
 	</div>
 
-	<? if(sizeof($amsd["data"]) > 0) { ?>
+	<script>
+		$("#category-select").on('change', function() {
+	        window.location.href = $(this).val();
+	    });
+    </script>
 
-		<script>
-			$("#category-select").on('change', function() {
-		        window.location.href = $(this).val();
-		    });
-	    </script>
+
+	<? if(sizeof($amsd["data"]) > 0) { ?>
 
 		<div class="amsd-list <?= $CLASS_GRID ?> with-categories">	
 
