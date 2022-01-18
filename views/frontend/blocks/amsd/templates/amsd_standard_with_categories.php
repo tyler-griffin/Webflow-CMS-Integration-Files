@@ -77,7 +77,7 @@ if($profile) {
 
 			<? foreach($amsd["data"] as $k => $CATEGORY) { ?>
 
-				<div class="amsd-category-wrapper">
+				<div class="amsd-category-wrapper <?= $CLASS_GRID ?>">
 
 					<div class="amsd-category-title"><?= $CATEGORY->title ?></div>
 
