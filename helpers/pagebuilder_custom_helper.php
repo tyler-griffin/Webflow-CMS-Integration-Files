@@ -392,6 +392,22 @@ function customSortedListBlocks() {
 
     */
 
+    $items[] = [
+        "title" => "Alert Bar",
+        "value" => "alert-bar",
+        "block" => [
+            "type" => 2,
+            "title" => "Alert Bar",
+            "settings" => [
+                ["Heading Read Only", "true"],
+                ["AMSD Limit", 1],
+                ["AMSD Noun", "Alert"],
+                ["Table", "amsd_alert_bar"],
+                ["Hidden", true]
+            ]
+        ],
+        "dev" => true
+    ];
     
     return $items;
 
