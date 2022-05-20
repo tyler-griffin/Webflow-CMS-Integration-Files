@@ -3,12 +3,7 @@
 	
 	<div class="amsd-list">	
 		
-		<? 
-		
-		// AMSD Listing Main Loop
-		// --------------------------------------------------------------------- //
-		
-		foreach($amsd["data"] as $k => $ITEM) { ?>
+		<? foreach($amsd["data"] as $k => $ITEM) { ?>
 
 			
 		

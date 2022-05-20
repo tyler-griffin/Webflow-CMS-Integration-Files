@@ -97,6 +97,15 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
+        case "button_one":
+        case "button_two":
+ 
+            $OUTPUT = $FIELD->build($KEY, [
+                "type" => "button"
+            ], false);
+     
+            break;
+
         case "icon":
  
             $OUTPUT = $FIELD->build($KEY, [
