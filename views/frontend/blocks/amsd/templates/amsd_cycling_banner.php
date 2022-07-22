@@ -13,7 +13,7 @@
 
 								<? $buttonOne = json_decode($ITEM->button_one); ?>
 								<? if($buttonOne->text) { ?>
-									<a href="<?= $buttonOne->url ?>" class="cms-btn banner-button w-button"><? if($ITEM->button_one_icon) { ?><span class="button-icon"><i class="<?= $ITEM->button_one_icon ?>"></i></span> <? } ?><?= $buttonOne->caption ?></a>
+									<a href="<?= $buttonOne->url ?>" class="cms-btn banner-button w-button"><? if($ITEM->button_one_icon) { ?><span class="button-icon"><i class="<?= $ITEM->button_one_icon ?>"></i></span> <? } ?><?= $buttonOne->text ?></a>
 								<? } ?>
 
 								<? $buttonTwo = json_decode($ITEM->button_two); ?>
