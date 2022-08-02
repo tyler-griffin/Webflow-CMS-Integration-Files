@@ -107,6 +107,8 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
             break;
 
         case "icon":
+        case "button_one_icon":
+        case "button_two_icon":
  
             $OUTPUT = $FIELD->build($KEY, [
                 "type" => "font_awesome"
