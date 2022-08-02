@@ -152,55 +152,6 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
          
                 break;
 
-        case "social_links":
-
-            if($GRID) {
-
-                $OUTPUT = '<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit Social Links</span></a>';
-
-            } else {
-
-                $LABEL_MARKUP = false;
-
-                $fields = [
-                    [
-                        "key" => "title",
-                        "label" => "Title",
-                        "config" => [
-                            "type" => "text"
-                        ]
-                    ],[
-                        "key" => "icon",
-                        "label" => "Icon",
-                        "config" => [
-                            "type" => "font_awesome",
-                            "options" => [
-                                "preset" => "social"
-                            ]
-                        ]
-                    ],
-                    [
-                        "key" => "url",
-                        "label" => "URL",
-                        "config" => [
-                            "type" => "url"
-                        ]
-                    ]
-                ];
-
-                $FIELD_HTML .= $FIELD->special($KEY, [
-                    "type" => "sorted_list",
-                    "fields" => $fields
-                ]);
-
-                $OUTPUT = '<div class="amsd-hr"></div>';
-
-                $OUTPUT .= '<br><span class="backend-label">Social Links</span><div class="field"><div class="field-inner">' . $FIELD_HTML . '</div></div>';
-
-            }
-
-            break;
-
     }
 
     /*
