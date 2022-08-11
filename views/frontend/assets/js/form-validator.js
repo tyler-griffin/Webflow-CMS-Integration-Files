@@ -152,6 +152,11 @@ var FORM_VALIDATOR = function($FORM, OPTIONS) {
 
 			MODULE["validate"]();
 
+			$('[name="viewport"]').attr('content','width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1');
+			setTimeout(function() { 
+		        $('[name="viewport"]').attr('content','width=device-width, initial-scale=1, minimum-scale=0, maximum-scale=100');
+		    }, 500);
+
 		});
 
 		// Toggle radio/checkbox by clicking on label
