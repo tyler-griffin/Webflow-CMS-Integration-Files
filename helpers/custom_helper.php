@@ -98,12 +98,12 @@
 
 	function printWebflowMenu() {
 
-		$GLOBALS = $GLOBALS["CI"]->load->{"_ci_cached_vars"};
+		$CACHED_VARS = $ci->load->{"_ci_cached_vars"};
 
 		$C = Array(
-			"NAV" => $GLOBALS["nav"],
-			"ROOT" => $GLOBALS["root"],
-			"PAGE" => $GLOBALS["page"]
+			"NAV" => $CACHED_VARS["nav"],
+			"ROOT" => $CACHED_VARS["root"],
+			"PAGE" => $CACHED_VARS["page"]
 		);
 
 		function recursiveSubs($R = Array(), $C = Array()) {
