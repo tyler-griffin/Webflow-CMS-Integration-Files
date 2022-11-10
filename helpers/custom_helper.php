@@ -98,6 +98,7 @@
 
 	function printWebflowMenu() {
 
+		$ci=& get_instance();
 		$CACHED_VARS = $ci->load->{"_ci_cached_vars"};
 
 		$C = Array(
