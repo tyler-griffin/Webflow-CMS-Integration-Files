@@ -19,7 +19,7 @@
 		<? seoCybernauticLogo($cms); ?>
 	</div>
 
-	© <?= date("Y"); ?> <?= $GLOBALS['owner']->site_title ?>
+	© <?= date("Y"); ?> <?= $owner->site_title ?>
 
 
 
