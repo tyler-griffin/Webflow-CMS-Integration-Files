@@ -81,17 +81,19 @@ if($profile) {
 	<div class="amsd-select-form-wrapper">
 		<form class="amsd-select-form">
 			<label for="news-select" class="amsd-select-form-label">Filter by Month</label>
-			<select id="news-select" class="input-field select-input category-filter w-select">
-				<option value="">
-				<? if($ARCHIVE["selected"]) { ?><?= $ARCHIVE["selected"] ?><? } ?><? if(!$ARCHIVE["selected"]) { ?>Recent Posts<? } ?></option>
-				<? if($ARCHIVE["selected"]) { ?><option value="/<?= $page->uri ?>/">Recent Posts</option><? } ?>
-				<? foreach($ARCHIVE["dates"] as $date) { ?>
-					<? $MONTH = "$date->text $date->year" ?>
-					<? if($ARCHIVE["selected"] != $MONTH) { ?>
-		    			<option value="/<?= $page->uri ?>/archive/<?= $date->year ?>/<?= $date->month ?>"><?= $MONTH ?></option>
+			<div class="input-field select-input-wrapper">
+				<select id="news-select" class="input-field select-input category-filter w-select">
+					<option value="">
+					<? if($ARCHIVE["selected"]) { ?><?= $ARCHIVE["selected"] ?><? } ?><? if(!$ARCHIVE["selected"]) { ?>Recent Posts<? } ?></option>
+					<? if($ARCHIVE["selected"]) { ?><option value="/<?= $page->uri ?>/">Recent Posts</option><? } ?>
+					<? foreach($ARCHIVE["dates"] as $date) { ?>
+						<? $MONTH = "$date->text $date->year" ?>
+						<? if($ARCHIVE["selected"] != $MONTH) { ?>
+			    			<option value="/<?= $page->uri ?>/archive/<?= $date->year ?>/<?= $date->month ?>"><?= $MONTH ?></option>
+						<? } ?>
 					<? } ?>
-				<? } ?>
-			</select>
+				</select>
+			</div>
 		</form>
 
 		<script>
@@ -108,12 +110,14 @@ if($profile) {
 
 			<form class="amsd-select-form">
 				<label for="category-select" class="amsd-select-form-label">Filter by Category</label>
-				<select id="category-select" name="category-select" class="input-field select-input category-filter w-select">
-					<option value="/<?= $page->uri ?>">All Categories</option>
-			        <? foreach($categoriesBlock["data"] as $k => $CATEGORY) { ?>
-			        	<option value="/<?= $page->uri ?>/category/<?= $CATEGORY->slug ?>" <? if(isset($subVal) && $subVal == $CATEGORY->id) { ?>selected<? } ?>><?= $CATEGORY->title ?></option>
-			        <? } ?>
-				</select>
+				<div class="input-field select-input-wrapper">
+					<select id="category-select" name="category-select" class="input-field select-input category-filter w-select">
+						<option value="/<?= $page->uri ?>">All Categories</option>
+				        <? foreach($categoriesBlock["data"] as $k => $CATEGORY) { ?>
+				        	<option value="/<?= $page->uri ?>/category/<?= $CATEGORY->slug ?>" <? if(isset($subVal) && $subVal == $CATEGORY->id) { ?>selected<? } ?>><?= $CATEGORY->title ?></option>
+				        <? } ?>
+					</select>
+				</div>
 			</form>
 
 			<script>

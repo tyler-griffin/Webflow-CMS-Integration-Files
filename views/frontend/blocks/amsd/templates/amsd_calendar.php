@@ -95,17 +95,19 @@ if($profile) {
 		<div class="tabs-amsd-category-select-form w-form">
 			<form class="form">
 				<label for="month-select" class="tabs-amsd-category-select-form-label">Filter Events</label>
-				<select id="month-select" class="input-field select-input tabs-amsd-category-filter w-select">
-					<? $currentMonth = new DateTime(date("M").' '.date("Y")); ?>
-					<? foreach ($calendar['month-select']['years'] as $y => $YEAR) { ?>
-						<? foreach ($calendar['month-select']['months'] as $m => $MONTH) { ?>
-							<? $monthCompare = new DateTime($MONTH.' '.$YEAR); ?>
-							<? if($monthCompare >= $currentMonth) { ?>
-								<option <? if($YEAR.$m == $calendar['state']['current']['year'].$calendar['state']['current']['month']) { ?>selected<? } ?> value="<?= base_url() ?><?= $page->uri ?>/archive/<?= $YEAR ?>/<?= $m ?>"><?= date("F", strtotime($MONTH)); ?> <?= $YEAR ?></option>
-							<? } ?>
+				<div class="input-field select-input-wrapper">
+					<select id="month-select" class="input-field select-input tabs-amsd-category-filter w-select">
+						<? $currentMonth = new DateTime(date("M").' '.date("Y")); ?>
+						<? foreach ($calendar['month-select']['years'] as $y => $YEAR) { ?>
+							<? foreach ($calendar['month-select']['months'] as $m => $MONTH) { ?>
+								<? $monthCompare = new DateTime($MONTH.' '.$YEAR); ?>
+								<? if($monthCompare >= $currentMonth) { ?>
+									<option <? if($YEAR.$m == $calendar['state']['current']['year'].$calendar['state']['current']['month']) { ?>selected<? } ?> value="<?= base_url() ?><?= $page->uri ?>/archive/<?= $YEAR ?>/<?= $m ?>"><?= date("F", strtotime($MONTH)); ?> <?= $YEAR ?></option>
+								<? } ?>
+							<?	} ?>
 						<?	} ?>
-					<?	} ?>
-				</select>
+					</select>
+				</div>
 			</form>
 			<script>
 		    $("#month-select").on('change', function() {
