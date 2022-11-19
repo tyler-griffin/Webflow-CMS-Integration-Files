@@ -1,6 +1,12 @@
 
 <?
 
+// Create class for staff layout
+$CLASS_STAFF = "";
+if(isset($block->settings["AMSD Layout"]) && $block->settings["Table"] == "amsd_staff") {
+	$CLASS_STAFF = " staff";
+}
+
 // Create class for grid layout
 $CLASS_GRID = "";
 if(isset($block->settings["AMSD Layout"]) && $block->settings["AMSD Layout"] == "grid-list") {
@@ -19,19 +25,34 @@ if($profile) {
 			$itemImage = json_decode($ITEM->focused_img);
 		} ?>
 		<? if($itemImage) { ?>
-			<div class="profile-image-wrapper">
-				<div class="amsd-image" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/800');"></div>
+			<div class="profile-image-wrapper <?= $CLASS_STAFF ?>">
+				<div class="amsd-image <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/400');"></div>
 			</div>
 		<? } ?>
 
 		<div class="profile-meta-text-wrapper">
+
 			<div class="amsd-title-text"><?= $ITEM->title ?></div>
+			<div class="profile-title-underline"></div>
+
 			<? if(isset($ITEM->sub_title)) { ?>
 				<p class="amsd-meta-text-profile-page"><?= $ITEM->sub_title ?></p>
 			<? } ?>
-			<? if(isset($ITEM->sub_title)) { ?>
-				<p class="amsd-meta-text-profile-page-small"><?= $ITEM->sub_title ?></p>
+
+			<? if(isset($ITEM->email) || isset($ITEM->phone)) { ?>
+				<p class="amsd-description-text grid">
+					<? if(isset($ITEM->email)) { ?>
+						<a href="mailto:<?= $ITEM->email ?>" class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-envelope"></i></span> <?= $ITEM->email ?></a>
+					<? } ?>
+					<? if(isset($ITEM->email) && isset($ITEM->phone)) { ?>
+						<br>
+					<? } ?>
+					<? if(isset($ITEM->phone)) { ?>
+						<a href="tel:+1<?= $ITEM->phone ?>" class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-phone-alt"></i></span> <?= $ITEM->phone ?></a>
+					<? } ?>
+				</p>
 			<? } ?>
+
 		</div>
 
 	</div>
@@ -40,82 +61,159 @@ if($profile) {
 		<?= $ITEM->html ?>
 	</div>
 
+
 	<div class="back-links-wrapper">
-		<a href="<?= $back ?>" class="back-link cms-btn"><span class="button-icon"><i class="fas fa-chevron-left"></i></span> Back to <?= $page->title ?></a>
+		<a href="/<?= getPage($page->id)->uri ?>" class="back-link"><span class="button-icon"><i class="fas fa-chevron-left"></i></span> Back to <?= $page->title ?></a>
 	</div>
 
 <? 
 // AMSD Listing View
 // --------------------------------------------------------------------- //
-} else { 
-?>
-	<? if(sizeof($amsd["data"]) > 0) { ?>
+} else {
+	// AMSD with Categories
+	$categoriesBlock = getBlock($block->settings["Category Table Block"]);
+	$amsdWithoutCategories = $amsd;
+	$amsd = amsdWithCategories($amsd);
+
+	// Add uncategorized items back to $amsd["data"]
+	$UNCATEGORIZED = new StdClass();
+	$UNCATEGORIZED->items = array();
+
+	foreach ($amsdWithoutCategories["data"] as $k => $ITEM) {
+		if(!$ITEM->category) {
+			$UNCATEGORIZED->items[] = $ITEM;
+		}
+	}
+	if(sizeof($UNCATEGORIZED->items) > 0) {
+		// Putting uncategorized items as a 'category' item in the begining of the $amsd["data"] array
+		array_unshift($amsd["data"], $UNCATEGORIZED);
+	}
 	
-		<div class="amsd-list <?= $CLASS_GRID ?>">	
-			
-			<? foreach($amsd["data"] as $k => $ITEM) { ?>
-			
-				<? // Generate the profile URL
-				$link = isset($block->settings["Slug"]) && strlen(strip_tags($ITEM->html)) > 2 ? amsdProfileSlug($page, $amsd, $ITEM) : '';
-				$link = isset($ITEM->url) ? $ITEM->url : $link; ?>
-			
-				<div class="amsd-item <?= $CLASS_GRID ?>">
+	?>
 
-					<? $itemImage = false;
-					if(isset($ITEM->focused_img)) {
-						$itemImage = json_decode($ITEM->focused_img);
-					} ?>
-				
-					<? if($itemImage) { ?>
-						<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-image-link w-inline-block <?= $CLASS_GRID ?>" title="<?= $ITEM->title ?>">
-							<div class="amsd-image <?= $CLASS_GRID ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/800');">
-								<? if($link) { ?><div class="hover-overlay"></div><? } ?>
-							</div>
-						</a>
-					<? } ?>
+	<? if(sizeof($categoriesBlock["data"]) > 0) { ?>
 
-					<div class="amsd-text-wrapper <?= $CLASS_GRID ?>">
+		<div class="amsd-select-form-wrapper">
+			<form class="amsd-select-form">
+				<label for="category-select" class="amsd-select-form-label">Filter by Category</label>
+				<select id="category-select" name="category-select" class="input-field select-input category-filter w-select">
+					<option value="/<?= $page->uri ?>">All Categories</option>
+			        <? foreach($categoriesBlock["data"] as $k => $CATEGORY) { ?>
+			        	<option value="/<?= $page->uri ?>/category/<?= $CATEGORY->slug ?>" <? if(isset($subVal) && $subVal == $CATEGORY->id) { ?>selected<? } ?>><?= $CATEGORY->title ?></option>
+			        <? } ?>
+				</select>
+			</form>
+		</div>
 
-						<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-title-text-link <?= $CLASS_GRID ?>"><?= $ITEM->title ?></a>
+		<script>
+			$("#category-select").on('change', function() {
+		        window.location.href = $(this).val();
+		    });
+	    </script>
 
-						<? if(isset($ITEM->sub_title)) { ?>
-							<p class="amsd-meta-text <?= $CLASS_GRID ?>"><?= $ITEM->sub_title ?></p>
-						<? } ?>
+	<? } ?>
 
-						<? $itemPreviewText = false;
-						if($ITEM->preview_text) {
-							$itemPreviewText = nl2br($ITEM->preview_text);
-						} else if(strlen(strip_tags($ITEM->html)) > 2) {
-							$itemPreviewText = character_limiter(strip_tags($ITEM->html), 300);
-						}
-						if(isset($itemPreviewText)) { ?>
-							<p class="amsd-description-text <?= $CLASS_GRID ?>"><?= $itemPreviewText ?></p>
-						<? } ?>
 
-						<? if($link) { ?>
+	<? if(sizeof($amsd["data"]) > 0) { ?>
 
-							<? $buttonText = '';
-							if(isset($ITEM->button_text)) {
-								$buttonText = $ITEM->button_text;
-							} else if(isset($ITEM->url)) {
-								$buttonText = 'Visit Link';
-							} else {
-								$buttonText = 'Learn More';
+		<div class="amsd-list <?= $CLASS_GRID ?> with-categories">	
+
+			<? foreach($amsd["data"] as $k => $CATEGORY) { ?>
+
+				<? if($CATEGORY->title) { ?>
+					<div class="heading category-title"><? if($CATEGORY->icon && $CATEGORY->icon != 'null') { ?><span class="category-icon"><i class="<?= $CATEGORY->icon ?>"></i></span> <? } ?><?= $CATEGORY->title ?></div>
+				<? } ?>
+
+				<div class="amsd-category-wrapper <?= $CLASS_GRID ?>">
+
+					<? foreach($CATEGORY->items as $k => $ITEM) { ?>
+
+						<? // Generate the profile URL
+						$link = isset($block->settings["Slug"]) && strlen(strip_tags($ITEM->html)) > 2 ? amsdProfileSlug($page, $amsd, $ITEM) : '';
+						$link = isset($ITEM->url) ? $ITEM->url : $link; ?>
+					
+						<div class="amsd-item <?= $CLASS_GRID ?>">
+
+							<? // Get image URL
+							$itemImageUrl = false;
+							$itemImagePosition = false;
+							if(isset($ITEM->focused_img)) {
+								$itemImage = json_decode($ITEM->focused_img);
+								$itemImagePosition = $itemImage->config->{'background-position'};
+								$itemImageUrl =  '/image/<?= $itemImage->id ?>/400';
+							} else if($block->settings["Table"] == "amsd_staff") {
+								$itemImageUrl = '/assets/images/staff-placeholder.jpg';
 							} ?>
-
-							<? if(!$CLASS_GRID) { ?>
-								<a href="<?= $link ?>" class="amsd-button cms-btn <?= $CLASS_GRID ?>" title="<?= $ITEM->title ?>"><?= $buttonText ?> <span class="button-arrow"><i class="fas fa-chevron-right"></i></span></a>
+						
+							<? if($itemImageUrl) { ?>
+								<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-image-link w-inline-block <?= $CLASS_GRID ?>" title="<?= $ITEM->title ?>">
+									<div class="amsd-image <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>" style="<? if($itemImagePosition) { ?>background-position: <?= $itemImagePosition ?>;<? } ?> background-image: url(<?= $itemImageUrl ?>);">
+										<? if($link) { ?><div class="hover-overlay"></div><? } ?>
+									</div>
+								</a>
 							<? } ?>
 
-						<? } ?>
+							<div class="amsd-text-wrapper <?= $CLASS_GRID ?>">
 
-					</div>
-				
+								<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-title-text-link <?= $CLASS_GRID ?>"><?= $ITEM->title ?></a>
+
+								<? if(isset($ITEM->sub_title)) { ?>
+									<p class="amsd-meta-text <?= $CLASS_GRID ?>"><?= $ITEM->sub_title ?></p>
+								<? } ?>
+
+								<? if(isset($ITEM->email) || isset($ITEM->phone)) { ?>
+									<p class="amsd-description-text grid">
+										<? if(isset($ITEM->email)) { ?>
+											<a href="mailto:<?= $ITEM->email ?>" class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-envelope"></i></span> <?= $ITEM->email ?></a>
+										<? } ?>
+										<? if(isset($ITEM->email) && isset($ITEM->phone)) { ?>
+											<br>
+										<? } ?>
+										<? if(isset($ITEM->phone)) { ?>
+											<a href="tel:+1<?= $ITEM->phone ?>" class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-phone-alt"></i></span> <?= $ITEM->phone ?></a>
+										<? } ?>
+									</p>
+								<? } ?>
+
+								<? $itemPreviewText = false;
+								if($ITEM->preview_text) {
+									$itemPreviewText = nl2br($ITEM->preview_text);
+								} else if(strlen(strip_tags($ITEM->html)) > 2) {
+									$itemPreviewText = character_limiter(strip_tags($ITEM->html), 180);
+								}
+								if(isset($itemPreviewText)) { ?>
+									<p class="amsd-description-text <?= $CLASS_GRID ?>"><?= $itemPreviewText ?></p>
+								<? } ?>
+
+
+								<? if($link) { ?>
+
+									<? $buttonText = '';
+									if(isset($ITEM->button_text)) {
+										$buttonText = $ITEM->button_text;
+									} else if($block->settings["Table"] == "amsd_staff") {
+										$buttonText = 'View Full Bio';
+									} else {
+										$buttonText = 'Learn More';
+									} ?>
+
+									<div class="amsd-button-wrapper">
+										<a href="<?= $link ?>" class="amsd-button <?= $CLASS_GRID ?>" title="<?= $ITEM->title ?>"><?= $buttonText ?> <span class="amsd-button-arrow"><i class="fas fa-chevron-right"></i></span></a>
+									</div>
+									
+								<? } ?>
+
+							</div>
+						
+						</div>
+
+					<? } ?>
+
 				</div>
 			
 			<? } ?>
-			
-		</div>
 
+		</div>
+		
 	<? } ?>
 <? } ?>
