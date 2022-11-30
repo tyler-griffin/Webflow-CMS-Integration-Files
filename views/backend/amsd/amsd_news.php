@@ -42,6 +42,10 @@
             
         </div>
 
+        <div class="amsd-hr"></div>
+        <?= $FIELD->build("url"); ?>
+        </div>
+
         <? if(array_key_exists("preview_text", $item)) { ?>
 
         <div class="amsd-hr"></div>
