@@ -142,14 +142,14 @@ if($profile) {
 							if(isset($ITEM->focused_img)) {
 								$itemImage = json_decode($ITEM->focused_img);
 								$itemImagePosition = $itemImage->config->{'background-position'};
-								$itemImageUrl =  '/image/<?= $itemImage->id ?>/400';
+								$itemImageUrl =  '/image/' . $itemImage->id . '/400';
 							} else if($block->settings["Table"] == "amsd_staff") {
 								$itemImageUrl = '/assets/images/staff-placeholder.jpg';
 							} ?>
 						
 							<? if($itemImageUrl) { ?>
 								<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-image-link w-inline-block <?= $CLASS_GRID ?>" title="<?= $ITEM->title ?>">
-									<div class="amsd-image <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>" style="<? if($itemImagePosition) { ?>background-position: <?= $itemImagePosition ?>;<? } ?> background-image: url(<?= $itemImageUrl ?>);">
+									<div class="amsd-image <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>" style="<? if($itemImagePosition) { ?>background-position: <?= $itemImagePosition ?>;<? } ?> background-image: url('<?= $itemImageUrl ?>');">
 										<? if($link) { ?><div class="hover-overlay"></div><? } ?>
 									</div>
 								</a>
