@@ -24,11 +24,6 @@ if($profile) {
 		<? if(isset($ITEM->focused_img)) {
 			$itemImage = json_decode($ITEM->focused_img);
 		} ?>
-		<? if($itemImage) { ?>
-			<div class="profile-image-wrapper <?= $CLASS_STAFF ?>">
-				<div class="amsd-image <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/400');"></div>
-			</div>
-		<? } ?>
 
 		<div class="profile-meta-text-wrapper">
 
@@ -54,6 +49,12 @@ if($profile) {
 			<? } ?>
 
 		</div>
+
+		<? if($itemImage) { ?>
+			<div class="profile-image-wrapper <?= $CLASS_STAFF ?>">
+				<div class="amsd-image <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/400');"></div>
+			</div>
+		<? } ?>
 
 	</div>
 
