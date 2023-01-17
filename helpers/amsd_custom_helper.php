@@ -97,6 +97,57 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
+        case "links":
+
+            if($GRID) {
+
+                $OUTPUT = '<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit Links</span></a>';
+
+            } else {
+
+                $LABEL_MARKUP = false;
+
+                $fields = [
+                    [
+                        "key" => "title",
+                        "label" => "Title",
+                        "config" => [
+                            "type" => "text"
+                        ]
+                    ],
+                    [
+                        "key" => "url",
+                        "label" => "URL",
+                        "config" => [
+                            "type" => "url"
+                        ]
+                    ]
+                ];
+
+                $FIELD_HTML .= $FIELD->special($KEY, [
+                    "type" => "sorted_list",
+                    "fields" => $fields
+                ]);
+
+                $OUTPUT = '<div class="amsd-hr"></div>';
+
+                $OUTPUT .= '<br><span class="backend-label">Links</span><div class="field"><div class="field-inner">' . $FIELD_HTML . '</div></div>';
+
+            }
+
+            break;
+
+        case "button_one":
+        case "button_two":
+        case "red_button":
+        case "black_button":
+ 
+            $OUTPUT = $FIELD->build($KEY, [
+                "type" => "button"
+            ], false);
+     
+            break;
+
         case "button_one":
         case "button_two":
  
