@@ -48,7 +48,6 @@
 
 	<script type="text/javascript" src="<?= assets("js/cms-frontend-framework.js") ?>"></script>
 	<script type="text/javascript" src="<?= bustCache("js/cms.js") ?>"></script>
-	<script type="text/javascript" src="<?= bustCache("js/form-validator.js") ?>"></script>
 
 </head>
 
