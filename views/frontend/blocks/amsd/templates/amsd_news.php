@@ -159,7 +159,6 @@ if($profile) {
 						<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-image-link w-inline-block <?= $CLASS_GRID ?>" title="<?= $ITEM->title ?>">
 							<div class="amsd-image <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>" style="<? if($itemImagePosition) { ?>background-position: <?= $itemImagePosition ?>;<? } ?> background-image: url(<?= $itemImageUrl ?>);">
 								<? if($link) { ?><div class="hover-overlay"></div><? } ?>
-								<div class="amsd-image-corner-text"><?= date("M j, Y", strtotime($ITEM->publish_date)); ?></div>
 							</div>
 						</a>
 					<? } ?>
@@ -168,7 +167,7 @@ if($profile) {
 
 						<p class="amsd-meta-text news-meta-text"><?= date("F j, Y", strtotime($ITEM->publish_date)); ?></p>
 
-						<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-title-text-link <?= $CLASS_GRID ?> small"><?= $ITEM->title ?></a>
+						<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-title-text-link <?= $CLASS_GRID ?>"><?= $ITEM->title ?></a>
 
 						<? if(isset($ITEM->category) || isset($ITEM->author)) { ?>
 							<p class="amsd-description-text grid">
