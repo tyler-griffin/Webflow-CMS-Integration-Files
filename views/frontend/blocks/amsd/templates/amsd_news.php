@@ -150,7 +150,7 @@ if($profile) {
 					if(isset($ITEM->focused_img)) {
 						$itemImage = json_decode($ITEM->focused_img);
 						$itemImagePosition = $itemImage->config->{'background-position'};
-						$itemImageUrl =  '/image/<?= $itemImage->id ?>/400';
+						$itemImageUrl =  '/image/' . $itemImage->id . '/400';
 					} else if($block->settings["Table"] == "amsd_staff") {
 						$itemImageUrl = '/assets/images/staff-placeholder.jpg';
 					} ?>
