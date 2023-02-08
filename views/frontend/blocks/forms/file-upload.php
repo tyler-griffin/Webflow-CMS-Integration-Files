@@ -1,8 +1,8 @@
 
-<? /* Add Block Setting to form "Block Setting: Form Upload Field Config" with value:
+<? /* Add Block Setting to form "Block Setting: Form Upload Field Config" with value (first line is the file upload field name):
 
 {
-    "resume": { //this is the file upload field name
+    "resume": {
         "accept": ["doc", "docx", "pdf"],
         "attach": true,
         "destination": {
