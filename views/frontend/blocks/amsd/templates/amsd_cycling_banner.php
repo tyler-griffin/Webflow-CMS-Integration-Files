@@ -8,7 +8,7 @@
 					<div class="home-banner-content-outer-wrapper">
 						<div class="home-banner-content-inner-wrapper">
 							<div class="home-banner-text-large"><?= $ITEM->title ?></div>
-							<div class="home-banner-text-small"><?= nl2br($ITEM->textarea); ?></div>
+							<div class="home-banner-text-small"><?= nl2br($ITEM->caption); ?></div>
 							<div class="home-banner-buttons-wrapper">
 
 								<? $buttonOne = json_decode($ITEM->button_one); ?>
