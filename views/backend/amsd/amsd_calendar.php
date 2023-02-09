@@ -42,6 +42,17 @@
 
         <form>
 
+            <? if(array_key_exists("category", $item)) { ?>
+            <?= $FIELD->build("category"); ?> 
+            <div class="amsd-hr"></div>  
+            <? } ?>
+        
+            <?= $FIELD->build(array_key_exists("focused_img", $item) ? "focused_img" : "img", [
+                "label" => "Image"
+            ]); ?>
+            
+            <div class="amsd-hr"></div>
+
             <?= $FIELD->build("event_title", Array(
                 "style" => "font-size: 25px; width: 500px;"
             )); ?>
