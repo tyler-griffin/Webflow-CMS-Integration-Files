@@ -8,7 +8,7 @@
 			if($count > 1) { break; }
 			$alertID = slug($ITEM->textarea);
 			?>
-			<div class="alert-bar">
+			<div id="alert-bar" class="alert-bar">
 				<div class="alert-text">
 					<?= nl2br($ITEM->textarea); ?>
 					<? if(json_decode($ITEM->button)->text) { ?>
@@ -21,19 +21,37 @@
 					<div class="alert-bar-close-button-vertical-line"></div>
 				</a>
 			</div>
+			<div id="alert-bar-spacer"></div>
 		<? } ?>
 	<? } ?>
 
 	<script type="text/javascript">
+
+		function alertBarSpacer() {
+			if($('#alert-bar').is(':visible')) {
+				$('#alert-bar-spacer').css('height', $('#alert-bar').outerHeight() + 'px');
+			}
+		}
+
+		$(window).on('resize', function(){
+			alertBarSpacer();
+		});
+
 		$(document).ready(function(){
+
 			if(localStorage.getItem('<?= $alertID ?>') != 'shown') {
-				$('.alert-bar').show();
+				$('#alert-bar, #alert-bar-spacer').show();
+				$('#alert-bar, #alert-bar-spacer').show();
 			}
 			$('#alert-bar-close').click(function() {
-				$('.alert-bar').hide();
+				$('#alert-bar, #alert-bar-spacer').hide();
 				localStorage.setItem('<?= $alertID ?>', 'shown');
 			});
+
+			alertBarSpacer();
+
 		});
+
 	</script>
 
 <? } ?>

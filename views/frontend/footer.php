@@ -13,15 +13,15 @@
 
 ?>
 
-
-
 	<div class="cybernautic-tag">
 		<? seoCybernauticLogo($cms); ?>
 	</div>
 
 	© <?= date("Y"); ?> <?= $owner->site_title ?>
 
+	
 
+	<? printBlock(ALERT_BAR_BLOCK_ID); ?>
 
 	<script type="text/javascript" src="<?= bustCache("js/scripts.js") ?>"></script>
 	<script type="text/javascript" src="<?= bustCache("js/webflow.js") ?>"></script>
