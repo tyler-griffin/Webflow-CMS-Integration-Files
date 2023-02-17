@@ -10,6 +10,9 @@
 			?>
 			<div id="alert-bar" class="alert-bar">
 				<div class="alert-text">
+					<? if($ITEM->icon && $ITEM->icon != "null") { ?>
+						<span class="alert-icon"><i class="<?= $ITEM->icon ?>"></i></span>
+					<? } ?>
 					<?= nl2br($ITEM->textarea); ?>
 					<? if(json_decode($ITEM->button)->text) { ?>
 						&nbsp;
