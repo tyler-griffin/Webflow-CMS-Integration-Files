@@ -27,12 +27,14 @@
 				</div>
 			<? } ?>
 		</div>
-		<div class="slider-arrow w-slider-arrow-left">
-			<div class="slider-arrow-icon w-icon-slider-left"></div>
-		</div>
-		<div class="slider-arrow w-slider-arrow-right">
-			<div class="slider-arrow-icon w-icon-slider-right"></div>
-		</div>
-		<div class="slide-nav w-slider-nav w-round"></div>
+		<? if(sizeof($amsd["data"]) > 1) { ?>
+			<div class="slider-arrow w-slider-arrow-left">
+				<div class="slider-arrow-icon w-icon-slider-left"></div>
+			</div>
+			<div class="slider-arrow w-slider-arrow-right">
+				<div class="slider-arrow-icon w-icon-slider-right"></div>
+			</div>
+			<div class="slide-nav w-slider-nav w-round"></div>
+		<? } ?>
 	</div>
 </div>
