@@ -95,7 +95,7 @@ if($profile) {
 		<div class="tabs-amsd-category-select-form w-form">
 			<form class="form">
 				<label for="month-select" class="tabs-amsd-category-select-form-label">Filter Events</label>
-				<div class="input-field select-input-wrapper">
+				<div class="form-input select-input-wrapper">
 					<select id="month-select" class="input-field select-input tabs-amsd-category-filter w-select">
 						<? $currentMonth = new DateTime(date("M").' '.date("Y")); ?>
 						<? foreach ($calendar['month-select']['years'] as $y => $YEAR) { ?>

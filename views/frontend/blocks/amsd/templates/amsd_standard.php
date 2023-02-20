@@ -97,7 +97,7 @@ if($profile) {
 		<div class="amsd-select-form-wrapper">
 			<form class="amsd-select-form">
 				<label for="category-select" class="amsd-select-form-label">Filter by Category</label>
-				<div class="input-field select-input-wrapper">
+				<div class="form-input select-input-wrapper">
 					<select id="category-select" name="category-select" class="input-field select-input category-filter w-select">
 						<option value="/<?= $page->uri ?>">All Categories</option>
 				        <? foreach($categoriesBlock["data"] as $k => $CATEGORY) { ?>
