@@ -19,5 +19,6 @@ dynamic variables, use "/site/config/globals.php"
 // This is used in the "bustCache()" function to version assets
 define("ASSETS_VERSION", "1.0.0");
 
-/*
+define(DEV_CONFIG_BLOCK_ID, 1);
+define(COMMON_ITEMS_BLOCK_ID, 2);
 define(ALERT_BAR_BLOCK_ID, 3);

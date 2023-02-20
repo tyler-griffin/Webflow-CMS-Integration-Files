@@ -1,7 +1,5 @@
 
-<?
-
-/*
+<? /*
 
 	* Replace WF_SITE and WF_PAGE in <html data-wf-site="WF_SITE" data-wf-page="WF_PAGE"> with the corresponding from the webflow export
 
@@ -12,16 +10,14 @@
 		footer.php
 
 
-	* The variables below can be moved to /config/globals.php
+	* Double check the files below to make sure common variables are correct such as ALERT_BAR_BLOCK_ID, $DEV_CONFIG, $COMMON_ITEMS
 
-		$DEV_CONFIG = strings(1);
-		$COMMON_ITEMS = strings(2);
-		define("M", _mobileCheck());
+		/config/globals.php
+		/config/constants.php
 
-*/
+*/ ?>
 
-
-?>
+<? define("M", _mobileCheck()); ?>
 
 <!DOCTYPE html>
 

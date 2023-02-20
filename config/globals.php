@@ -24,6 +24,5 @@ $ci=& get_instance();
 ------------------------------------------------------------------
 */
 
-/*
-$DEV_CONFIG = strings(1);
-$COMMON_ITEMS = strings(2);
+$DEV_CONFIG = strings(DEV_CONFIG_BLOCK_ID);
+$COMMON_ITEMS = strings(COMMON_ITEMS_BLOCK_ID);
