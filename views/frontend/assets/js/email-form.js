@@ -7,6 +7,8 @@ var EMAIL_FORM = function($FORM) {
 		
 		"onValid": function(CONFIG, OPTIONS) {
 
+			$('.contact-form-submit').attr("disabled","true");
+
 			VALIDATOR["message"]("Sending contact form...");
 			
 			var FROM = CONFIG["from"];
@@ -47,6 +49,8 @@ var EMAIL_FORM = function($FORM) {
 					}
 					
 				}
+
+				$('.contact-form-submit').removeAttr("disabled"); 
 			
 			});
 			

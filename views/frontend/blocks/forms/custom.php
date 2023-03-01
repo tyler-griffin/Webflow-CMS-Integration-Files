@@ -100,7 +100,7 @@
 			</div>
 
 			<div class="form-input">
-				<div class="cms-btn contact-form-submit w-button">Submit</div>
+				<button class="cms-btn contact-form-submit w-button">Submit</button>
 			</div>
 			
 			<span class="contact-form-loading-icon"></span>
@@ -120,6 +120,8 @@
 		 
 			var VALIDATOR = new FORM_VALIDATOR($FORM, {
 				"onValid": function(CONFIG) {
+
+					$('.contact-form-submit').attr("disabled","true");
 					 
 					VALIDATOR["message"]("Processing...");
 					 
@@ -132,6 +134,8 @@
 						}
 						 
 						VALIDATOR["message"](R["message"], R["status"], 5000);
+
+						$('.contact-form-submit').removeAttr("disabled"); 
 						 
 					}, 'json');
 					 

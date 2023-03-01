@@ -23,7 +23,7 @@
 			</div>
 
 			<div class="form-input">
-				<div class="cms-btn contact-form-submit w-button"><span class="button-icon"><i class="fas fa-paper-plane"></i></span> Submit</div>
+				<button class="cms-btn contact-form-submit w-button"><span class="button-icon"><i class="fas fa-paper-plane"></i></span> Submit</button>
 			</div>
 			
 			<span class="contact-form-loading-icon"></span>
