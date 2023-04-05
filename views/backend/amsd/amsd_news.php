@@ -40,27 +40,23 @@
                 <?= $FIELD->build("publish_date"); ?>
             
             </div>
+
+            <? if(array_key_exists("preview_text", $item)) { ?>
+    
+                <div class="unit">
+
+                    <?= $FIELD->build("preview_text"); ?>
+                
+                </div>
+
+            <? } ?>
             
         </div>
-
+        
+        <? if(array_key_exists("url", $item)) { ?>
         <div class="amsd-hr"></div>
         <?= $FIELD->build("url"); ?>
         </div>
-
-        <? if(array_key_exists("preview_text", $item)) { ?>
-
-        <div class="amsd-hr"></div>
-        
-        <div class="grid">
-    
-            <div class="unit half">
-        
-                <?= $FIELD->build("preview_text"); ?>
-            
-            </div>
-            
-        </div>
-
         <? } ?>
     
     </form>
