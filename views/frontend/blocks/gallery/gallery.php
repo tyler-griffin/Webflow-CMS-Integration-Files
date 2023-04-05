@@ -91,9 +91,14 @@ if($ALBUM) {  ?>
 
 		<? } ?>
 
-		<div class="back-link-block">
-			<a href="<?= $ALBUM["back"] ?>" class="back-link cms-btn"><span class="button-icon"><i class="fas fa-chevron-left"></i></span> &nbsp; Back to <?= $page->title ?></a>
-		</div>
+		<div class="gallery-image fix-remainder-items"></div>
+		<div class="gallery-image fix-remainder-items"></div>
+		
+		<? if($ALBUM["back"]) { ?>
+			<div class="back-links-wrapper">
+				<a href="<?= $ALBUM["back"] ?>" class="back-link"><span class="button-icon"><i class="fas fa-chevron-left"></i></span> Back to <?= $page->title ?></a>
+			</div>
+		<? } ?>
 
 	</div>
 
@@ -130,6 +135,9 @@ if($ALBUM) {  ?>
 	        </a>
 			
 	    <? } ?>
+
+		<div class="gallery-image fix-remainder-items"></div>
+		<div class="gallery-image fix-remainder-items"></div>
 
 	</div>
 

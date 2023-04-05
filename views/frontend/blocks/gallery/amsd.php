@@ -73,6 +73,9 @@
 
 		<? } ?>
 
+		<div class="gallery-image fix-remainder-items"></div>
+		<div class="gallery-image fix-remainder-items"></div>
+
 	</div>
 
 </div>
