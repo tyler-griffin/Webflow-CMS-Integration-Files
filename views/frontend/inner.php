@@ -1,47 +1,7 @@
-
-<?
-
-/*
-
-	Code in the file assumes the following variables exist for each page using a custom page settings block
-
-		$page->settings["Page Banner"]
-		$page->settings["Title Override"]
-		$page->settings["Subtitle"]
-
-	Custom page settings can be set in the customPageSettingsSchema found in /helpers/pagebuilder_custom_helper.php, examples below:
-	
-		$items[] = [
-	        "key" => "Page Banner",
-	        "value" => NULL,
-	        "config" => "focused_img"
-	    ];
-
-	    $items[] = [
-	        "key" => "Title Override",
-	        "value" => NULL,
-	        "config" => "text"
-	    ];
-
-	    $items[] = [
-	        "key" => "Subtitle",
-	        "value" => NULL,
-	        "config" => "text"
-	    ];
-
-*/
-
-?>
-
-
 <? include(FRONTEND . "/header.php"); ?>
 
 <? // Create variable for title text
-if(isset($page->profile->title)) {
-	$titleText = $page->profile->title;
-} else if(isset($page->profile->event_title)) {
-	$titleText = $page->profile->event_title;
-} else if($page->settings["Title Override"]) {
+if($page->settings["Title Override"]) {
 	$titleText = $page->settings["Title Override"];
 } else {
 	$titleText = $page->title;
@@ -50,12 +10,6 @@ if(isset($page->profile->title)) {
 <? // Create variable for subtitle text
 if(isset($page->settings["Subtitle"])) {
 	$subtitleText = $page->settings["Subtitle"];
-}
-if(isset($page->profile->sub_title)) {
-	$subtitleText = $page->profile->sub_title;
-}
-if(isset($page->profile->publish_date)) {
-	$subtitleText = date("F j, Y", strtotime($page->profile->publish_date));
 } ?>
 
 <? // Create variable for interior banner image

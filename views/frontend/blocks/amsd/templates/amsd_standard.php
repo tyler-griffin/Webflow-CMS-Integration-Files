@@ -52,7 +52,7 @@ if($profile) {
 
 		<? if($itemImage) { ?>
 			<div class="profile-image-wrapper <?= $CLASS_STAFF ?>">
-				<div class="amsd-image <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/400');"></div>
+				<div class="amsd-image <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/600');"></div>
 			</div>
 		<? } ?>
 
@@ -143,7 +143,7 @@ if($profile) {
 							if(isset($ITEM->focused_img)) {
 								$itemImage = json_decode($ITEM->focused_img);
 								$itemImagePosition = $itemImage->config->{'background-position'};
-								$itemImageUrl =  '/image/' . $itemImage->id . '/400';
+								$itemImageUrl =  '/image/' . $itemImage->id . '/600';
 							} else if($block->settings["Table"] == "amsd_staff") {
 								$itemImageUrl = '/assets/images/staff-placeholder.jpg';
 							} ?>
@@ -210,6 +210,11 @@ if($profile) {
 						
 						</div>
 
+					<? } ?>
+
+					<? if($CLASS_GRID) { ?>
+						<div class="amsd-item grid remainder-items-fix"></div>
+						<div class="amsd-item grid remainder-items-fix"></div>
 					<? } ?>
 
 				</div>

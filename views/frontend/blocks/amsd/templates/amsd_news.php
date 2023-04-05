@@ -1,12 +1,6 @@
 
 <?
 
-// Create class for staff layout
-$CLASS_STAFF = "";
-if(isset($block->settings["AMSD Layout"]) && $block->settings["Table"] == "amsd_staff") {
-	$CLASS_STAFF = " staff";
-}
-
 // Create class for grid layout
 $CLASS_GRID = "";
 if(isset($block->settings["AMSD Layout"]) && $block->settings["AMSD Layout"] == "grid-list") {
@@ -25,8 +19,8 @@ if($profile) {
 			$itemImage = json_decode($ITEM->focused_img);
 		} ?>
 		<? if($itemImage) { ?>
-			<div class="profile-image-wrapper <?= $CLASS_STAFF ?>">
-				<div class="amsd-image <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/400');"></div>
+			<div class="profile-image-wrapper">
+				<div class="amsd-image" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/600');"></div>
 			</div>
 		<? } ?>
 
@@ -150,14 +144,12 @@ if($profile) {
 					if(isset($ITEM->focused_img)) {
 						$itemImage = json_decode($ITEM->focused_img);
 						$itemImagePosition = $itemImage->config->{'background-position'};
-						$itemImageUrl =  '/image/' . $itemImage->id . '/400';
-					} else if($block->settings["Table"] == "amsd_staff") {
-						$itemImageUrl = '/assets/images/staff-placeholder.jpg';
+						$itemImageUrl =  '/image/' . $itemImage->id . '/600';
 					} ?>
 				
 					<? if($itemImageUrl) { ?>
 						<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-image-link w-inline-block <?= $CLASS_GRID ?>" title="<?= $ITEM->title ?>">
-							<div class="amsd-image <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>" style="<? if($itemImagePosition) { ?>background-position: <?= $itemImagePosition ?>;<? } ?> background-image: url(<?= $itemImageUrl ?>);">
+							<div class="amsd-image <?= $CLASS_GRID ?>" style="<? if($itemImagePosition) { ?>background-position: <?= $itemImagePosition ?>;<? } ?> background-image: url(<?= $itemImageUrl ?>);">
 								<? if($link) { ?><div class="hover-overlay"></div><? } ?>
 							</div>
 						</a>
@@ -227,6 +219,11 @@ if($profile) {
 				
 				</div>
 
+			<? } ?>
+
+			<? if($CLASS_GRID) { ?>
+				<div class="amsd-item grid remainder-items-fix"></div>
+				<div class="amsd-item grid remainder-items-fix"></div>
 			<? } ?>
 
 		</div>

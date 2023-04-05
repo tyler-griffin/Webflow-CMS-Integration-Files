@@ -49,25 +49,18 @@
 
 <body class="cms-frontend" data-page-id="<?= $page->id ?>">
 
-<? /*
-
-Example header section, change as needed
-
 	<div class="header-section">
 
 		<div data-collapse="medium" data-duration="400" role="banner" class="navbar w-nav">
 			<div class="nav-container w-container">
 				<a href="/home" class="logo-home-link w-nav-brand" title="Home">
-					<img src="/image/<?= $DEV_CONFIG['Logo'] ?>/600" width="300" height="93" alt="<?= $owner->site_title ?>" class="logo-image">
+					<img src="/image/<?= $DEV_CONFIG['Logo'] ?>/600" alt="<?= $owner->site_title ?>" class="logo-image">
 				</a>
 				<div class="menu-button w-nav-button">
 					<div class="w-icon-nav-menu"></div>
 				</div>
-				<? // printWebflowMenu() exists in /helpers/custom_helper.php
-				printWebflowMenu(); ?>
+				<? printWebflowMenu(); ?>
 			</div>
 		</div>
 	</div>
 
-*/
-?>
