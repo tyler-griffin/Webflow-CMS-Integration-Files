@@ -408,6 +408,20 @@ function customSortedListBlocks() {
         ],
         "dev" => true
     ];
+
+    $items[] = [
+        "title" => "Accordion List",
+        "value" => "accordion-list",
+        "block" => [
+            "type" => 2,
+            "title" => "Accordion List",
+            "settings" => [
+                ["Heading Read Only", "true"],
+                ["Table", "amsd_accordion"]
+            ]
+        ],
+        "dev" => true
+    ];
     
     return $items;
 
