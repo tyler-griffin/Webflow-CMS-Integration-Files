@@ -120,6 +120,8 @@
 
 			echo '<nav class="w-dropdown-list ' . ($R["LEVEL"] > 1 ? 'nested-' : '') . 'dropdown-list">';
 
+				echo '<div class="dropdown-links-wrapper">';
+
 				foreach($SUBS as $k => $SUB) {
 
 					// Set first class for dropdown links
@@ -160,6 +162,8 @@
 					}
 
 				}
+
+				echo '</div>';
 
 			echo '</nav>';
 
