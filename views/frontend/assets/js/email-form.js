@@ -37,8 +37,10 @@ var EMAIL_FORM = function($FORM) {
 						$FORM[0].reset();
 
 						$(".input-field").each(function () {
-							if ($(this).val().length < 1) {
-								$(this).prev('.floating-form-label').removeClass('focused');
+							if($(this).attr('type') != "date") {
+								if ($(this).val().length < 1) {
+									$(this).prev('.floating-form-label').removeClass('focused');
+								}
 							}
 						});
 						
