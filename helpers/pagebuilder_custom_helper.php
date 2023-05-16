@@ -422,6 +422,30 @@ function customSortedListBlocks() {
         ],
         "dev" => true
     ];
+
+    $items[] = [
+        "title" => "Reviews Embed",
+        "value" => "reviews-embed",
+        "block" => [
+            "type" => 2,
+            "title" => "Reviews Embed",
+            "settings" => [
+                ["AMSD Columns", 2],
+                ["AMSD Delete", "false"],
+                ["AMSD Edit", "false"],
+                ["Heading Read Only", "true"],
+                ["Table", "amsd_strings"],
+                ["Template", "reviews-embed"]
+            ]
+        ],
+        "items" => [
+            [
+                "key" => "Reviewability ID",
+                "value" => ""
+            ]
+        ],
+        "dev" => true
+    ];
     
     return $items;
 
