@@ -21,7 +21,7 @@
 
 <!DOCTYPE html>
 
-<html data-wf-site="WF_SITE" data-wf-page="WF_PAGE">
+<html data-wf-site="WF_SITE" data-wf-page="WF_PAGE" lang="en-US">
 
 <head>
 
