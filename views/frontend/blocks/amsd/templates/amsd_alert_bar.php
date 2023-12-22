@@ -20,8 +20,7 @@
 					<? } ?>
 				</div>
 				<a href="#" class="alert-bar-close-button w-inline-block" id="alert-bar-close">
-					<div class="alert-bar-close-button-horizontal-line"></div>
-					<div class="alert-bar-close-button-vertical-line"></div>
+					<div class="alert-close-icon"><i class="fa-solid fa-xmark"></i></div>
 				</a>
 			</div>
 			<div id="alert-bar-spacer"></div>
@@ -30,28 +29,16 @@
 
 	<script type="text/javascript">
 
-		function alertBarSpacer() {
-			if($('#alert-bar').is(':visible')) {
-				$('#alert-bar-spacer').css('height', $('#alert-bar').outerHeight() + 'px');
-			}
-		}
-
-		$(window).on('resize', function(){
-			alertBarSpacer();
-		});
-
 		$(document).ready(function(){
 
 			if(localStorage.getItem('<?= $alertID ?>') != 'shown') {
 				$('#alert-bar, #alert-bar-spacer').show();
-				$('#alert-bar, #alert-bar-spacer').show();
+				
 			}
 			$('#alert-bar-close').click(function() {
 				$('#alert-bar, #alert-bar-spacer').hide();
 				localStorage.setItem('<?= $alertID ?>', 'shown');
 			});
-
-			alertBarSpacer();
 
 		});
 
