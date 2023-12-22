@@ -1,4 +1,19 @@
 
+/* Check block IDs after importing data */
+INSERT INTO `amsd_strings` (`id`, `block`, `key`, `value`, `config`, `pos`) VALUES
+  (1, 2, 'Footer Links', '[{"title":"Accessibility Statement","url":""},{"title":"Privacy Policy","url":""}]', 'sorted_list', 5),
+  (2, 1, 'Logo', NULL, 'photo', 0),
+  (3, 1, 'Logo on Scroll', NULL, 'photo', 1),
+  (4, 1, 'Logo in Footer', NULL, 'photo', 2),
+  (5, 2, 'Default Page Banner Photo', NULL, 'focused_img', 0),
+  (6, 2, 'Email Address', NULL, NULL, 1),
+  (7, 2, 'Phone Number', NULL, NULL, 2),
+  (8, 2, 'Address', NULL, 'textarea', 3),
+  (9, 2, 'Hours', NULL, 'textarea', 4),
+  (10, 2, 'Social Media Links', NULL, 'social_media_links', 99999);
+
+
+
 CREATE TABLE IF NOT EXISTS `amsd_alert_bar` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `block` int(11) unsigned NOT NULL DEFAULT 0,
