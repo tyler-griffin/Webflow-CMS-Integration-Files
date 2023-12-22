@@ -1,16 +1,17 @@
 
 /* Check block IDs after importing data */
 INSERT INTO `amsd_strings` (`id`, `block`, `key`, `value`, `config`, `pos`) VALUES
-  (1, 2, 'Footer Links', '[{"title":"Accessibility Statement","url":""},{"title":"Privacy Policy","url":""}]', 'sorted_list', 5),
-  (2, 1, 'Logo', NULL, 'photo', 0),
-  (3, 1, 'Logo on Scroll', NULL, 'photo', 1),
-  (4, 1, 'Logo in Footer', NULL, 'photo', 2),
-  (5, 2, 'Default Page Banner Photo', NULL, 'focused_img', 0),
-  (6, 2, 'Email Address', NULL, NULL, 1),
-  (7, 2, 'Phone Number', NULL, NULL, 2),
-  (8, 2, 'Address', NULL, 'textarea', 3),
-  (9, 2, 'Hours', NULL, 'textarea', 4),
-  (10, 2, 'Social Media Links', NULL, 'social_media_links', 99999);
+  (1, 1, 'Logo', NULL, 'photo', 0),
+  (2, 1, 'Logo on Scroll', NULL, 'photo', 1),
+  (3, 1, 'Logo in Footer', NULL, 'photo', 2),
+  (4, 1, 'Nav Button Icon', NULL, 'font_awesome', 0),
+  (5, 2, 'Default Page Banner Photo', NULL, 'focused_img', 1),
+  (6, 2, 'Email Address', NULL, NULL, 2),
+  (7, 2, 'Phone Number', NULL, NULL, 3),
+  (8, 2, 'Address', NULL, 'textarea', 4),
+  (9, 2, 'Hours', NULL, 'textarea', 5),
+  (10, 2, 'Social Media Links', NULL, 'social_media_links', 6),
+  (11, 2, 'Footer Links', '[{"title":"Accessibility Statement","url":""},{"title":"Privacy Policy","url":""}]', 'sorted_list', 99999);
 
 
 
