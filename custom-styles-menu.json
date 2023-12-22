@@ -1,0 +1,21 @@
+[{
+    "title": "Heading 1",
+    "class": "heading",
+    "element": "div"  
+},{
+    "title": "Heading 2",
+    "class": "heading heading-2",
+    "element": "div"  
+},{
+    "title": "Heading 3",
+    "class": "heading heading-3",
+    "element": "div"  
+},{
+    "title": "Divider",
+    "class": "text-divider",
+    "element": "div"  
+},{
+    "title": "Call Out Text",
+    "class": "call-out-text",
+    "element": "div"
+}]
