@@ -171,6 +171,8 @@
 
 		function mainMenu($C) {
 
+			$COMMON_ITEMS = strings(COMMON_ITEMS_BLOCK_ID);
+
 			// Loop over main nav items
 			foreach ($C["NAV"] as $k => $ROOT) {
 
@@ -179,6 +181,12 @@
 
 				// Set last class for root items
 				$CLASS_LAST = $ROOT === end($C["NAV"]) ? " last" : "";
+
+				// Set icon for last root items
+				$LAST_ICON = '';
+				if($ROOT === end($C["NAV"]) && $COMMON_ITEMS['Nav Button Icon']) { 
+					$LAST_ICON = '<div class="button-icon"><i class="' . $COMMON_ITEMS["Nav Button Icon"] . '"></i></div>';
+				}
 
 				// Add beginning slash to inner page links
 				$ROOT_LINK = $ROOT->type == 2 ? $ROOT->slug : '/' . $ROOT->slug;
@@ -204,7 +212,7 @@
 				// Item is a single link
 				} else {
 
-					echo '<a class="w-nav-link nav-link' . $CLASS_ACTIVE . $CLASS_LAST . '" href="' . $ROOT_LINK . '">' . $ROOT->title . '</a>';
+					echo '<a class="w-nav-link nav-link' . $CLASS_ACTIVE . $CLASS_LAST . '" href="' . $ROOT_LINK . '">' . $LAST_ICON . $ROOT->title . '</a>';
 
 				}
 
