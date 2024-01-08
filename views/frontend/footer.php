@@ -13,6 +13,10 @@
 
 ?>
 
+	<? foreach(json_decode($COMMON_ITEMS['Footer Links']) as $k => $ITEM) { ?>
+		<a href="<?= $ITEM->url ?>" class=""><?= $ITEM->title ?></a>
+	<? } ?>
+
 	<div class="cybernautic-tag">
 		<? seoCybernauticLogo($cms); ?>
 	</div>
