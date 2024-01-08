@@ -17,14 +17,6 @@ window.onload = function(e) {
                 var suffix = "']";
                 var itemLabel = "LIST_ITEM";
 
-                if($('#common-items').checked) {
-                    prefix = "$COMMON_ITEMS['";
-                }
-
-                if($('#common-items').checked) {
-                    prefix = "$DEV_CONFIG['";
-                }
-
                 if($(this).parents('[cybdata="list"]').length) {
                     if($(this).parents('[cybdata="list"]').attr('cybkey')) {
                         itemLabel = $(this).parents('[cybdata="list"]').attr('cybkey').toUpperCase().replace(/ /g,"_") + "_ITEM";
