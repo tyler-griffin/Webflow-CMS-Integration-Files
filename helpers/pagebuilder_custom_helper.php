@@ -393,6 +393,101 @@ function customSortedListBlocks() {
     */
 
     $items[] = [
+        "title" => "Dev Config",
+        "value" => "dev-config",
+        "block" => [
+            "type" => 2,
+            "title" => "Dev Config",
+            "settings" => [
+                ["AMSD Columns", 2],
+                ["AMSD Delete", "false"],
+                ["AMSD Edit", "false"],
+                ["Heading Read Only", "true"],
+                ["Table", "amsd_strings"],
+                ["Developer Only", "true"],
+                ["Hidden", "true"]
+            ],
+            "items" => [
+                [
+                    "key" => "Logo",
+                    "config" => "photo"
+                ],[
+                    "key" => "Logo on Scroll",
+                    "config" => "photo"
+                ],[
+                    "key" => "Logo in Footer",
+                    "config" => "photo"
+                ]
+            ]
+        ],
+        "dev" => true
+    ];
+
+    $items[] = [
+        "title" => "Common Items",
+        "value" => "common-items",
+        "block" => [
+            "type" => 2,
+            "title" => "Common Items",
+            "settings" => [
+                ["AMSD Columns", 2],
+                ["AMSD Delete", "false"],
+                ["AMSD Edit", "false"],
+                ["Heading Read Only", "true"],
+                ["Table", "amsd_strings"],
+                ["Hidden", "true"]
+            ],
+            "items" => [
+                [
+                    "key" => "Default Page Banner Photo",
+                    "config" => "focused_img"
+                ],[
+                    "key" => "Email Address"
+                ],[
+                    "key" => "Phone Number"
+                ],[
+                    "key" => "Address",
+                    "config" => "text_area"
+                ],[
+                    "key" => "Hours"
+                ],[
+                    "key" => "Social Media Links",
+                    "config" => "social_media_links"
+                ],[
+                    "key" => "Footer Links",
+                    "value" => '[{"title":"Accessibility Statement","url":""},{"title":"Privacy Policy","url":""}]',
+                    "config" => "links"
+                ]
+            ]
+        ],
+        "dev" => true
+    ];
+
+    $items[] = [
+        "title" => "Form/Code Embed",
+        "value" => "embed-code",
+        "block" => [   
+            "type" => 2,
+            "title" => "Form/Code Embed",
+            "settings" => [
+                ["Table", "amsd_strings"],
+                ["Heading Read Only", "true"],
+                ["AMSD Columns", "2"],
+                ["AMSD Delete", "false"],
+                ["AMSD Edit", "false"],
+                ["Template", "embed-code"]
+            ],
+            "items" => [
+                [
+                    "key" => "Embed Code",
+                    "config" => "textarea"
+                ]
+            ]
+        ],
+        "dev" => true
+    ];
+
+    $items[] = [
         "title" => "Alert Bar",
         "value" => "alert-bar",
         "block" => [
@@ -403,7 +498,39 @@ function customSortedListBlocks() {
                 ["AMSD Limit", 1],
                 ["AMSD Noun", "Alert"],
                 ["Table", "amsd_alert_bar"],
-                ["Hidden", true]
+                ["Hidden", "true"]
+            ],
+            "items" => [
+                [
+                    "active" => 1,
+                    "icon" => "fas fa-triangle-exclamation",
+                    "textarea" => 'Lorem ipsum dolor sit amet, eam everti tractatos cu, ea vis brute ullamcorper, nominavi probatus posidonium cu his.',
+                    "button" => '{"text":"Learn More","url":""}'
+                ]
+            ]
+        ],
+        "dev" => true
+    ];
+
+    $items[] = [
+        "title" => "Popup Window",
+        "value" => "popup",
+        "block" => [
+            "type" => 2,
+            "title" => "Popup Window",
+            "settings" => [
+                ["Heading Read Only", "true"],
+                ["AMSD Limit", 1],
+                ["AMSD Noun", "Popup"],
+                ["Table", "amsd_popup"],
+                ["Hidden", "true"]
+            ],
+            "items" => [
+                [
+                    "active" => 1,
+                    "title" => "Test",
+                    "html" => '<div class="heading">Lightbox <span style="color:#63a34a;">Heading</span></div><p>The Rural Energy for America Program provides guaranteed loan financing and grant funding to agricultural producers and rural small businesses to purchase or install renewable energy systems or make energy efficiency improvements.</p><a class="cms-btn cms-btn-primary" data-btn-text="Button Text" href="#">Button Text</a></p>'
+                ]
             ]
         ],
         "dev" => true
