@@ -5,7 +5,98 @@ window.onload = function(e) {
 
     $(document).ready(function() {
 
+        function makeTitle(slug) {
+            var words = slug.split('-');
+            for (var i = 0; i < words.length; i++) {
+                var word = words[i];
+                words[i] = word.charAt(0).toUpperCase() + word.slice(1);
+            }
+            return words.join(' ');
+        }
+
         $('#parse').click(function(){
+
+            window.builderData = '';
+
+            $('#data-parsing').html($('#input').val());
+
+
+            /* --- Create data for customSortedListBlocks() in pagebuilder_custom_helper.php --- */
+
+            $('#data-parsing').find('[cybdata="list"]').each(function() {
+                $(this).children().remove();
+            });
+
+            $('#data-parsing').find('[cybdata="buttontext"]').each(function() {
+                $(this).removeAttr('cybdata');
+            });
+
+            $('#data-parsing').find('[cybdata="block"]').each(function() {
+
+                var title = $(this).attr('cybkey');
+                if(!title) { 
+                    title = makeTitle($(this).attr('class'));
+                }
+                var slug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
+                slug = slug.toLowerCase();
+
+                builderData += '$items[] = [';
+                    builderData += '"title" => "' + title + '",';
+                    builderData += '"value" => "' + slug + '",';
+                    builderData += '"block" => [';
+                        builderData += '"type" => 2,';
+                        builderData += '"title" => "' + title + '",';
+                        builderData += '"settings" => [';
+                            builderData += '["AMSD Columns", 2],';
+                            builderData += '["AMSD Delete", "false"],';
+                            builderData += '["AMSD Edit", "false"],';
+                            builderData += '["Heading Read Only", "true"],';
+                            builderData += '["Table", "amsd_strings"],';
+                            builderData += '["Template", "' + slug + '"]';
+                        builderData += '],"items" => [';
+
+                            $(this).find('[cybdata]').each(function() {
+
+                                var config = $(this).attr('cybdata');
+                                var key = $(this).attr('cybkey');
+                                if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
+
+                                if(config == 'list') {
+                                    
+                                    config = 'sorted_list';
+
+                                } else if(config == 'img') {
+
+                                    config = 'photo';
+
+                                } else if(config == 'bg') {
+
+                                    config = 'focused_img';
+
+                                } else if(config == 'icon') {
+
+                                    config = 'font_awesome';
+                                    
+                                } 
+                                
+                                if(config == 'link') {
+                                    builderData += '["key" => "' + key + ' Text","config" => ""],';
+                                    builderData += '["key" => "' + key + ' URL","config" => "url"],';
+                                } else {
+                                    builderData += '["key" => "' + key + '","config" => "' + config + '"],';
+                                }
+                                
+                            });
+
+                        builderData += ']';
+                    builderData += '],"dev" => true';
+                builderData += '];';
+            });
+
+            $('#data-output').val(builderData);
+            $('#data-parsing').html('');
+
+            /* --- CREATE PHP VIEW FOR TEMPLATE FILE --- */
 
             $('#parsing').html($('#input').val());
 
@@ -34,7 +125,11 @@ window.onload = function(e) {
 
                 /* --- DATA TYPES --- */
 
-                if(type == 'list') {
+                if(type == 'block' || type == 'buttontext') {
+
+                    /* Skip */
+
+                } else if(type == 'list') {
                     
                     itemLabel = key.toUpperCase().replace(/ /g,"_") + "_ITEM";
                     $(this).children().not(':first').remove();
@@ -66,10 +161,6 @@ window.onload = function(e) {
 
                     $(this).attr("href","<?= " + prefix + "url" + suffix + " ?>");
                     $(this).html("<?= " + prefix + "title" + suffix + " ?>");
-
-                } else if(type == 'buttontext') {
-
-                    /* Handled inside of button below, skipping item so it doesn't get treated as a standard text data type */
 
                 } else if(type == 'button') {
 
@@ -124,13 +215,14 @@ window.onload = function(e) {
 
             var cleanedUp = $('#parsing').html().replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->');
 
-            $('#output').val(cleanedUp);
+            $('#output').val('<? $DATA = strings($block->id); ?>' + cleanedUp);
             $('#parsing').html('');
-            $('.textarea').focus(function() { 
-                this.select(); 
-            });
             $('#output').focus();
 
+        });
+
+        $('.textarea').focus(function() { 
+            this.select(); 
         });
 
     });
