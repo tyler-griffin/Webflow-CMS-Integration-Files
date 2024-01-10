@@ -447,7 +447,7 @@ function customSortedListBlocks() {
                     "key" => "Phone Number"
                 ],[
                     "key" => "Address",
-                    "config" => "text_area"
+                    "config" => "textarea"
                 ],[
                     "key" => "Hours"
                 ],[
