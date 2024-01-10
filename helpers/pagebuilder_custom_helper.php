@@ -477,6 +477,21 @@ function customSortedListBlocks() {
     ];
 
     $items[] = [
+        "title" => "Cycling Banner",
+        "value" => "cycling-banner",
+        "block" => [
+            "type" => 2,
+            "title" => "Cycling Banner",
+            "settings" => [
+                ["AMSD Noun", "Banner"],
+                ["Heading Read Only", "true"],
+                ["Table", "amsd_cycling_banner"]
+            ]
+        ],
+        "dev" => true
+    ];
+
+    $items[] = [
         "title" => "Form/Code Embed",
         "value" => "embed-code",
         "block" => [   
