@@ -60,6 +60,13 @@ function customGeneratePageBuilderMenu() {
 
     */
 
+    $output[] = [
+        "title" => "Accordion List",
+        "value" => "accordion-list",
+        "icon" => "fa-layer-group",
+        "last" => "text-block"
+    ];
+
     return $output;
 
 }
@@ -205,6 +212,12 @@ function customCreatePageBlocks($config) {
                 break;
 
         */
+
+        case "accordion-list":
+
+		    $blocks[] = $blockLayouts["accordion-list"];
+
+		    break;
                 
     }
 
