@@ -1,9 +1,9 @@
 
-/* https://cybflow.webflow.io/ */
-
 window.onload = function(e) { 
 
     $(document).ready(function() {
+
+        $('textarea').attr('maxlength','500000');
 
         function makeTitle(slug) {
             var words = slug.split('-');
@@ -16,20 +16,13 @@ window.onload = function(e) {
 
         $('#parse').click(function(){
 
-            window.builderData = '';
+            window.blockBuilderData = '';
+            window.customFieldData = '';
 
             $('#data-parsing').html($('#input').val());
 
 
             /* --- Create data for customSortedListBlocks() in pagebuilder_custom_helper.php --- */
-
-            $('#data-parsing').find('[cybdata="list"]').each(function() {
-                $(this).children().remove();
-            });
-
-            $('#data-parsing').find('[cybdata="buttontext"]').each(function() {
-                $(this).removeAttr('cybdata');
-            });
 
             $('#data-parsing').find('[cybdata="block"]').each(function() {
 
@@ -37,63 +30,154 @@ window.onload = function(e) {
                 if(!title) { 
                     title = makeTitle($(this).attr('class'));
                 }
-                var slug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
-                slug = slug.toLowerCase();
+                var blockSlug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
+                blockSlug = blockSlug.toLowerCase();
 
-                builderData += '$items[] = [';
-                    builderData += '"title" => "' + title + '",';
-                    builderData += '"value" => "' + slug + '",';
-                    builderData += '"block" => [';
-                        builderData += '"type" => 2,';
-                        builderData += '"title" => "' + title + '",';
-                        builderData += '"settings" => [';
-                            builderData += '["AMSD Columns", 2],';
-                            builderData += '["AMSD Delete", "false"],';
-                            builderData += '["AMSD Edit", "false"],';
-                            builderData += '["Heading Read Only", "true"],';
-                            builderData += '["Table", "amsd_strings"],';
-                            builderData += '["Template", "' + slug + '"]';
-                        builderData += '],"items" => [';
+                blockBuilderData += '$items[] = [';
+                blockBuilderData += '\n    "title" => "' + title + '",';
+                blockBuilderData += '\n    "value" => "' + blockSlug + '",';
+                blockBuilderData += '\n    "block" => [';
+                blockBuilderData += '\n        "type" => 2,';
+                blockBuilderData += '\n        "title" => "' + title + '",';
+                blockBuilderData += '\n        "settings" => [';
+                blockBuilderData += '\n            ["AMSD Columns", 2],';
+                blockBuilderData += '\n            ["AMSD Delete", "false"],';
+                blockBuilderData += '\n            ["AMSD Edit", "false"],';
+                blockBuilderData += '\n            ["Heading Read Only", "true"],';
+                blockBuilderData += '\n            ["Table", "amsd_strings"],';
+                blockBuilderData += '\n            ["Template", "' + blockSlug + '"]';
+                blockBuilderData += '\n        ],"items" => [';
+
+                $(this).find('[cybdata]').each(function() {
+
+                    if($(this).parents('[cybdata="list"]').length) {
+
+                        /* Skip items inside of a sorted list item, those get handled inside of the list / sorted_list config */
+                        return;
+
+                    }
+
+                    var config = $(this).attr('cybdata');
+                    var key = $(this).attr('cybkey');
+                    if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
+
+                    var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                    itemSlug = itemSlug.toLowerCase();
+
+                    if(config == 'block' || config == 'buttontext') {
+
+                        /* Skip these field types */
+                        return;
+
+                    } else if(config == '' || config == 'title' || config == 'txt') {
+                        
+                        config = '';
+
+                    } else if(config == 'list') {
+                        
+                        config = 'sorted_list';
+
+                        if($(this).find('[cybdata]').length !== 0) {
+
+                            customFieldData += 'case "' + itemSlug + '":';
+                            customFieldData += '\n';
+                            customFieldData += '\n    if($GRID) {';
+                            customFieldData += '\n        $OUTPUT = \'<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>\';';
+                            customFieldData += '\n    } else {';
+                            customFieldData += '\n        $LABEL_MARKUP = false;';
+                            customFieldData += '\n        $fields = [';
 
                             $(this).find('[cybdata]').each(function() {
 
-                                var config = $(this).attr('cybdata');
-                                var key = $(this).attr('cybkey');
-                                if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
+                                var nestedConfig = $(this).attr('cybdata');
+                                var nestedKey = $(this).attr('cybkey');
+                                if(!nestedKey) { nestedKey = nestedConfig; }
+    
+                                if(nestedConfig == 'block' || nestedConfig == 'buttontext' || nestedConfig == 'list') {
 
-                                if(config == 'list') {
-                                    
-                                    config = 'sorted_list';
+                                    /* Skip these field types */
+                                    return;
 
-                                } else if(config == 'img') {
+                                } else if(nestedConfig == '' || nestedConfig == 'title' || nestedConfig == 'txt') {
 
-                                    config = 'photo';
+                                    nestedConfig = 'text';
 
-                                } else if(config == 'bg') {
+                                } else if(nestedConfig == 'img') {
 
-                                    config = 'focused_img';
+                                    nestedConfig = 'photo';
 
-                                } else if(config == 'icon') {
+                                } else if(nestedConfig == 'bg') {
 
-                                    config = 'font_awesome';
-                                    
+                                    nestedConfig = 'focused_img';
+
+                                } else if(nestedConfig == 'icon') {
+
+                                    nestedConfig = 'font_awesome';
+
+                                } else if(nestedConfig == 'link') {
+
                                 } 
-                                
-                                if(config == 'link') {
-                                    builderData += '["key" => "' + key + ' Text","config" => ""],';
-                                    builderData += '["key" => "' + key + ' URL","config" => "url"],';
-                                } else {
-                                    builderData += '["key" => "' + key + '","config" => "' + config + '"],';
-                                }
-                                
+
+                                customFieldData += '\n            [';
+                                customFieldData += '\n                "key" => "' + nestedConfig + '",';
+                                customFieldData += '\n                "label" => "' + makeTitle(nestedKey) + '",';
+                                customFieldData += '\n                "config" => [';
+                                customFieldData += '\n                    "type" => "' + nestedConfig + '"';
+                                customFieldData += '\n                ]';
+                                customFieldData += '\n            ],';
+
                             });
 
-                        builderData += ']';
-                    builderData += '],"dev" => true';
-                builderData += '];';
+                            customFieldData = customFieldData.slice(0,-1);
+
+                            customFieldData += '\n        ];';
+                            customFieldData += '\n        $FIELD_HTML .= $FIELD->special($KEY, [';
+                            customFieldData += '\n            "type" => "' + itemSlug + '",';
+                            customFieldData += '\n            "fields" => $fields';
+                            customFieldData += '\n        ]);';
+                            customFieldData += '\n        $OUTPUT= \'<div class="field"><div class="field-inner">\' . $FIELD_HTML . \'</div></div>\';';
+                            customFieldData += '\n    }';
+                            customFieldData += '\n';
+                            customFieldData += '\n    break;';
+
+                        }
+
+                    } else if(config == 'img') {
+
+                        config = 'photo';
+
+                    } else if(config == 'bg') {
+
+                        config = 'focused_img';
+
+                    } else if(config == 'icon') {
+
+                        config = 'font_awesome';
+                        
+                    }
+                    
+                    if(config == 'link') {
+                        blockBuilderData += '\n            ["key" => "' + key + ' Text","config" => ""],';
+                        blockBuilderData += '\n            ["key" => "' + key + ' URL","config" => "url"],';
+                    } else {
+                        blockBuilderData += '\n            ["key" => "' + key + '","config" => "' + config + '"],';
+                    }
+                    
+                });
+
+                if(blockBuilderData[blockBuilderData.length -1] == ',') {
+                    blockBuilderData = blockBuilderData.slice(0,-1);
+                }
+
+                blockBuilderData += '\n        ]';
+                blockBuilderData += '\n    ],';
+                blockBuilderData += '\n"dev" => true';
+                blockBuilderData += '\n];\n\n';
+
             });
 
-            $('#data-output').val(builderData);
+            $('#block-builder-data-output').val(blockBuilderData);
+            $('#custom-field-data-output').val(customFieldData);
             $('#data-parsing').html('');
 
             /* --- CREATE PHP VIEW FOR TEMPLATE FILE --- */
@@ -213,11 +297,11 @@ window.onload = function(e) {
             $('#parsing').find('[cybdata]').removeAttr('cybdata');
             $('#parsing').find('[cybkey]').removeAttr('cybkey');
 
-            var cleanedUp = $('#parsing').html().replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->');
+            var phpOutput = $('#parsing').html().replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->');
 
-            $('#output').val('<? $DATA = strings($block->id); ?>' + cleanedUp);
+            $('#php-output').val('<? $DATA = strings($block->id); ?>' + phpOutput);
             $('#parsing').html('');
-            $('#output').focus();
+            $('#php-output').focus();
 
         });
 
