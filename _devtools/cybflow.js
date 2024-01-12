@@ -24,7 +24,13 @@ window.onload = function(e) {
             /* --- Create data for new block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
 
             if($('#data-parsing').find('[cybblock]').length == 0) {
-                $('#data-parsing').children().first().attr('cybblock',$(this).attr('class'));
+
+                /* Assign a cyblock value if none exists - uses the first element's class name */
+
+                var assignedCybblockValue = $('#data-parsing').children().first().attr('class').split(' ')[0];
+
+                $('#data-parsing').children().first().attr('cybblock',assignedCybblockValue);
+
             }
 
             $('#data-parsing').find('[cybblock]').each(function() {
@@ -228,7 +234,15 @@ window.onload = function(e) {
                 } else if(type == 'list') {
                     
                     itemLabel = key.toUpperCase().replace(/ /g,"_") + "_ITEM";
-                    $(this).children().not(':first').remove();
+
+                    /* Keep last link intact on footer links (sitemap link is usually last and is should not be controllable in the CMS) */
+                    if(key == 'Footer Links') {
+                        alert('test');
+                        $(this).children().not(':first').not(':last').remove();
+                    } else {
+                        $(this).children().not(':first').remove();
+                    }
+
                     $(this).children().first().before("<? foreach (json_decode(" + prefix + key + suffix + ") as $k => $" + itemLabel + ") { ?>\n").after("\n<? } ?>");
 
                 } else if(type == 'textarea') {
