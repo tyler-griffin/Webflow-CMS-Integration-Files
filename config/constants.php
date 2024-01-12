@@ -22,3 +22,4 @@ define("ASSETS_VERSION", "1.0.0");
 define(DEV_CONFIG_BLOCK_ID, 1);
 define(COMMON_ITEMS_BLOCK_ID, 2);
 define(ALERT_BAR_BLOCK_ID, 3);
+define(POPUP_BLOCK_ID, 4);

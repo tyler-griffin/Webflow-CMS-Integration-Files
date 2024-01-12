@@ -462,6 +462,9 @@ function customSortedListBlocks() {
                     "key" => "Address",
                     "config" => "textarea"
                 ],[
+                    "key" => "Address URL",
+                    "config" => "url"
+                ],[
                     "key" => "Hours"
                 ],[
                     "key" => "Social Media Links",

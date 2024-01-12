@@ -21,15 +21,16 @@ window.onload = function(e) {
 
             $('#data-parsing').html($('#input').val());
 
+            /* --- Create data for new block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
 
-            /* --- Create data for customSortedListBlocks() in pagebuilder_custom_helper.php --- */
+            if($('#data-parsing').find('[cybblock]').length == 0) {
+                $('#data-parsing').children().first().attr('cybblock',$(this).attr('class'));
+            }
 
-            $('#data-parsing').find('[cybdata="block"]').each(function() {
+            $('#data-parsing').find('[cybblock]').each(function() {
 
-                var title = $(this).attr('cybkey');
-                if(!title) { 
-                    title = makeTitle($(this).attr('class'));
-                }
+                var title =  makeTitle($(this).attr('cybblock'));
+
                 var blockSlug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
                 blockSlug = blockSlug.toLowerCase();
 
@@ -64,7 +65,7 @@ window.onload = function(e) {
                     var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
                     itemSlug = itemSlug.toLowerCase();
 
-                    if(config == 'block' || config == 'buttontext') {
+                    if(config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag') {
 
                         /* Skip these field types */
                         return;
@@ -74,8 +75,10 @@ window.onload = function(e) {
                         config = '';
 
                     } else if(config == 'list') {
+
+                        /* --- Create data for custom sorted list fields - goes in field_builder_custom_preset() in amsd_custom_helper.php --- */
                         
-                        config = 'sorted_list';
+                        config = itemSlug;
 
                         if($(this).find('[cybdata]').length !== 0) {
 
@@ -93,7 +96,7 @@ window.onload = function(e) {
                                 var nestedKey = $(this).attr('cybkey');
                                 if(!nestedKey) { nestedKey = nestedConfig; }
     
-                                if(nestedConfig == 'block' || nestedConfig == 'buttontext' || nestedConfig == 'list') {
+                                if(nestedConfig == 'buttontext' || nestedConfig == 'list' || nestedConfig == 'nav' || nestedConfig == 'logo' || nestedConfig == 'footerlogo' || nestedConfig == 'alertbar' || nestedConfig == 'popup' || nestedConfig == 'tag') {
 
                                     /* Skip these field types */
                                     return;
@@ -110,13 +113,7 @@ window.onload = function(e) {
 
                                     nestedConfig = 'focused_img';
 
-                                } else if(nestedConfig == 'icon') {
-
-                                    nestedConfig = 'font_awesome';
-
-                                } else if(nestedConfig == 'link') {
-
-                                } 
+                                }
 
                                 customFieldData += '\n            [';
                                 customFieldData += '\n                "key" => "' + nestedConfig + '",';
@@ -150,18 +147,9 @@ window.onload = function(e) {
 
                         config = 'focused_img';
 
-                    } else if(config == 'icon') {
-
-                        config = 'font_awesome';
-                        
                     }
                     
-                    if(config == 'link') {
-                        blockBuilderData += '\n            ["key" => "' + key + ' Text","config" => ""],';
-                        blockBuilderData += '\n            ["key" => "' + key + ' URL","config" => "url"],';
-                    } else {
-                        blockBuilderData += '\n            ["key" => "' + key + '","config" => "' + config + '"],';
-                    }
+                    blockBuilderData += '\n            ["key" => "' + key + '","config" => "' + config + '"],';
                     
                 });
 
@@ -209,9 +197,33 @@ window.onload = function(e) {
 
                 /* --- DATA TYPES --- */
 
-                if(type == 'block' || type == 'buttontext') {
+                if(type == 'buttontext') {
 
                     /* Skip */
+
+                } else if(type == 'nav') {
+
+                    $(this).replaceWith('<? printWebflowMenu(); ?>');
+
+                } else if(type == 'logo') {
+
+                    $(this).replaceWith('<a href="/home" class="logo-home-link w-nav-brand" title="Home"><img src="/image/<?= $DEV_CONFIG[\'Logo\'] ?>/600" alt="<?= $owner->site_title ?>" class="logo-image"><img src="/image/<?= $DEV_CONFIG[\'Logo on Scroll\'] ?>/600" alt="<?= $owner->site_title ?>" class="logo-scrolled"></a>');
+
+                } else if(type == 'footerlogo') {
+
+                    $(this).replaceWith('<a href="/home" class="footer-logo-link-block w-inline-block" title="Home"><img src="/image/<?= $DEV_CONFIG[\'Footer Logo\'] ?>/600" alt="<?= $owner->site_title ?>" class="footer-logo"></a>');
+
+                } else if(type == 'alertbar') {
+
+                    $(this).replaceWith('<? printBlock(ALERT_BAR_BLOCK_ID); ?>');
+
+                } else if(type == 'popup') {
+
+                    $(this).replaceWith('<? printBlock(POPUP_BLOCK_ID); ?>');
+                
+                } else if(type == 'tag') {
+
+                    $(this).replaceWith('<div class="cybernautic-tag"><? seoCybernauticLogo($cms); ?></div>');
 
                 } else if(type == 'list') {
                     
@@ -240,11 +252,6 @@ window.onload = function(e) {
 
                     $(this).attr("href","mailto:+<?= " + prefix + key + suffix + " ?>");
                     $(this).html("<?= " + prefix + key + suffix + " ?>");
-
-                } else if(type == 'link') {
-
-                    $(this).attr("href","<?= " + prefix + "url" + suffix + " ?>");
-                    $(this).html("<?= " + prefix + "title" + suffix + " ?>");
 
                 } else if(type == 'button') {
 
@@ -299,7 +306,12 @@ window.onload = function(e) {
 
             var phpOutput = $('#parsing').html().replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->');
 
-            $('#php-output').val('<? $DATA = strings($block->id); ?>' + phpOutput);
+            if($('#common-items').is(':checked')) {
+                $('#php-output').val(phpOutput.replace(/\$DATA/g,'$COMMON_ITEMS'));
+            } else {
+                $('#php-output').val('<? $DATA = strings($block->id); ?>' + phpOutput);
+            }
+            
             $('#parsing').html('');
             $('#php-output').focus();
 

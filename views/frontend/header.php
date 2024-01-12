@@ -55,6 +55,7 @@
 			<div class="nav-container w-container">
 				<a href="/home" class="logo-home-link w-nav-brand" title="Home">
 					<img src="/image/<?= $DEV_CONFIG['Logo'] ?>/600" alt="<?= $owner->site_title ?>" class="logo-image">
+					<img src="/image/<?= $DEV_CONFIG['Logo on Scroll'] ?>/600" alt="<?= $owner->site_title ?>" class="logo-scrolled">
 				</a>
 				<div class="menu-button w-nav-button">
 					<div class="w-icon-nav-menu"></div>
