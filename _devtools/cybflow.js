@@ -135,13 +135,13 @@ window.onload = function(e) {
 
                             customFieldData += '\n        ];';
                             customFieldData += '\n        $FIELD_HTML .= $FIELD->special($KEY, [';
-                            customFieldData += '\n            "type" => "' + itemSlug + '",';
+                            customFieldData += '\n            "type" => "sorted_list",';
                             customFieldData += '\n            "fields" => $fields';
                             customFieldData += '\n        ]);';
                             customFieldData += '\n        $OUTPUT= \'<div class="field"><div class="field-inner">\' . $FIELD_HTML . \'</div></div>\';';
                             customFieldData += '\n    }';
                             customFieldData += '\n';
-                            customFieldData += '\n    break;';
+                            customFieldData += '\n    break;\n\n';
 
                         }
 
@@ -237,7 +237,6 @@ window.onload = function(e) {
 
                     /* Keep last link intact on footer links (sitemap link is usually last and is should not be controllable in the CMS) */
                     if(key == 'Footer Links') {
-                        alert('test');
                         $(this).children().not(':first').not(':last').remove();
                     } else {
                         $(this).children().not(':first').remove();

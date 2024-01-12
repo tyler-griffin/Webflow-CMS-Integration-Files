@@ -97,16 +97,89 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
+        case "contact_info":
+
+            if($GRID) {
+                $OUTPUT = '<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>';
+            } else {
+                $LABEL_MARKUP = false;
+                $fields = [
+                    [
+                        "key" => "textarea",
+                        "label" => "Textarea",
+                        "config" => [
+                            "type" => "textarea"
+                        ]
+                    ],
+                    [
+                        "key" => "icon",
+                        "label" => "Icon",
+                        "config" => [
+                            "type" => "contact_info_icon"
+                        ]
+                    ],
+                    [
+                        "key" => "url",
+                        "label" => "URL",
+                        "config" => [
+                            "type" => "url"
+                        ]
+                    ]
+                ];
+                $FIELD_HTML .= $FIELD->special($KEY, [
+                    "type" => "sorted_list",
+                    "fields" => $fields
+                ]);
+                $OUTPUT= '<div class="field"><div class="field-inner">' . $FIELD_HTML . '</div></div>';
+            }
+
+            break;
+
+        case "footer_links":
+        case "icon_links":
+
+            if($GRID) {
+                $OUTPUT = '<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>';
+            } else {
+                $LABEL_MARKUP = false;
+                $fields = [
+                    [
+                        "key" => "title",
+                        "label" => "Title",
+                        "config" => [
+                            "type" => "text"
+                        ]
+                    ],
+                    [
+                        "key" => "icon",
+                        "label" => "Icon",
+                        "config" => [
+                            "type" => "icon"
+                        ]
+                    ],
+                    [
+                        "key" => "url",
+                        "label" => "URL",
+                        "config" => [
+                            "type" => "url"
+                        ]
+                    ]
+                ];
+                $FIELD_HTML .= $FIELD->special($KEY, [
+                    "type" => "sorted_list",
+                    "fields" => $fields
+                ]);
+                $OUTPUT= '<div class="field"><div class="field-inner">' . $FIELD_HTML . '</div></div>';
+            }
+
+            break;
+
         case "links":
 
             if($GRID) {
-
-                $OUTPUT = '<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit Links</span></a>';
-
+                $OUTPUT = '<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>';
             } else {
-
                 $LABEL_MARKUP = false;
-
                 $fields = [
                     [
                         "key" => "title",
@@ -123,16 +196,11 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
                         ]
                     ]
                 ];
-
                 $FIELD_HTML .= $FIELD->special($KEY, [
                     "type" => "sorted_list",
                     "fields" => $fields
                 ]);
-
-                $OUTPUT = '<div class="amsd-hr"></div>';
-
-                $OUTPUT .= '<br><span class="backend-label">Links</span><div class="field"><div class="field-inner">' . $FIELD_HTML . '</div></div>';
-
+                $OUTPUT= '<div class="field"><div class="field-inner">' . $FIELD_HTML . '</div></div>';
             }
 
             break;
@@ -184,19 +252,24 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
                     "type" => "font_awesome",
                     "options" => [
                         "include" => [
-                            "envelope",
                             "phone",
-                            "phone-alt",
-                            "mobile-alt",
-                            "fax",
+                            "phone-flip",
+                            "mobile-screen",
+                            "envelope",
                             "map-marker-alt",
-                            "map-signs",
-                            "home",
-                            "paper-plane",
-                            "external-link-alt",
-                            "arrow-alt-circle-right",
-                            "info-circle",
-                            "check"
+                            "map-location-dot",
+                            "signs-post",
+                            "house-chimney",
+                            "store",
+                            "shop",
+                            "landmark",
+                            "building",
+                            "fax",
+                            "user",
+                            "clock",
+                            "calendar-check",
+                            "bullhorn",
+                            "paper-plane"
                         ]
                     ]
                 ], false);

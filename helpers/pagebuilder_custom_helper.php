@@ -455,17 +455,11 @@ function customSortedListBlocks() {
                     "key" => "Default Page Banner Photo",
                     "config" => "focused_img"
                 ],[
-                    "key" => "Email Address"
+                    "key" => "Contact Info",
+                    "config" => "contact_info"
                 ],[
-                    "key" => "Phone Number"
-                ],[
-                    "key" => "Address",
+                    "key" => "Hours",
                     "config" => "textarea"
-                ],[
-                    "key" => "Address URL",
-                    "config" => "url"
-                ],[
-                    "key" => "Hours"
                 ],[
                     "key" => "Social Media Links",
                     "config" => "social_media_links"
