@@ -3,6 +3,8 @@ window.onload = function(e) {
 
     $(document).ready(function() {
 
+        $('#data-output-option').attr('checked', 'checked');
+
         $('textarea').attr('maxlength','500000');
 
         function makeTitle(slug) {
@@ -111,11 +113,11 @@ window.onload = function(e) {
 
                                     nestedConfig = 'text';
 
-                                } else if(nestedConfig == 'img') {
+                                } else if(nestedConfig.substring(0,3) == 'img') {
 
                                     nestedConfig = 'photo';
 
-                                } else if(nestedConfig == 'bg') {
+                                } else if(nestedConfig.substring(0,2) == 'bg') {
 
                                     nestedConfig = 'focused_img';
 
@@ -145,11 +147,11 @@ window.onload = function(e) {
 
                         }
 
-                    } else if(config == 'img') {
+                    } else if(config.substring(0,3) == 'img') {
 
                         config = 'photo';
 
-                    } else if(config == 'bg') {
+                    } else if(config.substring(0,2) == 'bg') {
 
                         config = 'focused_img';
 
@@ -170,6 +172,10 @@ window.onload = function(e) {
 
             });
 
+            if($('#item-output-option').is(':checked') || $('#common-items-output-option').is(':checked')) {
+                blockBuilderData = '';
+            }
+
             $('#block-builder-data-output').val(blockBuilderData);
             $('#custom-field-data-output').val(customFieldData);
             $('#data-parsing').html('');
@@ -186,6 +192,11 @@ window.onload = function(e) {
                 var suffix = "']";
                 var itemLabel = "LIST_ITEM";
 
+                if($('#item-output-option').is(':checked')) {
+                    prefix = "$ITEM->";
+                    suffix = ""; 
+                }
+
                 if($(this).parents('[cybdata="list"]').length) {
                     if($(this).parents('[cybdata="list"]').attr('cybkey')) {
                         itemLabel = $(this).parents('[cybdata="list"]').attr('cybkey').toUpperCase().replace(/ /g,"_") + "_ITEM";
@@ -193,10 +204,20 @@ window.onload = function(e) {
                     prefix = "$" + itemLabel+ "->";
                     suffix = ""; 
                     if(key) {
-                        key = key.replace(/ /g,"_");
+                        key = key.toLowerCase().replace(/ /g,"_");
                     } else {
                         key = type;
                     }
+                }
+
+                if($('#item-output-option').is(':checked') || $(this).parents('[cybdata="amsd"]').length) {
+                    prefix = "$ITEM->";
+                    suffix = "";
+                    if(key) {
+                        key = key.toLowerCase().replace(/ /g,"_");
+                    } else {
+                        key = type;
+                    } 
                 }
 
                 if(!key) { key = type.charAt(0).toUpperCase() + type.slice(1); }
@@ -231,8 +252,8 @@ window.onload = function(e) {
 
                     $(this).replaceWith('<div class="cybernautic-tag"><? seoCybernauticLogo($cms); ?></div>');
 
-                } else if(type == 'list') {
-                    
+                } else if(type == 'list' || type == 'amsd') {
+
                     itemLabel = key.toUpperCase().replace(/ /g,"_") + "_ITEM";
 
                     /* Keep last link intact on footer links (sitemap link is usually last and is should not be controllable in the CMS) */
@@ -242,19 +263,33 @@ window.onload = function(e) {
                         $(this).children().not(':first').remove();
                     }
 
-                    $(this).children().first().before("<? foreach (json_decode(" + prefix + key + suffix + ") as $k => $" + itemLabel + ") { ?>\n").after("\n<? } ?>");
+                    if(type == 'amsd') {
+                        $(this).children().first().before('<? foreach($amsd["data"] as $k => $ITEM) { ?>\n').after("\n<? } ?>");
+                    } else {
+                        $(this).children().first().before("<? foreach (json_decode(" + prefix + key + suffix + ") as $k => $" + itemLabel + ") { ?>\n").after("\n<? } ?>");
+                    }
 
                 } else if(type == 'textarea') {
 
                     $(this).html("<?= nl2br(" + prefix + key + suffix + "); ?>");
 
-                } else if(type == 'img') {
+                } else if(type.substring(0,3) == 'img') {
 
-                    $(this).attr("src","/image/<?= " + prefix + key + suffix + " ?>/1000");
+                    var imageSize = type.slice(3);
+                    if(imageSize == '') {
+                        imageSize = '1000';
+                    }
 
-                } else if(type == 'bg') {
+                    $(this).attr("src","/image/<?= " + prefix + key + suffix + " ?>/" + imageSize);
 
-                    $(this).attr("style","background-position: <?= json_decode(" + prefix + key + suffix + ")->config->{'background-position'} ?>; background-image: url('/image/<?= json_decode(" + prefix + key + suffix + ")->id ?>/2000');");
+                } else if(type.substring(0,2) == 'bg') {
+
+                    var imageSize = type.slice(2);
+                    if(imageSize == '') {
+                        imageSize = '2000';
+                    }
+
+                    $(this).attr("style","background-position: <?= json_decode(" + prefix + key + suffix + ")->config->{'background-position'} ?>; background-image: url('/image/<?= json_decode(" + prefix + key + suffix + ")->id ?>/" + imageSize + "');");
                 
                 } else if(type == 'phone') {
 
@@ -268,7 +303,7 @@ window.onload = function(e) {
 
                 } else if(type == 'button') {
 
-                    if($(this).parents('[cybdata="list"]').length) {
+                    if($(this).parents('[cybdata="list"]').length || $(this).parents('[cybdata="amsd"]').length) {
 
                         $(this).attr("href","<?= json_decode(" + prefix + key + suffix + ")->url ?>");
 
@@ -319,8 +354,10 @@ window.onload = function(e) {
 
             var phpOutput = $('#parsing').html().replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->');
 
-            if($('#common-items').is(':checked')) {
+            if($('#common-items-output-option').is(':checked')) {
                 $('#php-output').val(phpOutput.replace(/\$DATA/g,'$COMMON_ITEMS'));
+            } else if($('#item-output-option').is(':checked')) {
+                $('#php-output').val(phpOutput);
             } else {
                 $('#php-output').val('<? $DATA = strings($block->id); ?>' + phpOutput);
             }
