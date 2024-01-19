@@ -3,8 +3,6 @@ window.onload = function(e) {
 
     $(document).ready(function() {
 
-        $('#data-output-option').attr('checked', 'checked');
-
         $('textarea').attr('maxlength','500000');
 
         function makeTitle(slug) {
@@ -20,24 +18,97 @@ window.onload = function(e) {
 
             window.blockBuilderData = '';
             window.customFieldData = '';
+            window.amsdTableSQL = '';
 
             $('#data-parsing').html($('#input').val());
 
-            /* --- Create data for new block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
+            /* --- Create data for custom sorted list fields - goes in field_builder_custom_preset() in amsd_custom_helper.php --- */
+            $('#data-parsing').find('[cybdata="list"]').each(function() {
 
-            if($('#data-parsing').find('[cybblock]').length == 0) {
+                var config = $(this).attr('cybdata');
+                var key = $(this).attr('cybkey');
+                if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
 
-                /* Assign a cyblock value if none exists - uses the first element's class name */
+                var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                itemSlug = itemSlug.toLowerCase();
+                        
 
-                var assignedCybblockValue = $('#data-parsing').children().first().attr('class').split(' ')[0];
+                if($(this).find('[cybdata]').length !== 0) {
 
-                $('#data-parsing').children().first().attr('cybblock',assignedCybblockValue);
+                    customFieldData += 'case "' + itemSlug + '":';
+                    customFieldData += '\n';
+                    customFieldData += '\n    if($GRID) {';
+                    customFieldData += '\n        $OUTPUT = \'<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>\';';
+                    customFieldData += '\n    } else {';
+                    customFieldData += '\n        $LABEL_MARKUP = false;';
+                    customFieldData += '\n        $fields = [';
 
-            }
+                    $(this).find('[cybdata]').each(function() {
 
-            $('#data-parsing').find('[cybblock]').each(function() {
+                        var nestedConfig = $(this).attr('cybdata');
+                        var nestedKey = $(this).attr('cybkey');
+                        if(!nestedKey) { nestedKey = nestedConfig; }
+                        var nestedSlug = nestedKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                        nestedSlug = nestedSlug.toLowerCase();
 
-                var title =  makeTitle($(this).attr('cybblock'));
+                        if(nestedConfig == 'amsd' || nestedConfig == 'profile' || nestedConfig == 'common' || nestedConfig == 'strings' || nestedConfig == 'buttontext' || nestedConfig == 'list' || nestedConfig == 'nav' || nestedConfig == 'logo' || nestedConfig == 'footerlogo' || nestedConfig == 'alertbar' || nestedConfig == 'popup' || nestedConfig == 'tag') {
+
+                            /* Skip these field types */
+                            return;
+
+                        } else if(nestedConfig == '' || nestedConfig == 'title' || nestedConfig == 'txt') {
+
+                            nestedConfig = 'text';
+
+                        } else if(nestedConfig.substring(0,3) == 'img') {
+
+                            nestedConfig = 'photo';
+
+                        } else if(nestedConfig.substring(0,2) == 'bg') {
+
+                            nestedConfig = 'focused_img';
+
+                        }
+
+                        customFieldData += '\n            [';
+                        customFieldData += '\n                "key" => "' + nestedSlug + '",';
+                        customFieldData += '\n                "label" => "' + makeTitle(nestedKey) + '",';
+                        customFieldData += '\n                "config" => [';
+                        customFieldData += '\n                    "type" => "' + nestedConfig + '"';
+                        customFieldData += '\n                ]';
+                        customFieldData += '\n            ],';
+
+                    });
+
+                    customFieldData = customFieldData.slice(0,-1);
+
+                    customFieldData += '\n        ];';
+                    customFieldData += '\n        $FIELD_HTML .= $FIELD->special($KEY, [';
+                    customFieldData += '\n            "type" => "sorted_list",';
+                    customFieldData += '\n            "fields" => $fields';
+                    customFieldData += '\n        ]);';
+                    customFieldData += '\n        $OUTPUT= \'<div class="field"><div class="field-inner">\' . $FIELD_HTML . \'</div></div>\';';
+                    customFieldData += '\n    }';
+                    customFieldData += '\n';
+                    customFieldData += '\n    break;\n\n';
+
+                }
+            });
+
+            /* --- Create data for STRINGS block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
+            $('#data-parsing').find('[cybdata="strings"]').each(function() {
+
+                var title =  '';
+                if($(this).attr('cybkey')) {
+                    title = makeTitle($(this).attr('cybkey'));
+                } else {
+                    if($(this).attr('class')) {
+                        title = makeTitle($(this).attr('class').split(' ')[0]);
+                    }  
+                }
+                if(title == '') {
+                    title = 'Custom Strings Block';
+                }
 
                 var blockSlug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
                 blockSlug = blockSlug.toLowerCase();
@@ -61,7 +132,7 @@ window.onload = function(e) {
 
                     if($(this).parents('[cybdata="list"]').length) {
 
-                        /* Skip items inside of a sorted list item, those get handled inside of the list / sorted_list config */
+                        /* Skip items inside of a sorted list item */
                         return;
 
                     }
@@ -73,7 +144,7 @@ window.onload = function(e) {
                     var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
                     itemSlug = itemSlug.toLowerCase();
 
-                    if(config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag') {
+                    if(config == 'amsd' || config == 'profile' || config == 'common' || config == 'strings' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag') {
 
                         /* Skip these field types */
                         return;
@@ -84,69 +155,8 @@ window.onload = function(e) {
 
                     } else if(config == 'list') {
 
-                        /* --- Create data for custom sorted list fields - goes in field_builder_custom_preset() in amsd_custom_helper.php --- */
-                        
                         config = itemSlug;
-
-                        if($(this).find('[cybdata]').length !== 0) {
-
-                            customFieldData += 'case "' + itemSlug + '":';
-                            customFieldData += '\n';
-                            customFieldData += '\n    if($GRID) {';
-                            customFieldData += '\n        $OUTPUT = \'<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>\';';
-                            customFieldData += '\n    } else {';
-                            customFieldData += '\n        $LABEL_MARKUP = false;';
-                            customFieldData += '\n        $fields = [';
-
-                            $(this).find('[cybdata]').each(function() {
-
-                                var nestedConfig = $(this).attr('cybdata');
-                                var nestedKey = $(this).attr('cybkey');
-                                if(!nestedKey) { nestedKey = nestedConfig; }
-    
-                                if(nestedConfig == 'buttontext' || nestedConfig == 'list' || nestedConfig == 'nav' || nestedConfig == 'logo' || nestedConfig == 'footerlogo' || nestedConfig == 'alertbar' || nestedConfig == 'popup' || nestedConfig == 'tag') {
-
-                                    /* Skip these field types */
-                                    return;
-
-                                } else if(nestedConfig == '' || nestedConfig == 'title' || nestedConfig == 'txt') {
-
-                                    nestedConfig = 'text';
-
-                                } else if(nestedConfig.substring(0,3) == 'img') {
-
-                                    nestedConfig = 'photo';
-
-                                } else if(nestedConfig.substring(0,2) == 'bg') {
-
-                                    nestedConfig = 'focused_img';
-
-                                }
-
-                                customFieldData += '\n            [';
-                                customFieldData += '\n                "key" => "' + nestedConfig + '",';
-                                customFieldData += '\n                "label" => "' + makeTitle(nestedKey) + '",';
-                                customFieldData += '\n                "config" => [';
-                                customFieldData += '\n                    "type" => "' + nestedConfig + '"';
-                                customFieldData += '\n                ]';
-                                customFieldData += '\n            ],';
-
-                            });
-
-                            customFieldData = customFieldData.slice(0,-1);
-
-                            customFieldData += '\n        ];';
-                            customFieldData += '\n        $FIELD_HTML .= $FIELD->special($KEY, [';
-                            customFieldData += '\n            "type" => "sorted_list",';
-                            customFieldData += '\n            "fields" => $fields';
-                            customFieldData += '\n        ]);';
-                            customFieldData += '\n        $OUTPUT= \'<div class="field"><div class="field-inner">\' . $FIELD_HTML . \'</div></div>\';';
-                            customFieldData += '\n    }';
-                            customFieldData += '\n';
-                            customFieldData += '\n    break;\n\n';
-
-                        }
-
+                        
                     } else if(config.substring(0,3) == 'img') {
 
                         config = 'photo';
@@ -167,16 +177,118 @@ window.onload = function(e) {
 
                 blockBuilderData += '\n        ]';
                 blockBuilderData += '\n    ],';
-                blockBuilderData += '\n"dev" => true';
+                blockBuilderData += '\n    "dev" => true';
                 blockBuilderData += '\n];\n\n';
 
             });
 
-            if($('#item-output-option').is(':checked') || $('#common-items-output-option').is(':checked')) {
-                blockBuilderData = '';
-            }
+            /* --- Create data for AMSD block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
+            $('#data-parsing').find('[cybdata="amsd"]').each(function() {
+
+                var title =  '';
+                if($(this).attr('cybkey')) {
+                    title = makeTitle($(this).attr('cybkey'));
+                } else {
+                    if($(this).attr('class')) {
+                        title = makeTitle($(this).attr('class').split(' ')[0]);
+                    }  
+                }
+                if(title == '') {
+                    title = 'Custom Sorted List Block';
+                }
+
+                var blockSlug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
+                blockSlug = blockSlug.toLowerCase();
+                var amsdSlug = 'amsd_' + blockSlug.replace(/-/g, "_");
+
+                blockBuilderData += '$items[] = [';
+                blockBuilderData += '\n    "title" => "' + title + '",';
+                blockBuilderData += '\n    "value" => "' + blockSlug + '",';
+                blockBuilderData += '\n    "block" => [';
+                blockBuilderData += '\n        "type" => 2,';
+                blockBuilderData += '\n        "title" => "' + title + '",';
+                blockBuilderData += '\n        "settings" => [';
+                blockBuilderData += '\n            ["Heading Read Only", "true"],';
+                blockBuilderData += '\n            ["Table", "' + amsdSlug + '"]';
+                blockBuilderData += '\n        ]';
+                blockBuilderData += '\n    ],';
+                blockBuilderData += '\n    "dev" => true';
+                blockBuilderData += '\n];\n\n';
+
+                amsdTableSQL += 'CREATE TABLE IF NOT EXISTS `' + amsdSlug + '` (';
+                amsdTableSQL += '\n    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,';
+                amsdTableSQL += '\n    `block` int(11) unsigned NOT NULL DEFAULT 0,';
+
+                $(this).find('[cybdata]').each(function() {
+
+                    if($(this).parents('[cybdata="list"]').length) {
+
+                        /* Skip items inside of a sorted list item */
+                        return;
+
+                    }
+
+                    var config = $(this).attr('cybdata');
+                    var key = $(this).attr('cybkey');
+                    if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
+
+                    var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                    itemSlug = itemSlug.toLowerCase();
+
+                    var name = config;
+                    var dataType = 'varchar(255)';
+
+                    if(config == 'profile' || config == 'common' || config == 'strings' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag') {
+
+                        /* Skip these field types */
+                        return;
+
+                    } else if(config == 'list') {
+
+                        name = itemSlug;
+                        dataType = 'text';
+
+                    } else if(config == 'title' || itemSlug == 'title') {
+
+                        name = 'title';
+                        dataType = 'text';
+
+                    } else if(config == 'textarea' || config == 'html' || config == 'button' || config == 'url') {
+
+                        dataType = 'text';
+
+                    } else if(config == 'date' || config == 'time') {
+
+                        dataType = config;
+                        
+                    } else if(config.substring(0,3) == 'img') {
+
+                        name = config;
+                        dataType = 'int(11) unsigned';
+
+                    } else if(config.substring(0,2) == 'bg') {
+
+                        name = 'focused_img';
+                        dataType = 'text';
+
+                    }
+                    
+                    amsdTableSQL += '\n    `' + name + '` ' + dataType + ' DEFAULT NULL,';
+
+                    if(name == 'title') {
+                        amsdTableSQL += '\n    `slug` varchar(255) DEFAULT NULL,';
+                    }
+                    
+                });
+
+                amsdTableSQL += '\n    `pos` int(11) unsigned NOT NULL DEFAULT 0,';
+                amsdTableSQL += '\n    PRIMARY KEY (`id`)';
+                amsdTableSQL += '\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;\n\n';
+
+            });
 
             $('#block-builder-data-output').val(blockBuilderData);
+            $('#amsd-table-sql-output').val(amsdTableSQL);
             $('#custom-field-data-output').val(customFieldData);
             $('#data-parsing').html('');
 
@@ -192,11 +304,6 @@ window.onload = function(e) {
                 var suffix = "']";
                 var itemLabel = "LIST_ITEM";
 
-                if($('#item-output-option').is(':checked')) {
-                    prefix = "$ITEM->";
-                    suffix = ""; 
-                }
-
                 if($(this).parents('[cybdata="list"]').length) {
                     if($(this).parents('[cybdata="list"]').attr('cybkey')) {
                         itemLabel = $(this).parents('[cybdata="list"]').attr('cybkey').toUpperCase().replace(/ /g,"_") + "_ITEM";
@@ -210,23 +317,29 @@ window.onload = function(e) {
                     }
                 }
 
-                if($('#item-output-option').is(':checked') || $(this).parents('[cybdata="amsd"]').length) {
-                    prefix = "$ITEM->";
-                    suffix = "";
-                    if(key) {
-                        key = key.toLowerCase().replace(/ /g,"_");
-                    } else {
-                        key = type;
-                    } 
+                if($(this).parents('[cybdata="amsd"]').length || $(this).parents('[cybdata="profile"]').length) {
+                    if($(this).parents('[cybdata="list"]').length == 0) {
+                        prefix = "$ITEM->";
+                        suffix = "";
+                        if(key) {
+                            key = key.toLowerCase().replace(/ /g,"_");
+                        } else {
+                            key = type;
+                        }
+                    }
                 }
 
                 if(!key) { key = type.charAt(0).toUpperCase() + type.slice(1); }
 
                 /* --- DATA TYPES --- */
 
-                if(type == 'buttontext') {
+                if(type == 'common' || type == 'strings' || type == 'buttontext') {
 
                     /* Skip */
+
+                } else if(type == 'profile') {
+
+                    $(this).children().first().before('<? $ITEM = $profile; ?>\n');
 
                 } else if(type == 'nav') {
 
@@ -327,6 +440,7 @@ window.onload = function(e) {
 
                 } else if(type == 'icon') {
 
+                    $(this).removeClass('w-embed');
                     $(this).html('<i class="<?= ' + prefix + key + suffix + ' ?>">');
 
                 } else if(type == 'url') {
@@ -348,20 +462,24 @@ window.onload = function(e) {
                 }
 
             });
+
+            $('#parsing').find('[cybdata="common"]').each(function() {
+                $(this).find('[cybdata]').each(function() {
+                    $(this).html($(this).html().replace(/\$DATA/g,'$COMMON_ITEMS'));
+                });
+            });
  
             $('#parsing').find('[cybdata]').removeAttr('cybdata');
             $('#parsing').find('[cybkey]').removeAttr('cybkey');
 
             var phpOutput = $('#parsing').html().replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->');
 
-            if($('#common-items-output-option').is(':checked')) {
-                $('#php-output').val(phpOutput.replace(/\$DATA/g,'$COMMON_ITEMS'));
-            } else if($('#item-output-option').is(':checked')) {
-                $('#php-output').val(phpOutput);
-            } else {
+            if($('#parsing').html().indexOf("$DATA") >= 0) {
                 $('#php-output').val('<? $DATA = strings($block->id); ?>' + phpOutput);
+            } else {
+                $('#php-output').val(phpOutput);
             }
-            
+
             $('#parsing').html('');
             $('#php-output').focus();
 
