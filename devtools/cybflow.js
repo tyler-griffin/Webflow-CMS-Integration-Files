@@ -272,6 +272,10 @@ window.onload = function(e) {
                         dataType = 'text';
 
                     }
+
+                    if(name == '') {
+                        name = itemSlug;
+                    }
                     
                     amsdTableSQL += '\n    `' + name + '` ' + dataType + ' DEFAULT NULL,';
 
