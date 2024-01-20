@@ -118,7 +118,7 @@ window.onload = function(e) {
                 var blockSlug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
                 blockSlug = blockSlug.toLowerCase();
 
-                viewFileNames += '/frontend/blocks/amsd/templates/strings/' + blockSlug + '.php\n';
+                viewFileNames += '/strings/' + blockSlug + '.php<br>';
 
                 blockBuilderData += '$items[] = [';
                 blockBuilderData += '\n    "title" => "' + title + '",';
@@ -208,7 +208,7 @@ window.onload = function(e) {
                 blockSlug = blockSlug.toLowerCase();
                 var amsdSlug = 'amsd_' + blockSlug.replace(/-/g, "_");
 
-                viewFileNames += '/frontend/blocks/amsd/templates/' + amsdSlug + '.php\n';
+                viewFileNames += amsdSlug + '.php<br>';
 
                 blockBuilderData += '$items[] = [';
                 blockBuilderData += '\n    "title" => "' + title + '",';
@@ -301,7 +301,9 @@ window.onload = function(e) {
             });
 
             if(viewFileNames != '') {
-                viewFileNames = viewFileNames.slice(0,-1);
+                viewFileNames = 'Create files in: /blocks/amsd/templates/<br>' + viewFileNames;
+                /* Remove last line break */
+                viewFileNames = viewFileNames.slice(0,-4);
             }
             $('#view-files-output').html(viewFileNames);
 
