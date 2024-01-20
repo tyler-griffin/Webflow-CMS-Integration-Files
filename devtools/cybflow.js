@@ -310,8 +310,6 @@ window.onload = function(e) {
             $('#custom-field-data-output').val(customFieldData);
             $('#data-parsing').html('');
 
-            .slice(0,-1)
-
             /* --- CREATE PHP VIEW FOR TEMPLATE FILE --- */
 
             $('#parsing').html($('#input').val());
