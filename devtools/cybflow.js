@@ -60,6 +60,10 @@ window.onload = function(e) {
 
                             nestedConfig = 'text';
 
+                        } else if(nestedConfig == 'icon') {
+
+                            nestedConfig = 'font_awesome';
+
                         } else if(nestedConfig.substring(0,3) == 'img') {
 
                             nestedConfig = 'photo';
