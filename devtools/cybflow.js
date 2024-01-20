@@ -19,6 +19,7 @@ window.onload = function(e) {
             window.blockBuilderData = '';
             window.customFieldData = '';
             window.amsdTableSQL = '';
+            window.viewFileNames = '';
 
             $('#data-parsing').html($('#input').val());
 
@@ -117,6 +118,8 @@ window.onload = function(e) {
                 var blockSlug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
                 blockSlug = blockSlug.toLowerCase();
 
+                viewFileNames += '/frontend/blocks/amsd/templates/strings/' + blockSlug + '.php\n';
+
                 blockBuilderData += '$items[] = [';
                 blockBuilderData += '\n    "title" => "' + title + '",';
                 blockBuilderData += '\n    "value" => "' + blockSlug + '",';
@@ -204,6 +207,8 @@ window.onload = function(e) {
                 var blockSlug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
                 blockSlug = blockSlug.toLowerCase();
                 var amsdSlug = 'amsd_' + blockSlug.replace(/-/g, "_");
+
+                viewFileNames += '/frontend/blocks/amsd/templates/' + amsdSlug + '.php\n';
 
                 blockBuilderData += '$items[] = [';
                 blockBuilderData += '\n    "title" => "' + title + '",';
@@ -295,10 +300,17 @@ window.onload = function(e) {
 
             });
 
+            if(viewFileNames != '') {
+                viewFileNames = viewFileNames.slice(0,-1);
+            }
+            $('#view-files-output').html(viewFileNames);
+
             $('#block-builder-data-output').val(blockBuilderData);
             $('#amsd-table-sql-output').val(amsdTableSQL);
             $('#custom-field-data-output').val(customFieldData);
             $('#data-parsing').html('');
+
+            .slice(0,-1)
 
             /* --- CREATE PHP VIEW FOR TEMPLATE FILE --- */
 
