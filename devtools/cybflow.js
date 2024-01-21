@@ -351,15 +351,27 @@ window.onload = function(e) {
 
                 if(!key) { key = type.charAt(0).toUpperCase() + type.slice(1); }
 
+                var blockSlug = key.replace(/ /g, "-").replace(/[^\w-]+/g, "");
+                blockSlug = blockSlug.toLowerCase();
+                var amsdSlug = 'amsd_' + blockSlug.replace(/-/g, "_");
+
                 /* --- DATA TYPES --- */
 
-                if(type == 'common' || type == 'strings' || type == 'buttontext') {
+                if(type == 'buttontext') {
 
                     /* Skip */
 
+                } else if(type == 'common') {
+
+                    $(this).children().first().before('<?/* Common Items */?>\n');
+
+                } else if(type == 'strings') {
+
+                    $(this).before('<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
+
                 } else if(type == 'profile') {
 
-                    $(this).children().first().before('<? $ITEM = $profile; ?>\n');
+                    $(this).children().first().before('<?/* AMSD Profile */?>\n<? $ITEM = $profile; ?>\n');
 
                 } else if(type == 'nav') {
 
@@ -397,6 +409,7 @@ window.onload = function(e) {
                     }
 
                     if(type == 'amsd') {
+                        $(this).before('<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
                         $(this).children().first().before('<? foreach($amsd["data"] as $k => $ITEM) { ?>\n').after("\n<? } ?>");
                     } else {
                         $(this).children().first().before("<? foreach (json_decode(" + prefix + key + suffix + ") as $k => $" + itemLabel + ") { ?>\n").after("\n<? } ?>");
