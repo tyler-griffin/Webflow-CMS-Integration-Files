@@ -364,10 +364,12 @@ window.onload = function(e) {
                 } else if(type == 'common') {
 
                     $(this).children().first().before('<?/* Common Items */?>\n');
+                    $(this).children().last().after('\n<?/* End Common Items */?>\n');
 
                 } else if(type == 'strings') {
 
                     $(this).before('<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
+                    $(this).after('\n<?/* End of String Block Template */?>\n');
 
                 } else if(type == 'profile') {
 
@@ -409,7 +411,7 @@ window.onload = function(e) {
                     }
 
                     if(type == 'amsd') {
-                        $(this).before('<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
+                        $(this).children().first().before('<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
                         $(this).children().first().before('<? foreach($amsd["data"] as $k => $ITEM) { ?>\n').after("\n<? } ?>");
                     } else {
                         $(this).children().first().before("<? foreach (json_decode(" + prefix + key + suffix + ") as $k => $" + itemLabel + ") { ?>\n").after("\n<? } ?>");
