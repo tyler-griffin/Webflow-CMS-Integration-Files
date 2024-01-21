@@ -43,7 +43,7 @@ window.onload = function(e) {
 
                 if($(this).find('[cybdata]').length !== 0) {
 
-                    customFieldData += 'case "' + itemSlug + '":';
+                    customFieldData += '        case "' + itemSlug + '":';
                     customFieldData += '\n';
                     customFieldData += '\n            if($GRID) {';
                     customFieldData += '\n                $OUTPUT = \'<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>\';';
@@ -127,7 +127,7 @@ window.onload = function(e) {
 
                 viewFileNames += '/strings/' + blockSlug + '.php<br>';
 
-                blockBuilderData += '$items[] = [';
+                blockBuilderData += '    $items[] = [';
                 blockBuilderData += '\n        "title" => "' + title + '",';
                 blockBuilderData += '\n        "value" => "' + blockSlug + '",';
                 blockBuilderData += '\n        "block" => [';
@@ -217,7 +217,7 @@ window.onload = function(e) {
 
                 viewFileNames += amsdSlug + '.php<br>';
 
-                blockBuilderData += '$items[] = [';
+                blockBuilderData += '    $items[] = [';
                 blockBuilderData += '\n        "title" => "' + title + '",';
                 blockBuilderData += '\n        "value" => "' + blockSlug + '",';
                 blockBuilderData += '\n        "block" => [';
