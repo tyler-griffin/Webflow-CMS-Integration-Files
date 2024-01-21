@@ -377,8 +377,8 @@ window.onload = function(e) {
 
                 } else if(type == 'common') {
 
-                    $(this).children().first().before('\n\n<?/* Common Items */?>\n');
-                    $(this).children().last().after('\n<?/* End Common Items */?>\n\n');
+                    $(this).before('\n\n<?/* Common Items */?>\n');
+                    $(this).after('\n<?/* End Common Items */?>\n\n');
 
                 } else if(type == 'strings') {
 
