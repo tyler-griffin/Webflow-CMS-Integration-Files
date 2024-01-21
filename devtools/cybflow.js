@@ -38,11 +38,11 @@ window.onload = function(e) {
 
                     customFieldData += 'case "' + itemSlug + '":';
                     customFieldData += '\n';
-                    customFieldData += '\n    if($GRID) {';
-                    customFieldData += '\n        $OUTPUT = \'<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>\';';
-                    customFieldData += '\n    } else {';
-                    customFieldData += '\n        $LABEL_MARKUP = false;';
-                    customFieldData += '\n        $fields = [';
+                    customFieldData += '\n            if($GRID) {';
+                    customFieldData += '\n                $OUTPUT = \'<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>\';';
+                    customFieldData += '\n            } else {';
+                    customFieldData += '\n                $LABEL_MARKUP = false;';
+                    customFieldData += '\n                $fields = [';
 
                     $(this).find('[cybdata]').each(function() {
 
@@ -75,27 +75,27 @@ window.onload = function(e) {
 
                         }
 
-                        customFieldData += '\n            [';
-                        customFieldData += '\n                "key" => "' + nestedSlug + '",';
-                        customFieldData += '\n                "label" => "' + makeTitle(nestedKey) + '",';
-                        customFieldData += '\n                "config" => [';
-                        customFieldData += '\n                    "type" => "' + nestedConfig + '"';
-                        customFieldData += '\n                ]';
-                        customFieldData += '\n            ],';
+                        customFieldData += '\n                    [';
+                        customFieldData += '\n                        "key" => "' + nestedSlug + '",';
+                        customFieldData += '\n                        "label" => "' + makeTitle(nestedKey) + '",';
+                        customFieldData += '\n                        "config" => [';
+                        customFieldData += '\n                            "type" => "' + nestedConfig + '"';
+                        customFieldData += '\n                        ]';
+                        customFieldData += '\n                    ],';
 
                     });
 
                     customFieldData = customFieldData.slice(0,-1);
 
-                    customFieldData += '\n        ];';
-                    customFieldData += '\n        $FIELD_HTML .= $FIELD->special($KEY, [';
-                    customFieldData += '\n            "type" => "sorted_list",';
-                    customFieldData += '\n            "fields" => $fields';
-                    customFieldData += '\n        ]);';
-                    customFieldData += '\n        $OUTPUT= \'<div class="field"><div class="field-inner">\' . $FIELD_HTML . \'</div></div>\';';
-                    customFieldData += '\n    }';
+                    customFieldData += '\n                ];';
+                    customFieldData += '\n                $FIELD_HTML .= $FIELD->special($KEY, [';
+                    customFieldData += '\n                    "type" => "sorted_list",';
+                    customFieldData += '\n                    "fields" => $fields';
+                    customFieldData += '\n                ]);';
+                    customFieldData += '\n                $OUTPUT= \'<div class="field"><div class="field-inner">\' . $FIELD_HTML . \'</div></div>\';';
+                    customFieldData += '\n            }';
                     customFieldData += '\n';
-                    customFieldData += '\n    break;\n\n';
+                    customFieldData += '\n            break;\n\n';
 
                 }
             });
@@ -121,19 +121,19 @@ window.onload = function(e) {
                 viewFileNames += '/strings/' + blockSlug + '.php<br>';
 
                 blockBuilderData += '$items[] = [';
-                blockBuilderData += '\n    "title" => "' + title + '",';
-                blockBuilderData += '\n    "value" => "' + blockSlug + '",';
-                blockBuilderData += '\n    "block" => [';
-                blockBuilderData += '\n        "type" => 2,';
                 blockBuilderData += '\n        "title" => "' + title + '",';
-                blockBuilderData += '\n        "settings" => [';
-                blockBuilderData += '\n            ["AMSD Columns", 2],';
-                blockBuilderData += '\n            ["AMSD Delete", "false"],';
-                blockBuilderData += '\n            ["AMSD Edit", "false"],';
-                blockBuilderData += '\n            ["Heading Read Only", "true"],';
-                blockBuilderData += '\n            ["Table", "amsd_strings"],';
-                blockBuilderData += '\n            ["Template", "' + blockSlug + '"]';
-                blockBuilderData += '\n        ],"items" => [';
+                blockBuilderData += '\n        "value" => "' + blockSlug + '",';
+                blockBuilderData += '\n        "block" => [';
+                blockBuilderData += '\n            "type" => 2,';
+                blockBuilderData += '\n            "title" => "' + title + '",';
+                blockBuilderData += '\n            "settings" => [';
+                blockBuilderData += '\n                ["AMSD Columns", 2],';
+                blockBuilderData += '\n                ["AMSD Delete", "false"],';
+                blockBuilderData += '\n                ["AMSD Edit", "false"],';
+                blockBuilderData += '\n                ["Heading Read Only", "true"],';
+                blockBuilderData += '\n                ["Table", "amsd_strings"],';
+                blockBuilderData += '\n                ["Template", "' + blockSlug + '"]';
+                blockBuilderData += '\n            ],"items" => [';
 
                 $(this).find('[cybdata]').each(function() {
 
@@ -174,7 +174,7 @@ window.onload = function(e) {
 
                     }
                     
-                    blockBuilderData += '\n            ["key" => "' + key + '","config" => "' + config + '"],';
+                    blockBuilderData += '\n                ["key" => "' + key + '","config" => "' + config + '"],';
                     
                 });
 
@@ -182,10 +182,10 @@ window.onload = function(e) {
                     blockBuilderData = blockBuilderData.slice(0,-1);
                 }
 
-                blockBuilderData += '\n        ]';
-                blockBuilderData += '\n    ],';
-                blockBuilderData += '\n    "dev" => true';
-                blockBuilderData += '\n];\n\n';
+                blockBuilderData += '\n            ]';
+                blockBuilderData += '\n        ],';
+                blockBuilderData += '\n        "dev" => true';
+                blockBuilderData += '\n    ];\n\n';
 
             });
 
@@ -211,18 +211,18 @@ window.onload = function(e) {
                 viewFileNames += amsdSlug + '.php<br>';
 
                 blockBuilderData += '$items[] = [';
-                blockBuilderData += '\n    "title" => "' + title + '",';
-                blockBuilderData += '\n    "value" => "' + blockSlug + '",';
-                blockBuilderData += '\n    "block" => [';
-                blockBuilderData += '\n        "type" => 2,';
                 blockBuilderData += '\n        "title" => "' + title + '",';
-                blockBuilderData += '\n        "settings" => [';
-                blockBuilderData += '\n            ["Heading Read Only", "true"],';
-                blockBuilderData += '\n            ["Table", "' + amsdSlug + '"]';
-                blockBuilderData += '\n        ]';
-                blockBuilderData += '\n    ],';
-                blockBuilderData += '\n    "dev" => true';
-                blockBuilderData += '\n];\n\n';
+                blockBuilderData += '\n        "value" => "' + blockSlug + '",';
+                blockBuilderData += '\n        "block" => [';
+                blockBuilderData += '\n            "type" => 2,';
+                blockBuilderData += '\n            "title" => "' + title + '",';
+                blockBuilderData += '\n            "settings" => [';
+                blockBuilderData += '\n                ["Heading Read Only", "true"],';
+                blockBuilderData += '\n                ["Table", "' + amsdSlug + '"]';
+                blockBuilderData += '\n            ]';
+                blockBuilderData += '\n        ],';
+                blockBuilderData += '\n        "dev" => true';
+                blockBuilderData += '\n    ];\n\n';
 
                 amsdTableSQL += 'CREATE TABLE IF NOT EXISTS `' + amsdSlug + '` (';
                 amsdTableSQL += '\n    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,';
@@ -363,18 +363,18 @@ window.onload = function(e) {
 
                 } else if(type == 'common') {
 
-                    $(this).children().first().before('\n\n<?/* Common Items */?>\n');
-                    $(this).children().last().after('\n<?/* End Common Items */?>\n\n\n');
+                    $(this).children().first().before('\n \n<?/* Common Items */?>\n');
+                    $(this).children().last().after('\n<?/* End Common Items */?>\n \n');
 
                 } else if(type == 'strings') {
 
-                    $(this).before('\n\n<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
-                    $(this).after('\n<?/* End of String Block Template */?>\n\n\n');
+                    $(this).before('\n \n<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
+                    $(this).after('\n<?/* End of String Block Template */?>\n \n');
 
                 } else if(type == 'profile') {
 
-                    $(this).children().first().before('\n\n<?/* AMSD Profile */?>\n<? $ITEM = $profile; ?>\n');
-                    $(this).children().last().after('\n<?/* End of AMSD Profile */?>\n\n\n');
+                    $(this).children().first().before('\n \n<?/* AMSD Profile */?>\n<? $ITEM = $profile; ?>\n');
+                    $(this).children().last().after('\n<?/* End of AMSD Profile */?>\n \n');
 
                 } else if(type == 'nav') {
 
@@ -412,7 +412,7 @@ window.onload = function(e) {
                     }
 
                     if(type == 'amsd') {
-                        $(this).children().first().before('\n\n<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
+                        $(this).children().first().before('\n \n<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
                         $(this).children().first().before('<? foreach($amsd["data"] as $k => $ITEM) { ?>\n').after("\n<? } ?>\n");
                     } else {
                         $(this).children().first().before("<? foreach (json_decode(" + prefix + key + suffix + ") as $k => $" + itemLabel + ") { ?>\n").after("\n<? } ?>");
