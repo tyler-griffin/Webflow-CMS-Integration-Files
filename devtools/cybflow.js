@@ -363,18 +363,18 @@ window.onload = function(e) {
 
                 } else if(type == 'common') {
 
-                    $(this).children().first().before('\n \n<?/* Common Items */?>\n');
-                    $(this).children().last().after('\n<?/* End Common Items */?>\n \n');
+                    $(this).children().first().before('\n<?/* Common Items */?>\n');
+                    $(this).children().last().after('\n<?/* End Common Items */?>\n');
 
                 } else if(type == 'strings') {
 
-                    $(this).before('\n \n<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
-                    $(this).after('\n<?/* End of String Block Template */?>\n \n');
+                    $(this).before('\n<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
+                    $(this).after('\n<?/* End of String Block Template */?>\n');
 
                 } else if(type == 'profile') {
 
-                    $(this).children().first().before('\n \n<?/* AMSD Profile */?>\n<? $ITEM = $profile; ?>\n');
-                    $(this).children().last().after('\n<?/* End of AMSD Profile */?>\n \n');
+                    $(this).children().first().before('<?/* AMSD Profile */?>\n<? $ITEM = $profile; ?>\n');
+                    $(this).children().last().after('\n<?/* End of AMSD Profile */?>\n');
 
                 } else if(type == 'nav') {
 
@@ -390,11 +390,11 @@ window.onload = function(e) {
 
                 } else if(type == 'alertbar') {
 
-                    $(this).replaceWith('<? printBlock(ALERT_BAR_BLOCK_ID); ?>');
+                    $(this).replaceWith('<? printBlock(ALERT_BAR_BLOCK_ID); ?>\n');
 
                 } else if(type == 'popup') {
 
-                    $(this).replaceWith('<? printBlock(POPUP_BLOCK_ID); ?>');
+                    $(this).replaceWith('\n<? printBlock(POPUP_BLOCK_ID); ?>\n');
                 
                 } else if(type == 'tag') {
 
@@ -412,7 +412,7 @@ window.onload = function(e) {
                     }
 
                     if(type == 'amsd') {
-                        $(this).children().first().before('\n \n<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
+                        $(this).children().first().before('\n<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
                         $(this).children().first().before('<? foreach($amsd["data"] as $k => $ITEM) { ?>\n').after("\n<? } ?>\n");
                     } else {
                         $(this).children().first().before("<? foreach (json_decode(" + prefix + key + suffix + ") as $k => $" + itemLabel + ") { ?>\n").after("\n<? } ?>");
