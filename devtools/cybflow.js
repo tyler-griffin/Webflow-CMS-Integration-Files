@@ -23,6 +23,13 @@ window.onload = function(e) {
 
             $('#data-parsing').html($('#input').val());
 
+            $('#data-parsing').find('[cybkey]').each(function() {
+                // Give a blank cybdata attribute to anything that has a cybkey attribute but no cybdata attribute
+                if(!$(this).attr('cybdata')) {
+                    $(this).attr('cybdata','');
+                }
+            });
+
             /* --- Create data for custom sorted list fields - goes in field_builder_custom_preset() in amsd_custom_helper.php --- */
             $('#data-parsing').find('[cybdata="list"]').each(function() {
 
@@ -315,6 +322,13 @@ window.onload = function(e) {
             /* --- CREATE PHP VIEW FOR TEMPLATE FILE --- */
 
             $('#parsing').html($('#input').val());
+
+            $('#parsing').find('[cybkey]').each(function() {
+                // Give a blank cybdata attribute to anything that has a cybkey attribute but no cybdata attribute
+                if(!$(this).attr('cybdata')) {
+                    $(this).attr('cybdata','');
+                }
+            });
 
             $('#parsing').find('[cybdata]').each(function() {
 
