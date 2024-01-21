@@ -363,17 +363,18 @@ window.onload = function(e) {
 
                 } else if(type == 'common') {
 
-                    $(this).children().first().before('<?/* Common Items */?>\n');
-                    $(this).children().last().after('\n<?/* End Common Items */?>\n');
+                    $(this).children().first().before('\n<?/* Common Items */?>\n');
+                    $(this).children().last().after('\n<?/* End Common Items */?>\n\n');
 
                 } else if(type == 'strings') {
 
-                    $(this).before('<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
-                    $(this).after('\n<?/* End of String Block Template */?>\n');
+                    $(this).before('\n<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
+                    $(this).after('\n<?/* End of String Block Template */?>\n\n');
 
                 } else if(type == 'profile') {
 
-                    $(this).children().first().before('<?/* AMSD Profile */?>\n<? $ITEM = $profile; ?>\n');
+                    $(this).children().first().before('\n<?/* AMSD Profile */?>\n<? $ITEM = $profile; ?>\n');
+                    $(this).children().last().after('\n<?/* End of AMSD Profile */?>\n\n');
 
                 } else if(type == 'nav') {
 
@@ -411,8 +412,8 @@ window.onload = function(e) {
                     }
 
                     if(type == 'amsd') {
-                        $(this).children().first().before('<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
-                        $(this).children().first().before('<? foreach($amsd["data"] as $k => $ITEM) { ?>\n').after("\n<? } ?>");
+                        $(this).children().first().before('\n<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
+                        $(this).children().first().before('<? foreach($amsd["data"] as $k => $ITEM) { ?>\n').after("\n<? } ?>\n");
                     } else {
                         $(this).children().first().before("<? foreach (json_decode(" + prefix + key + suffix + ") as $k => $" + itemLabel + ") { ?>\n").after("\n<? } ?>");
                     }
@@ -509,11 +510,7 @@ window.onload = function(e) {
 
             var phpOutput = $('#parsing').html().replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->');
 
-            if($('#parsing').html().indexOf("$DATA") >= 0) {
-                $('#php-output').val('<? $DATA = strings($block->id); ?>' + phpOutput);
-            } else {
-                $('#php-output').val(phpOutput);
-            }
+            $('#php-output').val(phpOutput);
 
             $('#parsing').html('');
             $('#php-output').focus();
