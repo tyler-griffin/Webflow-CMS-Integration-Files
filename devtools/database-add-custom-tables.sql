@@ -40,6 +40,15 @@ UPDATE `core_developer_settings` SET `value`='[{
 }]' WHERE `setting`='ckeditorStyles';
 
 
+CREATE TABLE IF NOT EXISTS `amsd_accordion` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `html` text DEFAULT NULL,
+  `pos` int(11) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+
 CREATE TABLE IF NOT EXISTS `amsd_alert_bar` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `block` int(11) unsigned NOT NULL DEFAULT 0,
