@@ -259,27 +259,23 @@ window.onload = function(e) {
                         /* Skip these field types */
                         return;
 
-                    } else if(config == 'list') {
+                    } else if(config == 'title' || itemSlug == 'title') {
+
+                        name = 'title';
+
+                    } else if(config == 'date' || config == 'time' || config == 'datetime') {
+
+                        name = itemSlug;
+                        dataType = config;
+
+                    } else if(config == 'list' || config == 'button' || config == 'textarea' || config == 'html' || config == 'url') {
 
                         name = itemSlug;
                         dataType = 'text';
 
-                    } else if(config == 'title' || itemSlug == 'title') {
-
-                        name = 'title';
-                        dataType = 'text';
-
-                    } else if(config == 'textarea' || config == 'html' || config == 'button' || config == 'url') {
-
-                        dataType = 'text';
-
-                    } else if(config == 'date' || config == 'time') {
-
-                        dataType = config;
-                        
                     } else if(config.substring(0,3) == 'img') {
 
-                        name = config;
+                        name = 'img';
                         dataType = 'int(11) unsigned';
 
                     } else if(config.substring(0,2) == 'bg') {
@@ -292,7 +288,16 @@ window.onload = function(e) {
                     if(name == '') {
                         name = itemSlug;
                     }
-                    
+
+                    if(config != name && config != '') {
+                        customFieldData += '        case "' + itemSlug + '":';
+                        customFieldData += '\n';
+                        customFieldData += '\n            $OUTPUT = $FIELD->build($KEY, [';
+                        customFieldData += '\n                "type" => "' + config + '"';
+                        customFieldData += '\n';
+                        customFieldData += '\n            break;\n\n';
+                    }
+
                     amsdTableSQL += '\n    `' + name + '` ' + dataType + ' DEFAULT NULL,';
 
                     if(name == 'title') {
