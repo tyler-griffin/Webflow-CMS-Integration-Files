@@ -115,7 +115,29 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
                         "key" => "icon",
                         "label" => "Icon",
                         "config" => [
-                            "type" => "contact_info_icon"
+                            "type" => "font_awesome",
+                            "options" => [
+                                "include" => [
+                                    "phone",
+                                    "phone-flip",
+                                    "mobile-screen",
+                                    "envelope",
+                                    "map-marker-alt",
+                                    "map-location-dot",
+                                    "signs-post",
+                                    "house-chimney",
+                                    "store",
+                                    "shop",
+                                    "landmark",
+                                    "building",
+                                    "fax",
+                                    "user",
+                                    "clock",
+                                    "calendar-check",
+                                    "bullhorn",
+                                    "paper-plane"
+                                ]
+                            ]
                         ]
                     ],
                     [
@@ -154,7 +176,7 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
                         "key" => "icon",
                         "label" => "Icon",
                         "config" => [
-                            "type" => "icon"
+                            "type" => "font_awesome"
                         ]
                     ],
                     [
@@ -205,8 +227,8 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
-        case "button_one":
-        case "button_two":
+        case "button_1":
+        case "button_2":
         case "red_button":
         case "black_button":
  
@@ -216,18 +238,9 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
      
             break;
 
-        case "button_one":
-        case "button_two":
- 
-            $OUTPUT = $FIELD->build($KEY, [
-                "type" => "button"
-            ], false);
-     
-            break;
-
         case "icon":
-        case "button_one_icon":
-        case "button_two_icon":
+        case "button_1_icon":
+        case "button_2_icon":
  
             $OUTPUT = $FIELD->build($KEY, [
                 "type" => "font_awesome"
