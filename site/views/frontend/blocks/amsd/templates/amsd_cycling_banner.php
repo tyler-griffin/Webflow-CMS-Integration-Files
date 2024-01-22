@@ -11,14 +11,14 @@
 							<div class="home-banner-text-small"><?= nl2br($ITEM->caption); ?></div>
 							<div class="home-banner-buttons-wrapper">
 
-								<? $buttonOne = json_decode($ITEM->button_one); ?>
-								<? if($buttonOne->text) { ?>
-									<a href="<?= $buttonOne->url ?>" class="cms-btn banner-button w-button"><? if($ITEM->button_one_icon) { ?><span class="button-icon"><i class="<?= $ITEM->button_one_icon ?>"></i></span> <? } ?><?= $buttonOne->text ?></a>
+								<? $button1 = json_decode($ITEM->button_1); ?>
+								<? if($button1->text) { ?>
+									<a href="<?= $button1->url ?>" class="cms-btn banner-button w-button"><? if($ITEM->button_1_icon) { ?><span class="button-icon"><i class="<?= $ITEM->button_1_icon ?>"></i></span> <? } ?><?= $button1->text ?></a>
 								<? } ?>
 
-								<? $buttonTwo = json_decode($ITEM->button_two); ?>
-								<? if($buttonTwo->text) { ?>
-									<a href="<?= $buttonTwo->url ?>" class="cms-btn cms-btn-secondary banner-button w-button"><? if($ITEM->button_two_icon) { ?><span class="button-icon"><i class="<?= $ITEM->button_two_icon ?>"></i></span> <? } ?><?= $buttonTwo->text ?></a>
+								<? $button2 = json_decode($ITEM->button_2); ?>
+								<? if($button2->text) { ?>
+									<a href="<?= $button2->url ?>" class="cms-btn cms-btn-secondary banner-button w-button"><? if($ITEM->button_2_icon) { ?><span class="button-icon"><i class="<?= $ITEM->button_2_icon ?>"></i></span> <? } ?><?= $button2->text ?></a>
 								<? } ?>
 
 							</div>
