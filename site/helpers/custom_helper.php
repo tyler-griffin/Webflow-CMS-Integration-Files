@@ -184,8 +184,8 @@
 
 				// Set icon for last root items
 				$LAST_ICON = '';
-				if($ROOT === end($C["NAV"]) && $COMMON_ITEMS['Nav Button Icon']) { 
-					$LAST_ICON = '<div class="button-icon"><i class="' . $COMMON_ITEMS["Nav Button Icon"] . '"></i></div>';
+				if($ROOT === end($C["NAV"]) && $COMMON_ITEMS['Last Nav Item Icon']) { 
+					$LAST_ICON = '<div class="button-icon"><i class="' . $COMMON_ITEMS["Last Nav Item Icon"] . '"></i></div>';
 				}
 
 				// Add beginning slash to inner page links

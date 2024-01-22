@@ -42,6 +42,7 @@ UPDATE `core_developer_settings` SET `value`='[{
 
 CREATE TABLE IF NOT EXISTS `amsd_accordion` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `block` int(11) unsigned NOT NULL DEFAULT 0,
   `title` varchar(255) DEFAULT NULL,
   `html` text DEFAULT NULL,
   `pos` int(11) unsigned NOT NULL DEFAULT 0,
@@ -70,43 +71,3 @@ CREATE TABLE IF NOT EXISTS `amsd_popup` (
   `pos` int(11) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=DYNAMIC;
-
-
-
-
-
-
-
-/* --- Below is just formatting for future use ---  */
-
-
-
-
-
-CREATE TABLE IF NOT EXISTS `amsd_standard` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `block` int(11) unsigned NOT NULL DEFAULT 0,
-  `focused_img` text DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `sub_title` varchar(255) DEFAULT NULL,
-  `slug` varchar(255) DEFAULT NULL,
-  `preview_text` text DEFAULT NULL,
-  `html` text DEFAULT NULL,
-  `pos` int(11) unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
-
-
-CREATE TABLE IF NOT EXISTS `amsd_standard_with_categories` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `block` int(11) unsigned NOT NULL DEFAULT 0,
-  `category` int(11) unsigned DEFAULT NULL,
-  `focused_img` text DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `sub_title` varchar(255) DEFAULT NULL,
-  `slug` varchar(255) DEFAULT NULL,
-  `preview_text` text DEFAULT NULL,
-  `html` text DEFAULT NULL,
-  `pos` int(11) unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
