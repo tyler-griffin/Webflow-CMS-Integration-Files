@@ -294,6 +294,7 @@ window.onload = function(e) {
                         customFieldData += '\n';
                         customFieldData += '\n            $OUTPUT = $FIELD->build($KEY, [';
                         customFieldData += '\n                "type" => "' + config + '"';
+                        customFieldData += '\n            ], false);';
                         customFieldData += '\n';
                         customFieldData += '\n            break;\n\n';
                     }
