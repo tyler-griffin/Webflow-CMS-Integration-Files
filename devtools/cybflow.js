@@ -314,7 +314,7 @@ window.onload = function(e) {
             });
 
             if(viewFileNames != '') {
-                viewFileNames = 'Create files in: /blocks/amsd/templates/<br>' + viewFileNames;
+                viewFileNames = 'Create block template files in: /blocks/amsd/templates/<br>' + viewFileNames;
                 /* Remove last line break */
                 viewFileNames = viewFileNames.slice(0,-4);
             }
