@@ -184,8 +184,12 @@
 
 				// Set icon for last root items
 				$LAST_ICON = '';
+				$LAST_ITEM_TEXT_PREFIX = '';
+				$LAST_ITEM_TEXT_SUFFIX = '';
 				if($ROOT === end($C["NAV"]) && $COMMON_ITEMS['Last Nav Item Icon']) { 
-					$LAST_ICON = '<div class="button-icon"><i class="' . $COMMON_ITEMS["Last Nav Item Icon"] . '"></i></div>';
+					$LAST_ICON = '<div class="last-nav-item-icon"><i class="' . $COMMON_ITEMS["Last Nav Item Icon"] . '"></i></div>';
+					$LAST_ITEM_TEXT_PREFIX = '<div class="last-nav-item-text">';
+					$LAST_ITEM_TEXT_SUFFIX = '</div>';
 				}
 
 				// Add beginning slash to inner page links
@@ -212,7 +216,7 @@
 				// Item is a single link
 				} else {
 
-					echo '<a class="w-nav-link nav-link' . $CLASS_ACTIVE . $CLASS_LAST . '" href="' . $ROOT_LINK . '">' . $LAST_ICON . $ROOT->title . '</a>';
+					echo '<a class="w-nav-link nav-link' . $CLASS_ACTIVE . $CLASS_LAST . '" href="' . $ROOT_LINK . '">' . $LAST_ICON . $LAST_ITEM_TEXT_PREFIX . $ROOT->title . $LAST_ITEM_TEXT_SUFFIX . '</a>';
 
 				}
 
