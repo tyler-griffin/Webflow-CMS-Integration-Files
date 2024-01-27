@@ -64,7 +64,7 @@ window.onload = function(e) {
                             /* Skip these field types */
                             return;
 
-                        } else if(nestedConfig == '' || nestedConfig == 'title' || nestedConfig == 'txt') {
+                        } else if(nestedConfig == '' || nestedConfig == 'title' || nestedConfig == 'txt' || nestedConfig == 'bgvideo') {
 
                             nestedConfig = 'text';
 
@@ -163,7 +163,7 @@ window.onload = function(e) {
                         /* Skip these field types */
                         return;
 
-                    } else if(config == '' || config == 'title' || config == 'txt') {
+                    } else if(config == '' || config == 'title' || config == 'txt' || config == 'bgvideo') {
                         
                         config = '';
 
@@ -498,6 +498,10 @@ window.onload = function(e) {
 
                     $(this).removeClass('w-embed');
                     $(this).html('<i class="<?= ' + prefix + key + suffix + ' ?>">');
+
+                } else if(type == 'bgvideo') {
+
+                    $(this).replaceWith('<div class="video-background-wrapper-outer"><div class="video-background-wrapper-inner"><div class="video-background"><iframe class="cms-video-vimeo" src="https://player.vimeo.com/video/<?= ' + prefix + key + suffix + ' ?>?background=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe></div></div></div>">');
 
                 } else if(type == 'url') {
                     
