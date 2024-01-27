@@ -389,7 +389,7 @@ window.onload = function(e) {
                 } else if(type == 'strings') {
 
                     $(this).before('<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
-                    $(this).after('\n<?/* End of String Block Template */?>\n\n');
+                    $(this).after('\n<?/* End of String Block Template */?>');
 
                 } else if(type == 'profile') {
 
