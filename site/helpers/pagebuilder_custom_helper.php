@@ -455,7 +455,7 @@ function customSortedListBlocks() {
                     "key" => "Last Nav Item Icon",
                     "config" => "icon"
                 ],[
-                    "key" => "Default Page Banner Photo",
+                    "key" => "Default Page Banner",
                     "config" => "focused_img"
                 ],[
                     "key" => "Contact Info",
