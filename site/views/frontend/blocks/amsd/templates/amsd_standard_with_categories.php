@@ -1,0 +1,1 @@
+<? include(FRONTEND . "/amsd_standard.php"); ?>

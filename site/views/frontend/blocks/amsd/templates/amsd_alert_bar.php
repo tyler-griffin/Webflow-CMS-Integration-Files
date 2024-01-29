@@ -16,7 +16,10 @@
 					<?= nl2br($ITEM->textarea); ?>
 					<? if(json_decode($ITEM->button)->text) { ?>
 						&nbsp;
-						<a class="alert-learn-more-link" href="<?= json_decode($ITEM->button)->url ?>"><?= json_decode($ITEM->button)->text ?> <span class="learn-more-arrow"><i class="fas fa-chevron-right"></i></span></a>
+						<a class="alert-learn-more-link" href="<?= json_decode($ITEM->button)->url ?>">
+							<div class="alert-learn-more-link-text"><?= json_decode($ITEM->button)->text ?></div>
+							<div class="alert-learn-more-arrow"><i class="fas fa-chevron-right"></i></div>
+						</a>
 					<? } ?>
 				</div>
 				<a href="#" class="alert-bar-close-button w-inline-block" id="alert-bar-close">
