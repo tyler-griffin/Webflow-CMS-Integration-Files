@@ -4,10 +4,7 @@ UPDATE `core_pages` SET `exclude_from_nav`='1' WHERE `id`=1;
 ALTER TABLE `amsd_cycling_banner` DROP COLUMN IF EXISTS `img`;
 ALTER TABLE `amsd_cycling_banner` DROP COLUMN IF EXISTS `url`;
 ALTER TABLE `amsd_cycling_banner` ADD `focused_img` text DEFAULT NULL;
-ALTER TABLE `amsd_cycling_banner` ADD `button_1` text DEFAULT NULL;
-ALTER TABLE `amsd_cycling_banner` ADD `button_2` text DEFAULT NULL;
-ALTER TABLE `amsd_cycling_banner` ADD `button_1_icon` varchar(255) DEFAULT NULL;
-ALTER TABLE `amsd_cycling_banner` ADD `button_2_icon` varchar(255) DEFAULT NULL;
+ALTER TABLE `amsd_cycling_banner` ADD `buttons` text DEFAULT NULL;
 
 ALTER TABLE `amsd_standard` DROP COLUMN IF EXISTS `img`;
 ALTER TABLE `amsd_standard` ADD `focused_img` text DEFAULT NULL;
