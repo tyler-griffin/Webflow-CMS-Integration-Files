@@ -48,7 +48,6 @@ window.onload = function(e) {
                     customFieldData += '\n            if($GRID) {';
                     customFieldData += '\n                $OUTPUT = \'<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>\';';
                     customFieldData += '\n            } else {';
-                    customFieldData += '\n                $LABEL_MARKUP = false;';
                     customFieldData += '\n                $fields = [';
 
                     $(this).find('[cybdata]').each(function() {
@@ -99,7 +98,7 @@ window.onload = function(e) {
                     customFieldData += '\n                    "type" => "sorted_list",';
                     customFieldData += '\n                    "fields" => $fields';
                     customFieldData += '\n                ]);';
-                    customFieldData += '\n                $OUTPUT= \'<div class="field"><div class="field-inner">\' . $FIELD_HTML . \'</div></div>\';';
+                    customFieldData += '\n                $OUTPUT = $FIELD_HTML;';
                     customFieldData += '\n            }';
                     customFieldData += '\n';
                     customFieldData += '\n            break;\n\n';

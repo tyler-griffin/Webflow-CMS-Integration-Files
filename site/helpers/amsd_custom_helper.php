@@ -97,12 +97,59 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
+        case "buttons":
+
+            if($GRID) {
+
+                $OUTPUT = '<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>';
+
+            } else {
+
+
+                $fields = [
+                    [
+                        "key" => "title",
+                        "label" => "Title",
+                        "config" => [
+                            "type" => "text"
+                        ]
+                    ],
+                    [
+                        "key" => "url",
+                        "label" => "URL",
+                        "config" => [
+                            "type" => "url"
+                        ]
+                    ],
+                    [
+                        "key" => "icon",
+                        "label" => "Icon",
+                        "config" => [
+                            "type" => "font_awesome"
+                        ]
+                    ]
+                ];
+
+                $FIELD_HTML .= $FIELD->special($KEY, [
+                    "type" => "sorted_list",
+                    "fields" => $fields,
+                    "options" => [
+                        "limit" => 2
+                    ]
+                ]);
+
+                $OUTPUT = $FIELD_HTML;
+
+            }
+
+            break;
+
         case "contact_info":
 
             if($GRID) {
                 $OUTPUT = '<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>';
             } else {
-                $LABEL_MARKUP = false;
+                
                 $fields = [
                     [
                         "key" => "textarea",
@@ -152,7 +199,7 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
                     "type" => "sorted_list",
                     "fields" => $fields
                 ]);
-                $OUTPUT= '<div class="field"><div class="field-inner">' . $FIELD_HTML . '</div></div>';
+                $OUTPUT = $FIELD_HTML;
             }
 
             break;
@@ -163,7 +210,6 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
             if($GRID) {
                 $OUTPUT = '<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>';
             } else {
-                $LABEL_MARKUP = false;
                 $fields = [
                     [
                         "key" => "title",
@@ -191,7 +237,7 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
                     "type" => "sorted_list",
                     "fields" => $fields
                 ]);
-                $OUTPUT= '<div class="field"><div class="field-inner">' . $FIELD_HTML . '</div></div>';
+                $OUTPUT= $FIELD_HTML;
             }
 
             break;
@@ -201,7 +247,6 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
             if($GRID) {
                 $OUTPUT = '<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>';
             } else {
-                $LABEL_MARKUP = false;
                 $fields = [
                     [
                         "key" => "title",
@@ -222,7 +267,7 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
                     "type" => "sorted_list",
                     "fields" => $fields
                 ]);
-                $OUTPUT= '<div class="field"><div class="field-inner">' . $FIELD_HTML . '</div></div>';
+                $OUTPUT= $FIELD_HTML;
             }
 
             break;
