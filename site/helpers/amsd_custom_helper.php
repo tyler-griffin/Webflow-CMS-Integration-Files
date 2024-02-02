@@ -272,6 +272,14 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
+        case "banner_image":
+ 
+            $OUTPUT = $FIELD->build($KEY, [
+                "type" => "focused_img"
+            ], false);
+     
+            break;
+
         case "button_1":
         case "button_2":
         case "red_button":
