@@ -20,6 +20,8 @@ window.onload = function(e) {
             window.customFieldData = '';
             window.amsdTableSQL = '';
             window.viewFileNames = '';
+            window.blocksCount = 0;
+            window.customFieldCount = 0;
 
             $('#data-parsing').html($('#input').val());
 
@@ -42,8 +44,10 @@ window.onload = function(e) {
                         
 
                 if($(this).find('[cybdata]').length !== 0) {
-
-                    customFieldData += '        case "' + itemSlug + '":';
+                    
+                    customFieldCount ++;
+                    if(customFieldCount != 1) { customFieldData += '        '; }
+                    customFieldData += 'case "' + itemSlug + '":';
                     customFieldData += '\n';
                     customFieldData += '\n            if($GRID) {';
                     customFieldData += '\n                $OUTPUT = \'<a class="fg-edit-html-in-strings-table"><span>Click Here to Edit</span></a>\';';
@@ -107,10 +111,9 @@ window.onload = function(e) {
             });
 
             /* --- Create data for STRINGS block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
-            var stringsCount = 0;
             $('#data-parsing').find('[cybdata="strings"]').each(function() {
 
-                stringsCount++;
+                blocksCount++;
 
                 var title =  '';
                 if($(this).attr('cybkey')) {
@@ -130,7 +133,7 @@ window.onload = function(e) {
                 viewFileNames += '/strings/' + blockSlug + '.php<br>';
 
                 blockBuilderData += '    ';
-                if(stringsCount != 1) { blockBuilderData += '    '; }
+                if(blocksCount != 1) { blockBuilderData += '    '; }
                 blockBuilderData += '$items[] = [';
                 blockBuilderData += '\n        "title" => "' + title + '",';
                 blockBuilderData += '\n        "value" => "' + blockSlug + '",';
@@ -201,10 +204,9 @@ window.onload = function(e) {
             });
 
             /* --- Create data for AMSD block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
-            var amsdCount = 0;
             $('#data-parsing').find('[cybdata="amsd"]').each(function() {
 
-                amsdCount++;
+                blocksCount++;
 
                 var title =  '';
                 if($(this).attr('cybkey')) {
@@ -224,7 +226,7 @@ window.onload = function(e) {
 
                 viewFileNames += amsdSlug + '.php<br>';
 
-                if(amsdCount != 1) { blockBuilderData += '    '; }
+                if(blocksCount != 1) { blockBuilderData += '    '; }
                 blockBuilderData += '$items[] = [';
                 blockBuilderData += '\n        "title" => "' + title + '",';
                 blockBuilderData += '\n        "value" => "' + blockSlug + '",';
@@ -276,9 +278,13 @@ window.onload = function(e) {
                         name = itemSlug;
                         dataType = config;
 
-                    } else if(config == 'list' || config == 'button' || config == 'textarea' || config == 'html' || config == 'url') {
+                    } else if(config == 'list') {
 
                         name = itemSlug;
+                        dataType = 'text';
+
+                    } else if(config == 'button' || config == 'textarea' || config == 'html' || config == 'url') {
+
                         dataType = 'text';
 
                     } else if(config.substring(0,3) == 'img') {
@@ -298,13 +304,27 @@ window.onload = function(e) {
                     }
 
                     if(config != name && config != '') {
-                        customFieldData += '        case "' + itemSlug + '":';
-                        customFieldData += '\n';
-                        customFieldData += '\n            $OUTPUT = $FIELD->build($KEY, [';
-                        customFieldData += '\n                "type" => "' + name + '"';
-                        customFieldData += '\n            ], false);';
-                        customFieldData += '\n';
-                        customFieldData += '\n            break;\n\n';
+
+                        if(config == 'list') {
+
+                            /* Skip */
+
+                        } else if(config == 'textarea' && itemSlug == 'caption') {
+
+                            /* Skip */
+
+                        } else {
+                            customFieldCount ++;
+                            if(customFieldCount != 1) { customFieldData += '        '; }
+                            customFieldData += 'case "' + itemSlug + '":';
+                            customFieldData += '\n';
+                            customFieldData += '\n            $OUTPUT = $FIELD->build($KEY, [';
+                            customFieldData += '\n                "type" => "' + name + '"';
+                            customFieldData += '\n            ], false);';
+                            customFieldData += '\n';
+                            customFieldData += '\n            break;\n\n';
+                        }
+
                     }
 
                     amsdTableSQL += '\n    `' + name + '` ' + dataType + ' DEFAULT NULL,';
