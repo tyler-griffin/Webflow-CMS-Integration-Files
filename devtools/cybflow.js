@@ -107,7 +107,10 @@ window.onload = function(e) {
             });
 
             /* --- Create data for STRINGS block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
+            var stringsCount = 0;
             $('#data-parsing').find('[cybdata="strings"]').each(function() {
+
+                stringsCount++;
 
                 var title =  '';
                 if($(this).attr('cybkey')) {
@@ -126,7 +129,9 @@ window.onload = function(e) {
 
                 viewFileNames += '/strings/' + blockSlug + '.php<br>';
 
-                blockBuilderData += '    $items[] = [';
+                blockBuilderData += '    ';
+                if(stringsCount != 1) { blockBuilderData += '    '; }
+                blockBuilderData += '$items[] = [';
                 blockBuilderData += '\n        "title" => "' + title + '",';
                 blockBuilderData += '\n        "value" => "' + blockSlug + '",';
                 blockBuilderData += '\n        "block" => [';
@@ -196,7 +201,10 @@ window.onload = function(e) {
             });
 
             /* --- Create data for AMSD block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
+            var amsdCount = 0;
             $('#data-parsing').find('[cybdata="amsd"]').each(function() {
+
+                amsdCount++;
 
                 var title =  '';
                 if($(this).attr('cybkey')) {
@@ -216,7 +224,8 @@ window.onload = function(e) {
 
                 viewFileNames += amsdSlug + '.php<br>';
 
-                blockBuilderData += '    $items[] = [';
+                if(amsdCount != 1) { blockBuilderData += '    '; }
+                blockBuilderData += '$items[] = [';
                 blockBuilderData += '\n        "title" => "' + title + '",';
                 blockBuilderData += '\n        "value" => "' + blockSlug + '",';
                 blockBuilderData += '\n        "block" => [';
@@ -292,7 +301,7 @@ window.onload = function(e) {
                         customFieldData += '        case "' + itemSlug + '":';
                         customFieldData += '\n';
                         customFieldData += '\n            $OUTPUT = $FIELD->build($KEY, [';
-                        customFieldData += '\n                "type" => "' + config + '"';
+                        customFieldData += '\n                "type" => "' + name + '"';
                         customFieldData += '\n            ], false);';
                         customFieldData += '\n';
                         customFieldData += '\n            break;\n\n';
