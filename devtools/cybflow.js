@@ -284,7 +284,7 @@ window.onload = function(e) {
                         dataType = 'text';
 
                     } else if(config == 'button' || config == 'textarea' || config == 'html' || config == 'url') {
-
+                        
                         dataType = 'text';
 
                     } else if(config.substring(0,3) == 'img') {
@@ -327,7 +327,7 @@ window.onload = function(e) {
 
                     }
 
-                    amsdTableSQL += '\n    `' + name + '` ' + dataType + ' DEFAULT NULL,';
+                    amsdTableSQL += '\n    `' + itemSlug + '` ' + dataType + ' DEFAULT NULL,';
 
                     if(name == 'title') {
                         amsdTableSQL += '\n    `slug` varchar(255) DEFAULT NULL,';
