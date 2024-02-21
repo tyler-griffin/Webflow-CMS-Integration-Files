@@ -9,7 +9,7 @@ var EMAIL_FORM = function($FORM) {
 
 			$('.contact-form-submit').attr("disabled","true");
 
-			VALIDATOR["message"]("Sending contact form...");
+			VALIDATOR["message"](OPTIONS["messages"]["validating"]);
 			
 			var FROM = CONFIG["from"];
 			
