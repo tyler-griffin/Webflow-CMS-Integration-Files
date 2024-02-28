@@ -485,7 +485,15 @@ function customSortedListBlocks() {
             "settings" => [
                 ["AMSD Noun", "Banner"],
                 ["Heading Read Only", "true"],
-                ["Table", "amsd_cycling_banner"]
+                ["Table", "amsd_cycling_banner"],
+                ["Additional Settings", "true"]
+            ],
+            "additional_settings" => [
+                [
+                    "key" => "Background Video Vimeo ID",
+                    "value" => "",
+                    "config" => ""
+                ]
             ]
         ],
         "dev" => true
