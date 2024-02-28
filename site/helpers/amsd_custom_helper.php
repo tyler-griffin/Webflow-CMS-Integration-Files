@@ -169,7 +169,7 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
                                     "phone-flip",
                                     "mobile-screen",
                                     "envelope",
-                                    "map-marker-alt",
+                                    "location-dot",
                                     "map-location-dot",
                                     "signs-post",
                                     "house-chimney",

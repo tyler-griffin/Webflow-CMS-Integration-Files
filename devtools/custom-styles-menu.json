@@ -1,4 +1,12 @@
 [{
+    "title": "Button One",
+    "class": "cms-btn",
+    "element": "a"  
+},{
+    "title": "Button Two",
+    "class": "cms-btn cms-btn-secondary",
+    "element": "a"  
+},{
     "title": "Heading 1",
     "class": "heading",
     "element": "div"  
