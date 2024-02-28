@@ -15,6 +15,7 @@ ALTER TABLE `amsd_standard_with_categories` ADD `focused_img` text DEFAULT NULL;
 UPDATE `core_developer_settings` SET `value`='/assets/css/cms.css' WHERE `setting`='contentsCSS';
 UPDATE `core_developer_settings` SET `value`='1' WHERE `setting`='stylesMenuV2';
 UPDATE `core_developer_settings` SET `value`= NULL WHERE `setting`='showButtonsInStylesMenu';
+UPDATE `core_developer_settings` SET `value`='1' WHERE `setting`='textboxButtonsV2';
 UPDATE `core_developer_settings` SET `value`='[{
     \"title\": \"Heading 1\",
     \"class\": \"heading\",
