@@ -541,7 +541,7 @@ function customSortedListBlocks() {
                     "active" => 1,
                     "icon" => "fas fa-triangle-exclamation",
                     "textarea" => 'Lorem ipsum dolor sit amet, eam everti tractatos cu, ea vis brute ullamcorper, nominavi probatus posidonium cu his.',
-                    "button" => '{"text":"Learn More","url":""}'
+                    "button" => '{"text":"Learn More","url":"#"}'
                 ]
             ]
         ],
