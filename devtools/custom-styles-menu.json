@@ -1,10 +1,18 @@
 [{
-    "title": "Button One",
+    "title": "Button (Primary)",
     "class": "cms-btn",
     "element": "a"  
 },{
-    "title": "Button Two",
+    "title": "Button (Secondary)",
     "class": "cms-btn cms-btn-secondary",
+    "element": "a"  
+},{
+    "title": "Button (Outlined)",
+    "class": "cms-btn cms-btn-outlined",
+    "element": "a"  
+},{
+    "title": "Button (Outlined Secondary)",
+    "class": "cms-btn cms-btn-outlined-secondary",
     "element": "a"  
 },{
     "title": "Heading 1",

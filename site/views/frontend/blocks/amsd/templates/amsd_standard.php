@@ -25,36 +25,38 @@ if($profile) {
 			$itemImage = json_decode($ITEM->focused_img);
 		} ?>
 
+		<? if($itemImage) { ?>
+			<div class="profile-image-wrapper <?= $CLASS_STAFF ?>">
+				<div class="amsd-image <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/600');"></div>
+			</div>
+		<? } ?>
+
 		<div class="profile-meta-text-wrapper">
 
 			<div class="amsd-title-text"><?= $ITEM->title ?></div>
-			<div class="profile-title-underline"></div>
 
 			<? if(isset($ITEM->sub_title)) { ?>
 				<p class="amsd-meta-text-profile-page"><?= $ITEM->sub_title ?></p>
 			<? } ?>
 
 			<? if(isset($ITEM->email) || isset($ITEM->phone)) { ?>
-				<p class="amsd-description-text grid">
+				<div class="amsd-meta-links-outer-wrapper profile-page">
 					<? if(isset($ITEM->email)) { ?>
-						<a href="mailto:<?= $ITEM->email ?>" class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-envelope"></i></span> <?= $ITEM->email ?></a>
-					<? } ?>
-					<? if(isset($ITEM->email) && isset($ITEM->phone)) { ?>
-						<br>
+						<div class="amsd-meta-link-wrapper profile-page">
+							<div class="amsd-meta-icon"><i class="fas fa-envelope"></i></div>
+							<a href="mailto:<?= $ITEM->email ?>" class="amsd-meta-link profile-page"><?= $ITEM->email ?></a>
+						</div>
 					<? } ?>
 					<? if(isset($ITEM->phone)) { ?>
-						<a href="tel:+1<?= $ITEM->phone ?>" class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-phone-alt"></i></span> <?= $ITEM->phone ?></a>
+						<div class="amsd-meta-link-wrapper profile-page">
+							<div class="amsd-meta-icon"><i class="fas fa-phone-alt"></i></div>
+							<a href="tel:+1<?= $ITEM->phone ?>" class="amsd-meta-link profile-page"><?= $ITEM->phone ?></a>
+						</div>
 					<? } ?>
-				</p>
+				</div>
 			<? } ?>
 
 		</div>
-
-		<? if($itemImage) { ?>
-			<div class="profile-image-wrapper <?= $CLASS_STAFF ?>">
-				<div class="amsd-image <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/600');"></div>
-			</div>
-		<? } ?>
 
 	</div>
 

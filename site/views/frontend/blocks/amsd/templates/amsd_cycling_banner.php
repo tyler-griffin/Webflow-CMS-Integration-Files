@@ -20,7 +20,7 @@ if($block->additional_settings['Background Video Vimeo ID']) {
                         <div class="home-banner-text-small"><?= nl2br($ITEM->caption); ?></div>
                         <div class="home-banner-buttons-wrapper">
                             <? foreach (json_decode($ITEM->buttons) as $bk => $BUTTON) { ?>
-                            <a href="<?= $BUTTON->url ?>" class="cms-btn <? if(($bk+1)%2 == 0) { ?>cms-btn-secondary<? } ?> banner-button"><? if($BUTTON->icon) { ?><span class="button-icon"><i class="<?= $BUTTON->icon ?>"></i></span> <? } ?><?= $BUTTON->title ?></a>
+                            <a href="<?= $BUTTON->url ?>" class="cms-btn <? if(($bk+1)%2 == 0) { ?>cms-btn-outlined-white<? } ?> banner-button"><? if($BUTTON->icon) { ?><span class="button-icon"><i class="<?= $BUTTON->icon ?>"></i></span> <? } ?><?= $BUTTON->title ?></a>
                             <? } ?>
                         </div>
                     </div>

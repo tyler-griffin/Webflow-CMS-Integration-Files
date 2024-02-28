@@ -27,7 +27,6 @@ if($profile) {
 		<div class="profile-meta-text-wrapper">
 
 			<div class="amsd-title-text"><?= $ITEM->title ?></div>
-			<div class="profile-title-underline"></div>
 
 			<? if(isset($ITEM->sub_title)) { ?>
 				<p class="amsd-meta-text-profile-page"><?= $ITEM->sub_title ?></p>
