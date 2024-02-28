@@ -7,7 +7,7 @@
 			$count++;
 			if($count > 1) { break; }
 			?>
-			<div id="alert-bar" class="alert-bar">
+			<div id="alert-bar" class="alert-bar" style="display:none;">
 				<div id="alert-text" class="alert-text">
 					<? if($ITEM->icon && $ITEM->icon != "null") { ?>
 						<span class="alert-icon"><i class="<?= $ITEM->icon ?>"></i></span>

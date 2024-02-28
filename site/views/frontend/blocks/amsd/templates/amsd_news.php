@@ -33,20 +33,6 @@ if($profile) {
 				<p class="amsd-meta-text-profile-page"><?= $ITEM->sub_title ?></p>
 			<? } ?>
 
-			<? if(isset($ITEM->email) || isset($ITEM->phone)) { ?>
-				<p class="amsd-description-text grid">
-					<? if(isset($ITEM->email)) { ?>
-						<a href="mailto:<?= $ITEM->email ?>" class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-envelope"></i></span> <?= $ITEM->email ?></a>
-					<? } ?>
-					<? if(isset($ITEM->email) && isset($ITEM->phone)) { ?>
-						<br>
-					<? } ?>
-					<? if(isset($ITEM->phone)) { ?>
-						<a href="tel:+1<?= $ITEM->phone ?>" class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-phone-alt"></i></span> <?= $ITEM->phone ?></a>
-					<? } ?>
-				</p>
-			<? } ?>
-
 		</div>
 
 	</div>
@@ -171,20 +157,6 @@ if($profile) {
 								<? } ?>
 								<? if(isset($ITEM->author)) { ?>
 									<div class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-user"></i></span> <?= $ITEM->author ?></div>
-								<? } ?>
-							</p>
-						<? } ?>
-
-						<? if(isset($ITEM->email) || isset($ITEM->phone)) { ?>
-							<p class="amsd-description-text grid">
-								<? if(isset($ITEM->email)) { ?>
-									<a href="mailto:<?= $ITEM->email ?>" class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-envelope"></i></span> <?= $ITEM->email ?></a>
-								<? } ?>
-								<? if(isset($ITEM->email) && isset($ITEM->phone)) { ?>
-									<br>
-								<? } ?>
-								<? if(isset($ITEM->phone)) { ?>
-									<a href="tel:+1<?= $ITEM->phone ?>" class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-phone-alt"></i></span> <?= $ITEM->phone ?></a>
 								<? } ?>
 							</p>
 						<? } ?>
