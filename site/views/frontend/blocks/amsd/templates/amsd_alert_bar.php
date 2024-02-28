@@ -6,10 +6,9 @@
 		if($ITEM->active) {
 			$count++;
 			if($count > 1) { break; }
-			$alertID = slug($ITEM->textarea);
 			?>
 			<div id="alert-bar" class="alert-bar">
-				<div class="alert-text">
+				<div id="alert-text" class="alert-text">
 					<? if($ITEM->icon && $ITEM->icon != "null") { ?>
 						<span class="alert-icon"><i class="<?= $ITEM->icon ?>"></i></span>
 					<? } ?>
@@ -32,18 +31,36 @@
 
 	<script type="text/javascript">
 
-		$(document).ready(function(){
+		window.addEventListener('load', function() {
 
-			if(localStorage.getItem('<?= $alertID ?>') != 'shown') {
-				$('#alert-bar, #alert-bar-spacer').show();
-				
-			}
-			$('#alert-bar-close').click(function() {
-				$('#alert-bar, #alert-bar-spacer').hide();
-				localStorage.setItem('<?= $alertID ?>', 'shown');
+			$(document).ready(function(){
+
+				String.prototype.hashCode = function() {
+					var hash = 0,
+						i, chr;
+					if (this.length === 0) return hash;
+					for (i = 0; i < this.length; i++) {
+						chr = this.charCodeAt(i);
+						hash = ((hash << 5) - hash) + chr;
+						hash |= 0; // Convert to 32bit integer
+					}
+					return hash;
+				}
+
+				var alertID = $('#alert-text').text().hashCode();
+
+				if(localStorage.getItem(alertID) != 'shown') {
+					$('#alert-bar, #alert-bar-spacer').show();
+					
+				}
+				$('#alert-bar-close').click(function() {
+					$('#alert-bar, #alert-bar-spacer').hide();
+					localStorage.setItem(alertID, 'shown');
+				});
+
 			});
 
-		});
+		})
 
 	</script>
 

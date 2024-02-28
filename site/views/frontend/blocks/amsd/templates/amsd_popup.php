@@ -6,7 +6,6 @@
 		if($ITEM->active) {
 			$count++;
 			if($count > 1) { break; }
-			$popupID = slug($ITEM->html);
 			?>
 
 			<div id="lightbox-window" class="lightbox-window">
@@ -15,7 +14,9 @@
 						<div data-ix="lightbox-close-button" class="close-button">
 							<div class="lightbox-close-icon"><i class="fa-solid fa-xmark"></i></div>
 						</div>
-						<?= $ITEM->html ?>
+						<div id="modal-text">
+							<?= $ITEM->html ?>
+						</div>
 					</div>
 					<div data-ix="lightbox-close-button" class="fullscreen-close-button"></div>
 				</div>
@@ -26,17 +27,35 @@
 
 	<script type="text/javascript">
 
-		$(document).ready(function(){
+		window.addEventListener('load', function() {
 
-			if(localStorage.getItem('<?= $popupID ?>') != 'shown') {
-				$('#lightbox-window').addClass('visible');
-			}
-			$('#alert-bar-close').click(function() {
-				$('#lightbox-window').removeClass('visible');
-				localStorage.setItem('<?= $popupID ?>', 'shown');
+			$(document).ready(function(){
+
+				String.prototype.hashCode = function() {
+					var hash = 0,
+						i, chr;
+					if (this.length === 0) return hash;
+					for (i = 0; i < this.length; i++) {
+						chr = this.charCodeAt(i);
+						hash = ((hash << 5) - hash) + chr;
+						hash |= 0; // Convert to 32bit integer
+					}
+					return hash;
+				}
+
+				var modalID = $('#modal-text').text().hashCode();
+
+				if(localStorage.getItem(modalID) != 'shown') {
+					$('#lightbox-window').addClass('visible');
+				}
+				$('#alert-bar-close').click(function() {
+					$('#lightbox-window').removeClass('visible');
+					localStorage.setItem(modalID, 'shown');
+				});
+
 			});
 
-		});
+		})
 
 	</script>
 
