@@ -468,7 +468,7 @@ function customSortedListBlocks() {
                     "config" => "social_media_links"
                 ],[
                     "key" => "Footer Links",
-                    "value" => '[{"title":"Accessibility Statement","icon":"fa-solid fa-universal-access","url":""},{"title":"Privacy Policy","icon":"fa-solid fa-shield-halved","url":""}]',
+                    "value" => '[{"title":"Accessibility Statement","icon":"fas fa-universal-access","url":""},{"title":"Privacy Policy","icon":"fas fa-shield-halved","url":""}]',
                     "config" => "footer_links"
                 ]
             ]
