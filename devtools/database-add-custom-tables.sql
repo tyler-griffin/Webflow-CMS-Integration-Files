@@ -17,6 +17,22 @@ UPDATE `core_developer_settings` SET `value`='1' WHERE `setting`='stylesMenuV2';
 UPDATE `core_developer_settings` SET `value`= NULL WHERE `setting`='showButtonsInStylesMenu';
 UPDATE `core_developer_settings` SET `value`='1' WHERE `setting`='textboxButtonsV2';
 UPDATE `core_developer_settings` SET `value`='[{
+    \"title\": \"Button (Primary)\",
+    \"class\": \"cms-btn\",
+    \"element\": \"a\"  
+},{
+    \"title\": \"Button (Secondary)\",
+    \"class\": \"cms-btn cms-btn-secondary\",
+    \"element\": \"a\"  
+},{
+    \"title\": \"Button (Outlined)\",
+    \"class\": \"cms-btn cms-btn-outlined\",
+    \"element\": \"a\"  
+},{
+    \"title\": \"Button (Outlined Secondary)\",
+    \"class\": \"cms-btn cms-btn-outlined-secondary\",
+    \"element\": \"a\"  
+},{
     \"title\": \"Heading 1\",
     \"class\": \"heading\",
     \"element\": \"div\"  
@@ -37,6 +53,8 @@ UPDATE `core_developer_settings` SET `value`='[{
     \"class\": \"call-out-text\",
     \"element\": \"div\"
 }]' WHERE `setting`='ckeditorStyles';
+
+
 
 
 CREATE TABLE IF NOT EXISTS `amsd_accordion` (
