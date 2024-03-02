@@ -132,7 +132,7 @@ window.onload = function(e) {
 
                 viewFileNames += '/strings/' + blockSlug + '.php<br>';
 
-                if(blocksCount != 1) { blockBuilderData += '    '; }
+                if(blocksCount != 1) { blockBuilderData += '    '+=blocksCount; }
                 blockBuilderData += '$items[] = [';
                 blockBuilderData += '\n        "title" => "' + title + '",';
                 blockBuilderData += '\n        "value" => "' + blockSlug + '",';
