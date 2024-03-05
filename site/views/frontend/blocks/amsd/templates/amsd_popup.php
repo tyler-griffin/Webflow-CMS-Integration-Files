@@ -14,7 +14,7 @@
 						<div data-ix="lightbox-close-button" class="close-button">
 							<div class="lightbox-close-icon"><i class="fa-solid fa-xmark"></i></div>
 						</div>
-						<div id="modal-text">
+						<div id="lightbox-text">
 							<?= $ITEM->html ?>
 						</div>
 					</div>
@@ -43,14 +43,14 @@
 					return hash;
 				}
 
-				var modalID = $('#modal-text').text().hashCode();
+				var lightboxID = $('#lightbox-text').text().hashCode();
 
-				if(localStorage.getItem(modalID) != 'shown') {
+				if(localStorage.getItem(lightboxID) != 'shown') {
 					$('#lightbox-window').addClass('visible');
 				}
-				$('#alert-bar-close').click(function() {
+				$('[data-ix="lightbox-close-button"]').click(function() {
 					$('#lightbox-window').removeClass('visible');
-					localStorage.setItem(modalID, 'shown');
+					localStorage.setItem(lightboxID, 'shown');
 				});
 
 			});
