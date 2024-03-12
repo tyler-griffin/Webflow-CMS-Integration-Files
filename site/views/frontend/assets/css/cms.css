@@ -11,6 +11,11 @@ And replace the import line below with the new import statement
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700');
 
+If an adobe font is used, get the typekit id from index.html in the webflow export (ex: <script src="https://use.typekit.net/kfe5odm.js" type="text/javascript"></script>)
+And use the id to create an import statment instead of using the script in the header:
+
+@import url("https://use.typekit.net/kfe5odm.css");
+
 */
 
 @import "normalize.css";

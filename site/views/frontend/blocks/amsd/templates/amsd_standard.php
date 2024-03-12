@@ -100,7 +100,7 @@ if($profile) {
 			<form class="amsd-select-form">
 				<label for="category-select" class="amsd-select-form-label">Filter by Category</label>
 				<div class="form-input select-input-wrapper">
-					<select id="category-select" name="category-select" class="input-field select-input category-filter w-select">
+					<select id="category-select" name="category-select" class="input-field select-input no-floating-label category-filter w-select">
 						<option value="/<?= $page->uri ?>">All Categories</option>
 				        <? foreach($categoriesBlock["data"] as $k => $CATEGORY) { ?>
 				        	<option value="/<?= $page->uri ?>/category/<?= $CATEGORY->slug ?>" <? if(isset($subVal) && $subVal == $CATEGORY->id) { ?>selected<? } ?>><?= $CATEGORY->title ?></option>
@@ -152,7 +152,7 @@ if($profile) {
 						
 							<? if($itemImageUrl) { ?>
 								<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-image-link w-inline-block <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>" title="<?= $ITEM->title ?>">
-									<div class="amsd-image <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?> <?= $CLASS_STAFF ?>" style="<? if($itemImagePosition) { ?>background-position: <?= $itemImagePosition ?>;<? } ?> background-image: url('<?= $itemImageUrl ?>');">
+									<div class="amsd-image <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>" style="<? if($itemImagePosition) { ?>background-position: <?= $itemImagePosition ?>;<? } ?> background-image: url('<?= $itemImageUrl ?>');">
 										<? if($link) { ?><div class="hover-overlay"></div><? } ?>
 									</div>
 								</a>
