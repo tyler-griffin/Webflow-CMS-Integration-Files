@@ -281,11 +281,9 @@ window.onload = function(e) {
                     var key = $(this).attr('cybkey');
                     if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
 
+                    /* Skip items if an item with the same key has already been added */
                     if ($.inArray(key, existingAMSDFields) != -1) {
-
-                        /* Skip items if an item with the same key has already been added */
                         return;
-
                     }
                     existingAMSDFields.push(key);
 
