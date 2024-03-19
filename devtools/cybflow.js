@@ -225,6 +225,9 @@ window.onload = function(e) {
             /* --- Create data for AMSD block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
             $('#data-parsing').find('[cybdata="amsd"]').each(function() {
 
+                /*--- Items within an AMSD loop are defined within the first child element, so we're dropping all other elements --*/
+                $(this).children().not(':first').remove();
+
                 blocksCount++;
 
                 var title =  '';
@@ -308,10 +311,18 @@ window.onload = function(e) {
 
                     } else if(config.substring(0,3) == 'img') {
 
+                        if(itemSlug == config) {
+                            itemSlug = 'img';
+                        }
+
                         name = 'img';
                         dataType = 'int(11) unsigned';
 
                     } else if(config.substring(0,2) == 'bg') {
+
+                        if(itemSlug == config) {
+                            itemSlug = 'focused_img';
+                        }
 
                         name = 'focused_img';
                         dataType = 'text';
