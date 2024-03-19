@@ -57,6 +57,7 @@ window.onload = function(e) {
                     customFieldData += '\n            } else {';
                     customFieldData += '\n                $fields = [';
 
+                    var existingSortedListFields = new Array();
                     $(this).find('[cybdata]').each(function() {
 
                         var nestedConfig = $(this).attr('cybdata');
@@ -103,6 +104,12 @@ window.onload = function(e) {
                         if(nestedLabel == '') {
                             nestedLabel = makeTitle(nestedKey);
                         }
+
+                        /* Skip items if an item with the same key has already been added */
+                        if ($.inArray(nestedSlug, existingSortedListFields) != -1) {
+                            return;
+                        }
+                        existingSortedListFields.push(nestedSlug);
 
                         customFieldData += '\n                    [';
                         customFieldData += '\n                        "key" => "' + nestedSlug + '",';
