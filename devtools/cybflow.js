@@ -58,6 +58,13 @@ window.onload = function(e) {
 
                         var nestedConfig = $(this).attr('cybdata');
 
+                        var nestedKey = $(this).attr('cybkey');
+                        if(!nestedKey) { nestedKey = nestedConfig; }
+                        var nestedSlug = nestedKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                        nestedSlug = nestedSlug.toLowerCase();
+
+                        var nestedLabel = '';
+
                         if(nestedConfig == 'amsd' || nestedConfig == 'profile' || nestedConfig == 'common' || nestedConfig == 'strings' || nestedConfig == 'buttontext' || nestedConfig == 'list' || nestedConfig == 'nav' || nestedConfig == 'logo' || nestedConfig == 'footerlogo' || nestedConfig == 'alertbar' || nestedConfig == 'popup' || nestedConfig == 'tag') {
 
                             /* Skip these field types */
@@ -70,25 +77,27 @@ window.onload = function(e) {
                         } else if(nestedConfig == 'icon') {
 
                             nestedConfig = 'font_awesome';
+                            nestedLabel = 'Icon';
 
                         } else if(nestedConfig.substring(0,3) == 'img') {
 
                             nestedConfig = 'photo';
+                            nestedLabel = 'Image';
 
                         } else if(nestedConfig.substring(0,2) == 'bg') {
 
                             nestedConfig = 'focused_img';
+                            nestedLabel = 'Focused Image';
 
                         }
 
-                        var nestedKey = $(this).attr('cybkey');
-                        if(!nestedKey) { nestedKey = nestedConfig; }
-                        var nestedSlug = nestedKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
-                        nestedSlug = nestedSlug.toLowerCase();
+                        if(nestedLabel == '') {
+                            nestedLabel = makeTitle(nestedKey);
+                        }
 
                         customFieldData += '\n                    [';
                         customFieldData += '\n                        "key" => "' + nestedSlug + '",';
-                        customFieldData += '\n                        "label" => "' + makeTitle(nestedKey) + '",';
+                        customFieldData += '\n                        "label" => "' + nestedLabel + '",';
                         customFieldData += '\n                        "config" => [';
                         customFieldData += '\n                            "type" => "' + nestedConfig + '"';
                         customFieldData += '\n                        ]';
