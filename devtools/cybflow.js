@@ -57,11 +57,7 @@ window.onload = function(e) {
                     $(this).find('[cybdata]').each(function() {
 
                         var nestedConfig = $(this).attr('cybdata');
-
                         var nestedKey = $(this).attr('cybkey');
-                        if(!nestedKey) { nestedKey = nestedConfig; }
-                        var nestedSlug = nestedKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
-                        nestedSlug = nestedSlug.toLowerCase();
 
                         var nestedLabel = '';
 
@@ -77,19 +73,29 @@ window.onload = function(e) {
                         } else if(nestedConfig == 'icon') {
 
                             nestedConfig = 'font_awesome';
-                            nestedLabel = 'Icon';
+                            if(!nestedKey) {
+                                nestedLabel = 'Icon';
+                            }
 
                         } else if(nestedConfig.substring(0,3) == 'img') {
 
                             nestedConfig = 'photo';
-                            nestedLabel = 'Image';
+                            if(!nestedKey) {
+                                nestedLabel = 'Image';
+                            }
 
                         } else if(nestedConfig.substring(0,2) == 'bg') {
 
                             nestedConfig = 'focused_img';
-                            nestedLabel = 'Focused Image';
+                            if(!nestedKey) {
+                                nestedLabel = 'Focused Image';
+                            }
 
                         }
+
+                        if(!nestedKey) { nestedKey = nestedConfig; }
+                        var nestedSlug = nestedKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                        nestedSlug = nestedSlug.toLowerCase();
 
                         if(nestedLabel == '') {
                             nestedLabel = makeTitle(nestedKey);
