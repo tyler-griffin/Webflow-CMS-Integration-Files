@@ -267,6 +267,7 @@ window.onload = function(e) {
                 amsdTableSQL += '\n    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,';
                 amsdTableSQL += '\n    `block` int(11) unsigned NOT NULL DEFAULT 0,';
 
+                var existingAMSDFields = new Array();
                 $(this).find('[cybdata]').each(function() {
 
                     if($(this).parents('[cybdata="list"]').length) {
@@ -279,6 +280,14 @@ window.onload = function(e) {
                     var config = $(this).attr('cybdata');
                     var key = $(this).attr('cybkey');
                     if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
+
+                    if ($.inArray(key, existingAMSDFields) != -1) {
+
+                        /* Skip items if an item with the same key has already been added */
+                        return;
+
+                    }
+                    existingAMSDFields.push(key);
 
                     var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
                     itemSlug = itemSlug.toLowerCase();
