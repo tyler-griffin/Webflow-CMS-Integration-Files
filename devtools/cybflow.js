@@ -35,6 +35,9 @@ window.onload = function(e) {
             /* --- Create data for custom sorted list fields - goes in field_builder_custom_preset() in amsd_custom_helper.php --- */
             $('#data-parsing').find('[cybdata="list"]').each(function() {
 
+                /*--- Items within a sorted list field are defined within the first child element, so we're dropping all other elements --*/
+                $(this).children().not(':first').remove();
+
                 var config = $(this).attr('cybdata');
                 var key = $(this).attr('cybkey');
                 if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
@@ -72,7 +75,7 @@ window.onload = function(e) {
 
                         } else if(nestedConfig == 'icon') {
 
-                            nestedConfig = 'font_awesome';
+                            nestedConfig = 'icon';
                             if(!nestedKey) {
                                 nestedLabel = 'Icon';
                             }
