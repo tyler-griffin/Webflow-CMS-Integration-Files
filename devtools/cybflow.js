@@ -497,15 +497,19 @@ window.onload = function(e) {
                 
                 } else if(type == 'phone') {
 
+                    $(this).removeAttr("target");
                     $(this).attr("href","tel:+1<?= " + prefix + key + suffix + " ?>");
                     $(this).html("<?= " + prefix + key + suffix + " ?>");
 
                 } else if(type == 'email') {
 
+                    $(this).removeAttr("target");
                     $(this).attr("href","mailto:+<?= " + prefix + key + suffix + " ?>");
                     $(this).html("<?= " + prefix + key + suffix + " ?>");
 
                 } else if(type == 'button') {
+
+                    $(this).removeAttr("target");
 
                     if($(this).parents('[cybdata="list"]').length || $(this).parents('[cybdata="amsd"]').length) {
 
@@ -535,7 +539,8 @@ window.onload = function(e) {
                     $(this).html('<i class="<?= ' + prefix + key + suffix + ' ?>">');
 
                 } else if(type == 'url') {
-                    
+
+                    $(this).removeAttr("target");
                     $(this).attr("href","<?= " + prefix + key + suffix + " ?>");
 
                  } else if(type == 'date') {
