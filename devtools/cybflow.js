@@ -57,10 +57,6 @@ window.onload = function(e) {
                     $(this).find('[cybdata]').each(function() {
 
                         var nestedConfig = $(this).attr('cybdata');
-                        var nestedKey = $(this).attr('cybkey');
-                        if(!nestedKey) { nestedKey = nestedConfig; }
-                        var nestedSlug = nestedKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
-                        nestedSlug = nestedSlug.toLowerCase();
 
                         if(nestedConfig == 'amsd' || nestedConfig == 'profile' || nestedConfig == 'common' || nestedConfig == 'strings' || nestedConfig == 'buttontext' || nestedConfig == 'list' || nestedConfig == 'nav' || nestedConfig == 'logo' || nestedConfig == 'footerlogo' || nestedConfig == 'alertbar' || nestedConfig == 'popup' || nestedConfig == 'tag') {
 
@@ -84,6 +80,11 @@ window.onload = function(e) {
                             nestedConfig = 'focused_img';
 
                         }
+
+                        var nestedKey = $(this).attr('cybkey');
+                        if(!nestedKey) { nestedKey = nestedConfig; }
+                        var nestedSlug = nestedKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                        nestedSlug = nestedSlug.toLowerCase();
 
                         customFieldData += '\n                    [';
                         customFieldData += '\n                        "key" => "' + nestedSlug + '",';
@@ -158,6 +159,7 @@ window.onload = function(e) {
                     }
 
                     var config = $(this).attr('cybdata');
+
                     var key = $(this).attr('cybkey');
                     if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
 
@@ -375,7 +377,7 @@ window.onload = function(e) {
                     if($(this).parents('[cybdata="list"]').attr('cybkey')) {
                         itemLabel = $(this).parents('[cybdata="list"]').attr('cybkey').toUpperCase().replace(/ /g,"_") + "_ITEM";
                     }
-                    prefix = "$" + itemLabel+ "->";
+                    prefix = "$" + itemLabel + "->";
                     suffix = ""; 
                     if(key) {
                         key = key.toLowerCase().replace(/ /g,"_");
@@ -479,6 +481,10 @@ window.onload = function(e) {
 
                 } else if(type.substring(0,3) == 'img') {
 
+                    if(key == type) {
+                        key = 'img';
+                    }
+
                     var imageSize = type.slice(3);
                     if(imageSize == '') {
                         imageSize = '1000';
@@ -487,6 +493,10 @@ window.onload = function(e) {
                     $(this).attr("src","/image/<?= " + prefix + key + suffix + " ?>/" + imageSize);
 
                 } else if(type.substring(0,2) == 'bg') {
+
+                    if(key == type) {
+                        key = 'focused_img';
+                    }
 
                     var imageSize = type.slice(2);
                     if(imageSize == '') {
