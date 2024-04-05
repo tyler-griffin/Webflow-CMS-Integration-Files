@@ -565,7 +565,7 @@ function customSortedListBlocks() {
                 [
                     "active" => 1,
                     "title" => "Test",
-                    "html" => '<div class="heading">Lightbox <span style="color:#63a34a;">Heading</span></div><p>The Rural Energy for America Program provides guaranteed loan financing and grant funding to agricultural producers and rural small businesses to purchase or install renewable energy systems or make energy efficiency improvements.</p><a class="cms-btn cms-btn-primary" data-btn-text="Button Text" href="#">Button Text</a></p>'
+                    "html" => '<div class="heading">Lightbox Heading</div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ultricies tortor vel dolor pulvinar sagittis</p><p>&nbsp;</p><p><a class="cms-btn cms-btn-primary" data-btn-text="Button Text" href="#">Button Text</a></p>'
                 ]
             ]
         ],
