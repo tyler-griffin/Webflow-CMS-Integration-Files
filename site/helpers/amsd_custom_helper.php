@@ -112,7 +112,9 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
                 "options" => [
                     /*"classes" => [
                         "primary" => "Primary",
-                        "secondary" => "Secondary"
+                        "secondary" => "Secondary",
+                        "outlined" => "Outlined",
+                        "outlined-secondary" => "Outlined Secondary"
                     ],*/
                     "icons" => true,
                 ]
