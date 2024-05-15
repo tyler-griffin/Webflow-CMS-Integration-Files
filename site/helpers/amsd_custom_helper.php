@@ -97,12 +97,25 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
-        case "rich_text":
         case "preview_text":
 
             $OUTPUT = $FIELD->build($KEY, [
-                "type" => "textarea",
-                "rich" => true
+                "type" => "textarea_rich",
+            ], false);
+
+            break;
+
+        case "button":
+
+            $OUTPUT = $FIELD->build($KEY, [
+                "type" => "button",
+                "options" => [
+                    /*"classes" => [
+                        "primary" => "Primary",
+                        "secondary" => "Secondary"
+                    ],*/
+                    "icons" => true,
+                ]
             ], false);
 
             break;
