@@ -97,6 +97,16 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
+        case "rich_text":
+        case "preview_text":
+
+            $OUTPUT = $FIELD->build($KEY, [
+                "type" => "textarea",
+                "rich" => true
+            ], false);
+
+            break;
+
         case "buttons":
 
             if($GRID) {
