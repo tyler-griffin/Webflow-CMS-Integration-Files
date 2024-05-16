@@ -139,6 +139,11 @@ window.onload = function(e) {
             /* --- Create data for STRINGS block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
             $('#data-parsing').find('[cybdata="strings"]').each(function() {
 
+                /* Skip block if there's an amsd loop inside - it is now considered an amsd block and any strings items will be added as additional settings to the amsd block. */
+                if($(this).find('[cybdata="amsd"]').length !== 0) {
+                    return;
+                }
+
                 blocksCount++;
 
                 var title =  '';
@@ -461,7 +466,7 @@ window.onload = function(e) {
                 } else if(type == 'strings') {
 
                     $(this).before('<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
-                    $(this).after('\n<?/* End of String Block Template */?>');
+                    $(this).after('\n<?/* End of Strings Block Template */?>');
 
                 } else if(type == 'profile') {
 
