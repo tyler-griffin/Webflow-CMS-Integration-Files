@@ -278,13 +278,13 @@ window.onload = function(e) {
                 blockBuilderData += '\n            ]';
 
                 if($(this).parents('[cybdata="strings"]').length) {
-                    blockBuilderData += ',\n        "additional_settings" => [';
+                    blockBuilderData += ',\n            "additional_settings" => [';
                     blockBuilderData += '\n                [';
                     blockBuilderData += '\n                    "key" => "Heading",';
                     blockBuilderData += '\n                    "value" => NULL,';
                     blockBuilderData += '\n                    "config" => NULL';
                     blockBuilderData += '\n                ]';
-                    blockBuilderData += '\n        ]';
+                    blockBuilderData += '\n            ]';
                 }
 
                 blockBuilderData += '\n        ],';
