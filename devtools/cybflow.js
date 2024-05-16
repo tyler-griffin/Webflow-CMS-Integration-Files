@@ -242,12 +242,22 @@ window.onload = function(e) {
 
                 /* If the AMSD loop is inside a strings block, any cybdata items inside the strings block get pulled into the amsd block as additional settings */
                 var hasAdditionalSettings = false;
+                var additionalSettingsData = '';
                 if($(this).parents('[cybdata="strings"]').length) {
                     $(this).parents('[cybdata="strings"]').find('[cybdata]').each(function() {
+
                         if($(this).attr('cybdata') == 'amsd' || $(this).parents('[cybdata="amsd"]').length) {
                             return;
                         }
+
                         hasAdditionalSettings = true;
+
+                        additionalSettingsData += '\n                [';
+                        additionalSettingsData += '\n                    "key" => "Heading",';
+                        additionalSettingsData += '\n                    "value" => NULL,';
+                        additionalSettingsData += '\n                    "config" => NULL';
+                        additionalSettingsData += '\n                ],';
+
                     });
                 }
 
@@ -290,15 +300,8 @@ window.onload = function(e) {
 
                 if(hasAdditionalSettings) {
 
-
-
-
                     blockBuilderData += ',\n            "additional_settings" => [';
-                    blockBuilderData += '\n                [';
-                    blockBuilderData += '\n                    "key" => "Heading",';
-                    blockBuilderData += '\n                    "value" => NULL,';
-                    blockBuilderData += '\n                    "config" => NULL';
-                    blockBuilderData += '\n                ]';
+                    blockBuilderData += additionalSettingsData;
                     blockBuilderData += '\n            ]';
                 }
 
