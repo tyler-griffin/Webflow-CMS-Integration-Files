@@ -270,8 +270,25 @@ window.onload = function(e) {
                 blockBuilderData += '\n            "settings" => [';
                 blockBuilderData += '\n                ["Heading Read Only", "true"],';
                 blockBuilderData += '\n                ["Table", "' + amsdSlug + '"]';
+
+                if($(this).parents('[cybdata="strings"]').length) {
+                    blockBuilderData += ',\n                ["Additional Settings", "true"]';
+                }
+
                 blockBuilderData += '\n            ]';
+
+                if($(this).parents('[cybdata="strings"]').length) {
+                    blockBuilderData += ',\n        "additional_settings" => [';
+                    blockBuilderData += '\n                [';
+                    blockBuilderData += '\n                    "key" => "Heading",';
+                    blockBuilderData += '\n                    "value" => NULL,';
+                    blockBuilderData += '\n                    "config" => NULL';
+                    blockBuilderData += '\n                ]';
+                    blockBuilderData += '\n        ]';
+                }
+
                 blockBuilderData += '\n        ],';
+
                 blockBuilderData += '\n        "dev" => true';
                 blockBuilderData += '\n    ];\n\n';
 
