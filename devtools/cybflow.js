@@ -421,6 +421,15 @@ window.onload = function(e) {
                 var suffix = "']";
                 var itemLabel = "LIST_ITEM";
 
+                if(type == 'strings') {
+                    /* If there's an amsd loop inside a strings block, it becomes an amsd block and gets a new key from the amsd loop */
+                    if($(this).find('[cybdata="amsd"]').length !== 0) {
+                        $(this).find('[cybdata="amsd"]').each(function() {
+                            key = $(this).attr('cybkey');
+                        });
+                    }
+                }
+
                 if($(this).parents('[cybdata="list"]').length) {
                     if($(this).parents('[cybdata="list"]').attr('cybkey')) {
                         itemLabel = $(this).parents('[cybdata="list"]').attr('cybkey').toUpperCase().replace(/ /g,"_") + "_ITEM";
@@ -467,6 +476,7 @@ window.onload = function(e) {
 
                     if($(this).find('[cybdata="amsd"]').length !== 0) {
 
+                        /* If there's an amsd loop inside the block, it becomes an amsd block */
                         $(this).before('<?/* AMSD Block Template for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
                         $(this).after('\n<?/* End of AMSD Block Template */?>');
                     
