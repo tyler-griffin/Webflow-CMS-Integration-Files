@@ -465,8 +465,17 @@ window.onload = function(e) {
 
                 } else if(type == 'strings') {
 
-                    $(this).before('<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
-                    $(this).after('\n<?/* End of Strings Block Template */?>');
+                    if($(this).find('[cybdata="amsd"]').length !== 0) {
+
+                        $(this).before('<?/* AMSD Block Template for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
+                        $(this).after('\n<?/* End of AMSD Block Template */?>');
+                    
+                    } else {
+
+                        $(this).before('<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
+                        $(this).after('\n<?/* End of Strings Block Template */?>');
+                    
+                    }
 
                 } else if(type == 'profile') {
 
