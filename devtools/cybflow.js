@@ -300,6 +300,9 @@ window.onload = function(e) {
 
                 if(hasAdditionalSettings) {
 
+                    /* Remove comma from last item in additional settings data */
+                    additionalSettingsData = additionalSettingsData.slice(0,-1);
+
                     blockBuilderData += ',\n            "additional_settings" => [';
                     blockBuilderData += additionalSettingsData;
                     blockBuilderData += '\n            ]';
