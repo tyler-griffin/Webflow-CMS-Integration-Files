@@ -237,8 +237,19 @@ window.onload = function(e) {
             /* --- Create data for AMSD block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
             $('#data-parsing').find('[cybdata="amsd"]').each(function() {
 
-                /*--- Items within an AMSD loop are defined within the first child element, so we're dropping all other elements --*/
+                /* Items within an AMSD loop are defined within the first child element, so we're dropping all other elements */
                 $(this).children().not(':first').remove();
+
+                /* If the AMSD loop is inside a strings block, any cybdata items inside the strings block get pulled into the amsd block as additional settings */
+                var hasAdditionalSettings = false;
+                if($(this).parents('[cybdata="strings"]').length) {
+                    $(this).parents('[cybdata="strings"]').find('[cybdata]').each(function() {
+                        if($(this).attr('cybdata') == 'amsd' || $(this).parents('[cybdata="amsd"]').length) {
+                            return;
+                        }
+                        hasAdditionalSettings = true;
+                    });
+                }
 
                 blocksCount++;
 
@@ -271,13 +282,17 @@ window.onload = function(e) {
                 blockBuilderData += '\n                ["Heading Read Only", "true"],';
                 blockBuilderData += '\n                ["Table", "' + amsdSlug + '"]';
 
-                if($(this).parents('[cybdata="strings"]').length) {
+                if(hasAdditionalSettings) {
                     blockBuilderData += ',\n                ["Additional Settings", "true"]';
                 }
 
                 blockBuilderData += '\n            ]';
 
-                if($(this).parents('[cybdata="strings"]').length) {
+                if(hasAdditionalSettings) {
+
+
+
+
                     blockBuilderData += ',\n            "additional_settings" => [';
                     blockBuilderData += '\n                [';
                     blockBuilderData += '\n                    "key" => "Heading",';
