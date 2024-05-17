@@ -177,7 +177,8 @@ window.onload = function(e) {
                 blockBuilderData += '\n                ["Heading Read Only", "true"],';
                 blockBuilderData += '\n                ["Table", "amsd_strings"],';
                 blockBuilderData += '\n                ["Template", "' + blockSlug + '"]';
-                blockBuilderData += '\n            ],"items" => [';
+                blockBuilderData += '\n            ],';
+                blockBuilderData += '\n            "items" => [';
 
                 $(this).find('[cybdata]').each(function() {
 
