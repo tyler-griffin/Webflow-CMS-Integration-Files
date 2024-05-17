@@ -253,7 +253,35 @@ window.onload = function(e) {
                         hasAdditionalSettings = true;
 
                         var additionalSettingsItemConfig = $(this).attr('cybdata');
+                        
                         var additionalSettingsItemKey = $(this).attr('cybkey');
+                        if(!additionalSettingsItemKey) { additionalSettingsItemKey = additionalSettingsItemConfig.charAt(0).toUpperCase() + additionalSettingsItemConfig.slice(1); }
+
+                        var additionalSettingsItemSlug = additionalSettingsItemKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                        additionalSettingsItemSlug = additionalSettingsItemSlug.toLowerCase();
+
+                        if(additionalSettingsItemConfig == 'amsd' || additionalSettingsItemConfig == 'profile' || additionalSettingsItemConfig == 'common' || additionalSettingsItemConfig == 'strings' || additionalSettingsItemConfig == 'buttontext' || additionalSettingsItemConfig == 'nav' || additionalSettingsItemConfig == 'logo' || additionalSettingsItemConfig == 'footerlogo' || additionalSettingsItemConfig == 'alertbar' || additionalSettingsItemConfig == 'popup' || additionalSettingsItemConfig == 'tag') {
+
+                            /* Skip these field types */
+                            return;
+
+                        } else if(additionalSettingsItemConfig == '' || additionalSettingsItemConfig == 'title' || additionalSettingsItemConfig == 'txt' || additionalSettingsItemConfig == 'vimeobg' || additionalSettingsItemConfig == 'youtubebg') {
+                            
+                            additionalSettingsItemConfig = 'NULL';
+
+                        } else if(additionalSettingsItemConfig == 'list') {
+
+                            additionalSettingsItemConfig = additionalSettingsItemSlug;
+                            
+                        } else if(additionalSettingsItemConfig.substring(0,3) == 'img') {
+
+                            additionalSettingsItemConfig = 'photo';
+
+                        } else if(additionalSettingsItemConfig.substring(0,2) == 'bg') {
+
+                            additionalSettingsItemConfig = 'focused_img';
+
+                        }
 
                         additionalSettingsData += '\n                [';
                         additionalSettingsData += '\n                    "key" => "' + additionalSettingsItemKey + '",';
