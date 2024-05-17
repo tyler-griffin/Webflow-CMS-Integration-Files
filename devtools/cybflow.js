@@ -139,7 +139,7 @@ window.onload = function(e) {
             /* --- Create data for STRINGS block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
             $('#data-parsing').find('[cybdata="strings"]').each(function() {
 
-                /* Skip block if there's an amsd loop inside - it is now considered an amsd block and any strings items will be added as additional settings to the amsd block. */
+                /* Skip block if there's an AMSD loop inside - it is now considered an AMSD block and any strings items will be added as additional settings to the AMSD block. */
                 if($(this).find('[cybdata="amsd"]').length !== 0) {
                     return;
                 }
@@ -252,10 +252,13 @@ window.onload = function(e) {
 
                         hasAdditionalSettings = true;
 
+                        var additionalSettingsItemConfig = $(this).attr('cybdata');
+                        var additionalSettingsItemKey = $(this).attr('cybkey');
+
                         additionalSettingsData += '\n                [';
-                        additionalSettingsData += '\n                    "key" => "Heading",';
+                        additionalSettingsData += '\n                    "key" => "' + additionalSettingsItemKey + '",';
                         additionalSettingsData += '\n                    "value" => NULL,';
-                        additionalSettingsData += '\n                    "config" => NULL';
+                        additionalSettingsData += '\n                    "config" => ' + additionalSettingsItemConfig + '';
                         additionalSettingsData += '\n                ],';
 
                     });
