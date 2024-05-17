@@ -65,7 +65,7 @@ window.onload = function(e) {
 
                         var nestedLabel = '';
 
-                        if(nestedConfig == 'amsd' || nestedConfig == 'profile' || nestedConfig == 'common' || nestedConfig == 'strings' || nestedConfig == 'buttontext' || nestedConfig == 'list' || nestedConfig == 'nav' || nestedConfig == 'logo' || nestedConfig == 'footerlogo' || nestedConfig == 'alertbar' || nestedConfig == 'popup' || nestedConfig == 'tag') {
+                        if(nestedConfig == 'amsd' || nestedConfig == 'profile' || nestedConfig == 'common' || nestedConfig == 'block' || nestedConfig == 'buttontext' || nestedConfig == 'list' || nestedConfig == 'nav' || nestedConfig == 'logo' || nestedConfig == 'footerlogo' || nestedConfig == 'alertbar' || nestedConfig == 'popup' || nestedConfig == 'tag') {
 
                             /* Skip these field types */
                             return;
@@ -137,9 +137,9 @@ window.onload = function(e) {
             });
 
             /* --- Create data for STRINGS block type - goes in customSortedListBlocks() in pagebuilder_custom_helper.php --- */
-            $('#data-parsing').find('[cybdata="strings"]').each(function() {
+            $('#data-parsing').find('[cybdata="block"]').each(function() {
 
-                /* Skip block if there's an AMSD loop inside - it is now considered an AMSD block and any strings items will be added as additional settings to the AMSD block. */
+                /* Skip block if there's an AMSD loop inside - it is now considered an AMSD block and any items will be added as additional settings to the AMSD block. */
                 if($(this).find('[cybdata="amsd"]').length !== 0) {
                     return;
                 }
@@ -155,7 +155,7 @@ window.onload = function(e) {
                     }  
                 }
                 if(title == '') {
-                    title = 'Custom Strings Block';
+                    title = 'Custom Block';
                 }
 
                 var blockSlug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
@@ -196,7 +196,7 @@ window.onload = function(e) {
                     var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
                     itemSlug = itemSlug.toLowerCase();
 
-                    if(config == 'amsd' || config == 'profile' || config == 'common' || config == 'strings' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag') {
+                    if(config == 'amsd' || config == 'profile' || config == 'common' || config == 'block' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag') {
 
                         /* Skip these field types */
                         return;
@@ -240,11 +240,11 @@ window.onload = function(e) {
                 /* Items within an AMSD loop are defined within the first child element, so we're dropping all other elements */
                 $(this).children().not(':first').remove();
 
-                /* If the AMSD loop is inside a strings block, any cybdata items inside the strings block get pulled into the amsd block as additional settings */
+                /* If the AMSD loop is inside a block, any other cybdata items inside the block get pulled into the amsd block as additional settings */
                 var hasAdditionalSettings = false;
                 var additionalSettingsData = '';
-                if($(this).parents('[cybdata="strings"]').length) {
-                    $(this).parents('[cybdata="strings"]').find('[cybdata]').each(function() {
+                if($(this).parents('[cybdata="block"]').length) {
+                    $(this).parents('[cybdata="block"]').find('[cybdata]').each(function() {
 
                         if($(this).attr('cybdata') == 'amsd' || $(this).parents('[cybdata="amsd"]').length) {
                             return;
@@ -253,14 +253,14 @@ window.onload = function(e) {
                         hasAdditionalSettings = true;
 
                         var additionalSettingsItemConfig = $(this).attr('cybdata');
-                        
+
                         var additionalSettingsItemKey = $(this).attr('cybkey');
                         if(!additionalSettingsItemKey) { additionalSettingsItemKey = additionalSettingsItemConfig.charAt(0).toUpperCase() + additionalSettingsItemConfig.slice(1); }
 
                         var additionalSettingsItemSlug = additionalSettingsItemKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
                         additionalSettingsItemSlug = additionalSettingsItemSlug.toLowerCase();
 
-                        if(additionalSettingsItemConfig == 'amsd' || additionalSettingsItemConfig == 'profile' || additionalSettingsItemConfig == 'common' || additionalSettingsItemConfig == 'strings' || additionalSettingsItemConfig == 'buttontext' || additionalSettingsItemConfig == 'nav' || additionalSettingsItemConfig == 'logo' || additionalSettingsItemConfig == 'footerlogo' || additionalSettingsItemConfig == 'alertbar' || additionalSettingsItemConfig == 'popup' || additionalSettingsItemConfig == 'tag') {
+                        if(additionalSettingsItemConfig == 'amsd' || additionalSettingsItemConfig == 'profile' || additionalSettingsItemConfig == 'common' || additionalSettingsItemConfig == 'block' || additionalSettingsItemConfig == 'buttontext' || additionalSettingsItemConfig == 'nav' || additionalSettingsItemConfig == 'logo' || additionalSettingsItemConfig == 'footerlogo' || additionalSettingsItemConfig == 'alertbar' || additionalSettingsItemConfig == 'popup' || additionalSettingsItemConfig == 'tag') {
 
                             /* Skip these field types */
                             return;
@@ -374,7 +374,7 @@ window.onload = function(e) {
                     var name = config;
                     var dataType = 'varchar(255)';
 
-                    if(config == 'profile' || config == 'common' || config == 'strings' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag') {
+                    if(config == 'profile' || config == 'common' || config == 'block' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag') {
 
                         /* Skip these field types */
                         return;
@@ -490,8 +490,8 @@ window.onload = function(e) {
                 var suffix = "']";
                 var itemLabel = "LIST_ITEM";
 
-                if(type == 'strings') {
-                    /* If there's an amsd loop inside a strings block, it becomes an amsd block and gets a new key from the amsd loop */
+                if(type == 'block') {
+                    /* If there's an AMSD loop inside a block, it becomes an AMSD block and gets a new key from the AMSD loop */
                     if($(this).find('[cybdata="amsd"]').length !== 0) {
                         $(this).find('[cybdata="amsd"]').each(function() {
                             key = $(this).attr('cybkey');
@@ -541,7 +541,7 @@ window.onload = function(e) {
                     $(this).before('\n\n<?/* Common Items Area */?>\n');
                     $(this).after('\n<?/* End Common Items Area */?>\n\n');
 
-                } else if(type == 'strings') {
+                } else if(type == 'block') {
 
                     if($(this).find('[cybdata="amsd"]').length !== 0) {
 
