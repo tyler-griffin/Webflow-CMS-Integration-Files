@@ -547,13 +547,13 @@ window.onload = function(e) {
                     if($(this).find('[cybdata="amsd"]').length !== 0) {
 
                         /* If there's an amsd loop inside the block, it becomes an amsd block */
-                        $(this).before('<?/* AMSD Block Template for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
-                        $(this).after('\n<?/* End of AMSD Block Template */?>');
+                        $(this).before('\n\n<?/* AMSD Block Template for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
+                        $(this).after('\n<?/* End of AMSD Block Template */?>\n\n');
                     
                     } else {
 
-                        $(this).before('<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
-                        $(this).after('\n<?/* End of Strings Block Template */?>');
+                        $(this).before('\n\n<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
+                        $(this).after('\n<?/* End of Strings Block Template */?>\n\n');
                     
                     }
 
@@ -598,8 +598,8 @@ window.onload = function(e) {
                     }
 
                     if(type == 'amsd') {
-                        $(this).children().first().before('\n\n<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
-                        $(this).children().first().before('<? foreach($amsd["data"] as $k => $ITEM) { ?>\n').after("\n<? } ?>\n");
+                        $(this).children().first().before('\n<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
+                        $(this).children().first().before('<? foreach($amsd["data"] as $k => $ITEM) { ?>\n').after("\n<? } ?>\n\n<?/* End of AMSD Loop */?>\n");
                     } else {
                         $(this).children().first().before("<? foreach (json_decode(" + prefix + key + suffix + ") as $k => $" + itemLabel + ") { ?>\n").after("\n<? } ?>");
                     }
