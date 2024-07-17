@@ -70,7 +70,7 @@ window.onload = function(e) {
                             /* Skip these field types */
                             return;
 
-                        } else if(nestedConfig == '' || nestedConfig == 'title' || nestedConfig == 'txt' || nestedConfig == 'vimeobg' || nestedConfig == 'youtubebg') {
+                        } else if(nestedConfig == '' || nestedConfig == 'title' || nestedConfig == 'text' || nestedConfig == 'txt' || nestedConfig == 'vimeobg' || nestedConfig == 'youtubebg') {
 
                             nestedConfig = 'text';
 
@@ -202,7 +202,7 @@ window.onload = function(e) {
                         /* Skip these field types */
                         return;
 
-                    } else if(config == '' || config == 'title' || config == 'txt' || config == 'vimeobg' || config == 'youtubebg') {
+                    } else if(config == '' || config == 'title' || config == 'text' || config == 'txt' || config == 'vimeobg' || config == 'youtubebg') {
                         
                         config = '';
 
@@ -266,7 +266,7 @@ window.onload = function(e) {
                             /* Skip these field types */
                             return;
 
-                        } else if(additionalSettingsItemConfig == '' || additionalSettingsItemConfig == 'title' || additionalSettingsItemConfig == 'txt' || additionalSettingsItemConfig == 'vimeobg' || additionalSettingsItemConfig == 'youtubebg') {
+                        } else if(additionalSettingsItemConfig == '' || additionalSettingsItemConfig == 'title' || additionalSettingsItemConfig == 'text' || additionalSettingsItemConfig == 'txt' || additionalSettingsItemConfig == 'vimeobg' || additionalSettingsItemConfig == 'youtubebg') {
                             
                             additionalSettingsItemConfig = 'NULL';
 
