@@ -25,7 +25,6 @@
 					<div class="alert-close-icon"><i class="fa-solid fa-xmark"></i></div>
 				</a>
 			</div>
-			<div id="alert-bar-spacer"></div>
 		<? } ?>
 	<? } ?>
 
