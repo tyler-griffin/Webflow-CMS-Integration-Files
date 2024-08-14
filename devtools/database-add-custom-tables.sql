@@ -1,14 +1,8 @@
 
-/* If using amsd_cycling_banner table */
-
 ALTER TABLE `amsd_cycling_banner` DROP COLUMN IF EXISTS `img`;
 ALTER TABLE `amsd_cycling_banner` DROP COLUMN IF EXISTS `url`;
 ALTER TABLE `amsd_cycling_banner` ADD `banner_image` text DEFAULT NULL;
 ALTER TABLE `amsd_cycling_banner` ADD `buttons` text DEFAULT NULL;
-
-/* If not using amsd_cycling_banner table */
-
-DROP TABLE `amsd_cycling_banner`;
 
 UPDATE `core_pages` SET `exclude_from_nav`='1' WHERE `id`=1;
 
