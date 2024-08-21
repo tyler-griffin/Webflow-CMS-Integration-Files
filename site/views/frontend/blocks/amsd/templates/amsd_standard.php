@@ -191,10 +191,9 @@ if($profile) {
 										$itemPreviewText = character_limiter(strip_tags($ITEM->html), 180);
 									}
 								}
-								if(isset($itemPreviewText)) { ?>
+								if($itemPreviewText) { ?>
 									<p class="amsd-description-text <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>"><?= $itemPreviewText ?></p>
 								<? } ?>
-
 
 								<? if($link) { ?>
 
