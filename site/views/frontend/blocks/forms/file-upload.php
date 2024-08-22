@@ -23,27 +23,23 @@ Need to create folder files/Resumes and it should automatically become a protect
 
 	<form data-module="email-form" class="form" data-block="<?= $block->id ?>">
 
-		<div class="form-input third">
+		<div class="form-input half">
 			<label class="floating-form-label" for="Name">Name</label>
 			<input class="input-field w-input" data-name="true" id="Name" maxlength="256" name="Name" data-required type="text">
 		</div>
 
-		<div class="form-input third">
+		<div class="form-input half">
 			<label class="floating-form-label" for="Email">Email</label>
 			<input class="input-field w-input" id="Email" maxlength="256" name="Email" data-required type="text" data-email="true">
 		</div>
 
-		<div class="form-input third">
+		<div class="form-input half">
 			<label class="floating-form-label" for="Phone">Phone</label>
 			<input class="input-field w-input" id="Phone" maxlength="256" name="Phone" data-required type="text" data-mask="(999) 999-9999">
 		</div>
 
-		<div class="form-input">
-			<textarea placeholder="Message" class="input-field text-area-input w-input" id="Message" maxlength="5000" name="Message"></textarea>
-		</div>
-
-		<div class="form-input resume-upload">
-			<label for="resume" class="form-label">Resume (Word Documents and PDFs are accepted) *</label>
+		<div class="form-input half">
+			<label class="floating-form-label" for="resume">Resume</label>
 			<? printUploadField($block->id, "resume", [
 				"attributes" => [
 					"id" => "resume",
@@ -51,6 +47,10 @@ Need to create folder files/Resumes and it should automatically become a protect
 					"class" => "input-field resume-upload w-input"
 				]
 			]) ?>
+		</div>
+
+		<div class="form-input">
+			<textarea placeholder="Message" class="input-field text-area-input w-input" id="Message" maxlength="5000" name="Message"></textarea>
 		</div>
 
 		<div class="form-input">
