@@ -61,6 +61,13 @@ function customGeneratePageBuilderMenu() {
     */
 
     $output[] = [
+        "title" => "Staff",
+        "value" => "staff",
+        "icon" => "fa-user-group",
+        "last" => "text-block"
+    ];
+
+    $output[] = [
         "title" => "Accordion List",
         "value" => "accordion-list",
         "icon" => "fa-layer-group",
@@ -213,6 +220,14 @@ function customCreatePageBlocks($config) {
 
         */
 
+        case "staff":
+
+		    $blocks[] = $blockLayouts["staff"];
+
+            $blocks[] = $blockLayouts["categories"];
+
+		    break;
+
         case "accordion-list":
 
 		    $blocks[] = $blockLayouts["accordion-list"];
@@ -283,6 +298,39 @@ function customCreatePageAfter($config, $pageID) {
                 break;
 
         */
+
+        case "staff":
+
+            $amsd_block_id = false;
+            $category_block_id = false;
+
+            foreach($page->blocks as $block) {
+
+                if(isset($block->settings["Table"])) {
+
+                    if($block->settings["Table"] == "amsd_staff") {
+
+                        $amsd_block_id = $block->id;
+
+                    }
+
+                    if($block->settings["Table"] == "amsd_categories") {
+
+                        $category_block_id = $block->id;
+
+                    }
+
+                }
+
+            }
+
+            if($category_block_id) {
+
+                $ci->ei_post->setBlockSetting($amsd_block_id, "Category Table Block", $category_block_id);
+
+            }
+
+            break;
 
 
 
@@ -605,6 +653,45 @@ function customSortedListBlocks() {
             [
                 "key" => "Reviewability ID",
                 "value" => ""
+            ]
+        ],
+        "dev" => true
+    ];
+
+    $items[] = [
+        "title" => "Staff",
+        "value" => "staff",
+        "block" => [
+            "type" => 2,
+            "title" => "Staff",
+            "settings" => [
+                ["AMSD Category Table", "amsd_categories"],
+                ["AMSD Filter Key", "category"],
+                ["AMSD Layout", "grid-list"],
+                ["FlexGrid Auto", 25],
+                ["FlexGrid Limit", 25],
+                ["Slug", "profile"],
+                ["Heading Read Only", "true"],
+                ["AMSD Noun", "Staff Member"],
+                ["Table", "amsd_staff"]
+            ]
+        ],
+        "dev" => true
+    ];
+
+    $items[] = [
+        "title" => "Categories",
+        "value" => "categories",
+        "block" => [
+            "type" => 2,
+            "title" => "Categories",
+            "settings" => [
+                ["FlexGrid Auto", 25],
+                ["FlexGrid Limit", 25],
+                ["Heading Read Only", "true"],
+                ["Hidden", "true"],
+                ["AMSD Noun", "Category"],
+                ["Table", "amsd_categories"]
             ]
         ],
         "dev" => true
