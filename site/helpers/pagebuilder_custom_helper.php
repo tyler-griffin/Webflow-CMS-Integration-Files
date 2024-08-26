@@ -515,6 +515,9 @@ function customSortedListBlocks() {
                     "key" => "Social Media Links",
                     "config" => "social_media_links"
                 ],[
+                    "key" => "Secondary Nav Links",
+                    "config" => "icon_links"
+                ],[
                     "key" => "Footer Links",
                     "value" => '[{"title":"Accessibility Statement","icon":"fas fa-universal-access","url":""},{"title":"Privacy Policy","icon":"fas fa-shield-halved","url":""}]',
                     "config" => "footer_links"

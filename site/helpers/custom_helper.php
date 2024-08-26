@@ -176,6 +176,14 @@
 			// Loop over main nav items
 			foreach ($C["NAV"] as $k => $ROOT) {
 
+				// Nav Link Icon
+				$NAV_LINK_ICON = getPage($ROOT->id)->settings["Nav Icon"];
+				if($NAV_LINK_ICON && $NAV_LINK_ICON != 'null'){
+					$NAV_LINK_ICON = '<div class="nav-link-icon"><i class="' . $NAV_LINK_ICON . '"></i></div>';
+				} else {
+					$NAV_LINK_ICON = '';
+				}
+
 				// Set active class for root items
 				$CLASS_ACTIVE = $ROOT->id == $C["ROOT"]->id ? " w--current current" : "";
 
@@ -201,7 +209,7 @@
 					echo '<div class="w-dropdown dropdown" data-delay="0"' . (M ? '' : ' data-hover="true" ') . '>
 
 							<div class="w-dropdown-toggle nav-link dropdown-nav-link' . $CLASS_ACTIVE . $CLASS_LAST . '">
-								<div class="dropdown-nav-link-text">' . $ROOT->title . '</div>
+								<div class="nav-link-text">' . $ROOT->title . '</div>
 								<div class="dropdown-nav-link-arrow w-icon-dropdown-toggle"></div>
 							</div>';
 
@@ -216,7 +224,7 @@
 				// Item is a single link
 				} else {
 
-					echo '<a class="w-nav-link nav-link' . $CLASS_ACTIVE . $CLASS_LAST . '" href="' . $ROOT_LINK . '">' . $LAST_ICON . $LAST_ITEM_TEXT_PREFIX . $ROOT->title . $LAST_ITEM_TEXT_SUFFIX . '</a>';
+					echo '<a class="w-nav-link nav-link' . $CLASS_ACTIVE . '" href="' . $ROOT_LINK . '">' . $NAV_LINK_ICON . '<div class="nav-link-text">' . $ROOT->title . '</div></a>';
 
 				}
 
@@ -229,6 +237,37 @@
 			echo '<div class="nav-items-wrapper">';
 
 				mainMenu($C);
+
+				$COMMON_ITEMS = strings(COMMON_ITEMS_BLOCK_ID);
+
+				if($COMMON_ITEMS['Secondary Nav Links']) { ?>
+
+					<div class="secondary-nav-outer-wrapper">
+						<div class="secondary-nav-inner-wrapper">
+							<? if($COMMON_ITEMS['Social Media Links']) { ?>
+								<div class="secondary-nav-links social">
+									<? foreach (json_decode($COMMON_ITEMS['Social Media Links']) as $k => $ITEM) { ?>
+										<a href="<?= $ITEM->url ?>" class="seconary-nav-social-link w-inline-block">
+											<div class="social-link-icon"><i class="<?= $ITEM->icon ?>"></i></div>
+										</a>
+									<? } ?>
+								</div>	
+							<? } ?>
+							<div class="secondary-nav-links">
+								<? foreach (json_decode($COMMON_ITEMS['Secondary Nav Links']) as $k => $ITEM) { ?>
+									<a href="<?= $ITEM->url ?>" class="secondary-nav-link w-inline-block">
+										<? if($ITEM->icon) { ?><div class="secondary-nav-link-icon"><i class="<?= $ITEM->icon ?>"></i></div><? } ?>
+										<div class="secondary-nav-link-text"><?= $ITEM->title ?></div>
+									</a>
+									<? if($ITEM != end(json_decode($COMMON_ITEMS['Secondary Nav Links']))) { ?>
+										<div class="secondary-nav-link-divider"></div>
+									<? } ?>
+								<? } ?>
+							</div>
+						</div>
+					</div>
+
+				<? }
 
 			echo '</div>';
 
