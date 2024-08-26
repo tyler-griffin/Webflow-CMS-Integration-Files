@@ -673,6 +673,7 @@ function customSortedListBlocks() {
                 ["Slug", "profile"],
                 ["Heading Read Only", "true"],
                 ["AMSD Noun", "Staff Member"],
+                ["Category Table Block", "null"],
                 ["Table", "amsd_staff"]
             ]
         ],
