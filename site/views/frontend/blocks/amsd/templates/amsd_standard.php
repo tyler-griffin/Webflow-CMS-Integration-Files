@@ -27,7 +27,7 @@ if($profile) {
 
 		<? if($itemImage) { ?>
 			<div class="profile-image-wrapper <?= $CLASS_STAFF ?>">
-				<div class="amsd-image <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/600');"></div>
+				<div class="amsd-image profile-page <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/600');"></div>
 			</div>
 		<? } ?>
 
