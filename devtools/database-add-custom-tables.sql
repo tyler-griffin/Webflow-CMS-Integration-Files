@@ -12,6 +12,8 @@ ALTER TABLE `amsd_standard` ADD `focused_img` text DEFAULT NULL;
 ALTER TABLE `amsd_standard_with_categories` DROP COLUMN IF EXISTS `img`;
 ALTER TABLE `amsd_standard_with_categories` ADD `focused_img` text DEFAULT NULL;
 
+ALTER TABLE `amsd_categories` ADD `icon` varchar(255) DEFAULT NULL;
+
 UPDATE `core_developer_settings` SET `value`='/assets/css/cms.css' WHERE `setting`='contentsCSS';
 UPDATE `core_developer_settings` SET `value`='1' WHERE `setting`='stylesMenuV2';
 UPDATE `core_developer_settings` SET `value`= NULL WHERE `setting`='showButtonsInStylesMenu';
