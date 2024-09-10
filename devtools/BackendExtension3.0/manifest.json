@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Backend URL Snippet Adder",
+  "version": "3.0",
+  "description": "Add a Backend URL Snippet to the current URL: Ty Z",
+  "permissions": ["activeTab"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
