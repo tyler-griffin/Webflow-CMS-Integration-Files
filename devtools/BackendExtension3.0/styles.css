@@ -31,3 +31,11 @@ button {
 button:hover {
     background-color: #45a049;
 }
+
+button#openNewTab {
+    background-color: #4253ff;
+}
+
+button#openNewTab:hover {
+    background-color: #3d4def;
+}
