@@ -568,7 +568,9 @@ window.onload = function(e) {
 
                 } else if(type == 'logo') {
 
-                    $(this).replaceWith('<a href="/home" class="logo-home-link w-nav-brand" title="Home"><img src="/image/<?= $DEV_CONFIG[\'Logo\'] ?>/600" width="600" alt="<?= $owner->site_title ?>" class="logo-image"><img src="/image/<?= $DEV_CONFIG[\'Logo on Scroll\'] ?>/600" width="600" alt="<?= $owner->site_title ?>" class="logo-scrolled"></a>');
+                    var logoWidth = $(this).find('.logo-image').attr('width');
+
+                    $(this).replaceWith('<a href="/home" class="logo-home-link w-nav-brand" title="Home"><img src="/image/<?= $DEV_CONFIG[\'Logo\'] ?>/600" width="' + logoWidth + '" alt="<?= $owner->site_title ?>" class="logo-image"><img src="/image/<?= $DEV_CONFIG[\'Logo on Scroll\'] ?>/600" width="600" alt="<?= $owner->site_title ?>" class="logo-scrolled"></a>');
 
                 } else if(type == 'footerlogo') {
 
