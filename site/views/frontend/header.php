@@ -37,7 +37,6 @@
 
 	<script type="text/javascript" src="<?= assets("js/jquery/3.4.1/jquery.min.js") ?>"></script>
 
-	<script>var head_conf = { section: '-disabling-section-class' };</script>
 	<script type="text/javascript" src="<?= assets("js/helpers/head.min.js?v=2") ?>"></script>
 	<script type="text/javascript" src="<?= assets("js/helpers/maskedInput.js") ?>"></script>
 
