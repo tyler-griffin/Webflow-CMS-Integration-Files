@@ -37,7 +37,7 @@
 
 	<script type="text/javascript" src="<?= assets("js/jquery/3.4.1/jquery.min.js") ?>"></script>
 
-	<script type="text/javascript" src="<?= assets("js/helpers/head.min.js?v=2") ?>"></script>
+	<script type="text/javascript" src="<?= assets("js/helpers/head.min.js?v=3") ?>"></script>
 	<script type="text/javascript" src="<?= assets("js/helpers/maskedInput.js") ?>"></script>
 
 	<!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
