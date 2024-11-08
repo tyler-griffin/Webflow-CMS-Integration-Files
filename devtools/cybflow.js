@@ -70,7 +70,7 @@ window.onload = function(e) {
                             /* Skip these field types */
                             return;
 
-                        } else if(nestedConfig == '' || nestedConfig == 'title' || nestedConfig == 'text' || nestedConfig == 'txt' || nestedConfig == 'vimeobg' || nestedConfig == 'youtubebg') {
+                        } else if(nestedConfig == '' || nestedConfig == 'title' || nestedConfig == 'text' || nestedConfig == 'txt' || nestedConfig == 'vimeobg' || nestedConfig == 'youtubebg' || nestedConfig == 'videobg') {
 
                             nestedConfig = 'text';
 
@@ -202,7 +202,7 @@ window.onload = function(e) {
                         /* Skip these field types */
                         return;
 
-                    } else if(config == '' || config == 'title' || config == 'text' || config == 'txt' || config == 'vimeobg' || config == 'youtubebg') {
+                    } else if(config == '' || config == 'title' || config == 'text' || config == 'txt' || config == 'vimeobg' || config == 'youtubebg' || config == 'videobg') {
                         
                         config = '';
 
@@ -266,7 +266,7 @@ window.onload = function(e) {
                             /* Skip these field types */
                             return;
 
-                        } else if(additionalSettingsItemConfig == '' || additionalSettingsItemConfig == 'title' || additionalSettingsItemConfig == 'text' || additionalSettingsItemConfig == 'txt' || additionalSettingsItemConfig == 'vimeobg' || additionalSettingsItemConfig == 'youtubebg') {
+                        } else if(additionalSettingsItemConfig == '' || additionalSettingsItemConfig == 'title' || additionalSettingsItemConfig == 'text' || additionalSettingsItemConfig == 'txt' || additionalSettingsItemConfig == 'vimeobg' || additionalSettingsItemConfig == 'youtubebg' || additionalSettingsItemConfig == 'videobg') {
                             
                             additionalSettingsItemConfig = 'NULL';
 
@@ -637,11 +637,15 @@ window.onload = function(e) {
 
                 } else if(type == 'vimeobg') {
 
-                    $(this).replaceWith('<div class="video-background-wrapper-outer">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://player.vimeo.com/video/<?= ' + prefix + key + suffix + ' ?>?background=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>');
+                    $(this).replaceWith('<div class="video-background-wrapper-outer visible">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://player.vimeo.com/video/<?= ' + prefix + key + suffix + ' ?>?background=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>');
 
                 } else if(type == 'youtubebg') {
 
-                    $(this).replaceWith('<div class="video-background-wrapper-outer">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://www.youtube.com/embed/<?= ' + prefix + key + suffix + ' ?>?autoplay=1&controls=0&rel=0&mute=1&loop=1&playlist=<?= ' + prefix + key + suffix + ' ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>');
+                    $(this).replaceWith('<div class="video-background-wrapper-outer visible">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://www.youtube.com/embed/<?= ' + prefix + key + suffix + ' ?>?autoplay=1&controls=0&rel=0&mute=1&loop=1&playlist=<?= ' + prefix + key + suffix + ' ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>');
+
+                } else if(type == 'videobg') {
+
+                    $(this).replaceWith('<? if(mb_strlen(' + prefix + key + suffix + ') > 10) { ?>\n\u0020\u0020\u0020\u0020<div class="video-background-wrapper-outer visible">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://www.youtube.com/embed/<?= ' + prefix + key + suffix + ' ?>?autoplay=1&controls=0&rel=0&mute=1&loop=1&playlist=<?= ' + prefix + key + suffix + ' ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>\n<? } else } ?>\n\u0020\u0020\u0020\u0020<div class="video-background-wrapper-outer visible">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://player.vimeo.com/video/<?= ' + prefix + key + suffix + ' ?>?background=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>\n<? } ?>');
 
                 } else if(type.substring(0,3) == 'img') {
 
