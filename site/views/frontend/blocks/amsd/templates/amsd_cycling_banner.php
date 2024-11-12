@@ -1,7 +1,7 @@
 
 <? $backgroundVideoID = '';
-if($block->additional_settings['Background Video Vimeo ID']) { 
-	$backgroundVideoID = $block->additional_settings['Background Video Vimeo ID'];
+if($block->additional_settings['Background Video ID']) { 
+	$backgroundVideoID = $block->additional_settings['Background Video ID'];
 } ?>
 
 <div class="home-banner-section">
@@ -36,11 +36,14 @@ if($block->additional_settings['Background Video Vimeo ID']) {
     </div>
 
 	<? if($backgroundVideoID != '') { ?>
-		<div class="video-background-wrapper-outer visible">
-			<div class="video-background-wrapper-inner">
-				<div class="video-background w-embed w-iframe"><iframe class="cms-video-vimeo" src="https://player.vimeo.com/video/<?= $backgroundVideoID ?>?background=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe></div>
-			</div>
-		</div>
+        <? if(mb_strlen($backgroundVideoID) > 10) { $backgroundVideoSrc = "https://www.youtube.com/embed/" . $backgroundVideoID . "?autoplay=1&amp;controls=0&amp;rel=0&amp;mute=1&amp;loop=1&amp;playlist=" . $backgroundVideoID; } else { $backgroundVideoSrc = "https://player.vimeo.com/video/" . $backgroundVideoID . "?background=1"; } ?>
+        <div class="video-background-wrapper-outer visible">
+            <div class="video-background-wrapper-inner">
+                <div class="video-background">
+                    <iframe class="cms-video-vimeo" src="<?= $backgroundVideoSrc ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+                </div>
+            </div>
+        </div>
 	<? } ?>
 
 </div>
