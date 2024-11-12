@@ -638,11 +638,11 @@ window.onload = function(e) {
 
                 } else if(type == 'vimeobg') {
 
-                    $(this).replaceWith('<div class="video-background-wrapper-outer">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://player.vimeo.com/video/<?= ' + prefix + key + suffix + ' ?>?background=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>');
+                    $(this).replaceWith('<? if(' + prefix + key + suffix + ') { ?>\n<div class="video-background-wrapper-outer">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://player.vimeo.com/video/<?= ' + prefix + key + suffix + ' ?>?background=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>\n<? } ?>');
 
                 } else if(type == 'youtubebg') {
 
-                    $(this).replaceWith('<div class="video-background-wrapper-outer">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://www.youtube.com/embed/<?= ' + prefix + key + suffix + ' ?>?autoplay=1&controls=0&rel=0&mute=1&loop=1&playlist=<?= ' + prefix + key + suffix + ' ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>');
+                    $(this).replaceWith('<? if(' + prefix + key + suffix + ') { ?>\n<div class="video-background-wrapper-outer">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://www.youtube.com/embed/<?= ' + prefix + key + suffix + ' ?>?autoplay=1&controls=0&rel=0&mute=1&loop=1&playlist=<?= ' + prefix + key + suffix + ' ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>\n<? } ?>');
 
                 } else if(type == 'videobg') {
 
