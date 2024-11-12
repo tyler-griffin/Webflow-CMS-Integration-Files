@@ -527,6 +527,7 @@ window.onload = function(e) {
 
                 if(!key) { key = type.charAt(0).toUpperCase() + type.slice(1); }
 
+                var variableSlug = key.replace(/ /g, "").replace(/[^\w-]+/g, "");
                 var blockSlug = key.replace(/ /g, "-").replace(/[^\w-]+/g, "");
                 blockSlug = blockSlug.toLowerCase();
                 var amsdSlug = 'amsd_' + blockSlug.replace(/-/g, "_");
@@ -637,15 +638,15 @@ window.onload = function(e) {
 
                 } else if(type == 'vimeobg') {
 
-                    $(this).replaceWith('<div class="video-background-wrapper-outer visible">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://player.vimeo.com/video/<?= ' + prefix + key + suffix + ' ?>?background=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>');
+                    $(this).replaceWith('<div class="video-background-wrapper-outer">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://player.vimeo.com/video/<?= ' + prefix + key + suffix + ' ?>?background=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>');
 
                 } else if(type == 'youtubebg') {
 
-                    $(this).replaceWith('<div class="video-background-wrapper-outer visible">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://www.youtube.com/embed/<?= ' + prefix + key + suffix + ' ?>?autoplay=1&controls=0&rel=0&mute=1&loop=1&playlist=<?= ' + prefix + key + suffix + ' ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>');
+                    $(this).replaceWith('<div class="video-background-wrapper-outer">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="https://www.youtube.com/embed/<?= ' + prefix + key + suffix + ' ?>?autoplay=1&controls=0&rel=0&mute=1&loop=1&playlist=<?= ' + prefix + key + suffix + ' ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>');
 
                 } else if(type == 'videobg') {
 
-                    $(this).replaceWith('<? if(mb_strlen(' + prefix + key + suffix + ') {{greaterthan}} 10) { $backgroundVideoSrc = "https://www.youtube.com/embed/" . ' + prefix + key + suffix + ' . "?autoplay=1&amp;controls=0&amp;rel=0&amp;mute=1&amp;loop=1&amp;playlist=" . ' + prefix + key + suffix + '; } else { $backgroundVideoSrc = "https://player.vimeo.com/video/" . ' + prefix + key + suffix + ' . "?background=1"; } ?>\n\n<div class="video-background-wrapper-outer visible">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="<?= $backgroundVideoSrc ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>');
+                    $(this).replaceWith('<? if(' + prefix + key + suffix + ') { ?>\n<? if(mb_strlen(' + prefix + key + suffix + ') {{greaterthan}} 10) { $videoSrc' + variableSlug + ' = "https://www.youtube.com/embed/" . ' + prefix + key + suffix + ' . "?autoplay=1&amp;controls=0&amp;rel=0&amp;mute=1&amp;loop=1&amp;playlist=" . ' + prefix + key + suffix + '; } else { $videoSrc' + variableSlug + ' = "https://player.vimeo.com/video/" . ' + prefix + key + suffix + ' . "?background=1"; } ?>\n\n<div class="video-background-wrapper-outer">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="<?= $videoSrc' + variableSlug + ' ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>\n<? } ?>');
 
                 } else if(type.substring(0,3) == 'img') {
 
