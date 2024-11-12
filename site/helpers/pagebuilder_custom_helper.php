@@ -541,7 +541,7 @@ function customSortedListBlocks() {
             ],
             "additional_settings" => [
                 [
-                    "key" => "Background Video Vimeo ID",
+                    "key" => "Background Video ID",
                     "value" => NULL,
                     "config" => NULL
                 ]
