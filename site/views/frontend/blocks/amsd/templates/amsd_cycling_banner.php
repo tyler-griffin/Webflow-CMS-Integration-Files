@@ -36,7 +36,13 @@ if($block->additional_settings['Background Video ID']) {
     </div>
 
 	<? if($backgroundVideoID != '') { ?>
-        <? if(mb_strlen($backgroundVideoID) > 10) { $backgroundVideoSrc = "https://www.youtube.com/embed/" . $backgroundVideoID . "?autoplay=1&amp;controls=0&amp;rel=0&amp;mute=1&amp;loop=1&amp;playlist=" . $backgroundVideoID; } else { $backgroundVideoSrc = "https://player.vimeo.com/video/" . $backgroundVideoID . "?background=1"; } ?>
+
+        <? if(mb_strlen($backgroundVideoID) > 10) {
+            $backgroundVideoSrc = "https://www.youtube.com/embed/" . $backgroundVideoID . "?autoplay=1&amp;controls=0&amp;rel=0&amp;mute=1&amp;loop=1&amp;playlist=" . $backgroundVideoID;
+        } else {
+            $backgroundVideoSrc = "https://player.vimeo.com/video/" . $backgroundVideoID . "?background=1";
+        } ?>
+
         <div class="video-background-wrapper-outer visible">
             <div class="video-background-wrapper-inner">
                 <div class="video-background">
@@ -44,6 +50,7 @@ if($block->additional_settings['Background Video ID']) {
                 </div>
             </div>
         </div>
+        
 	<? } ?>
 
 </div>
