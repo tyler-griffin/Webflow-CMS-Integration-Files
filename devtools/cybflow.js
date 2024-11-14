@@ -659,7 +659,11 @@ window.onload = function(e) {
 
                 } else if(type == 'previewtext') {
 
-                    $(this).html("<?= nl2br(" + prefix + key + suffix + "); ?>");
+                    $(this).before('\n<? $charLimitedHtmlOr' + variableSlug + ' = false;\nif(' + prefix + key + suffix + ') {\n    $charLimitedHtmlOr' + variableSlug + ' = nl2br(' + prefix + key + suffix + ');\n} else if(strlen(strip_tags(' + prefix + 'html' + suffix + ')) > 2) {\n    $charLimitedHtmlOr' + variableSlug + ' = character_limiter(strip_tags(' + prefix + 'html' + suffix + '), 180);\n}\nif($charLimitedHtmlOr' + variableSlug + ') { ?>\n');
+
+                    $(this).html('<?= $charLimitedHtmlOr' + variableSlug + '; ?>');
+
+                    $(this).after('\n<? } ?>');
 
                 } else if(type == 'vimeobg') {
 
@@ -671,7 +675,7 @@ window.onload = function(e) {
 
                 } else if(type == 'videobg') {
 
-                    $(this).replaceWith('<? if(' + prefix + key + suffix + ') {\n    if(mb_strlen(' + prefix + key + suffix + ') {{greaterthan}} 10) {\n        $videoSrc' + variableSlug + ' = "https://www.youtube.com/embed/" . ' + prefix + key + suffix + ' . "?autoplay=1&amp;controls=0&amp;rel=0&amp;mute=1&amp;loop=1&amp;playlist=" . ' + prefix + key + suffix + ';\n    } else {\n        $videoSrc' + variableSlug + ' = "https://player.vimeo.com/video/" . ' + prefix + key + suffix + ' . "?background=1";\n    } ?>\n\n<div class="video-background-wrapper-outer">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="<?= $videoSrc' + variableSlug + ' ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>\n<? } ?>');
+                    $(this).replaceWith('<? if(' + prefix + key + suffix + ') {\n    if(mb_strlen(' + prefix + key + suffix + ') {{greaterthan}} 10) {\n        $srcUrl' + variableSlug + ' = "https://www.youtube.com/embed/" . ' + prefix + key + suffix + ' . "?autoplay=1&amp;controls=0&amp;rel=0&amp;mute=1&amp;loop=1&amp;playlist=" . ' + prefix + key + suffix + ';\n    } else {\n        $srcUrl' + variableSlug + ' = "https://player.vimeo.com/video/" . ' + prefix + key + suffix + ' . "?background=1";\n    } ?>\n\n<div class="video-background-wrapper-outer">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="<?= $srcUrl' + variableSlug + ' ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>\n<? } ?>');
 
                 } else if(type.substring(0,3) == 'img') {
 
