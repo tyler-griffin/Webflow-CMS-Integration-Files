@@ -209,6 +209,10 @@ window.onload = function(e) {
                     } else if(config == 'list') {
 
                         config = itemSlug;
+
+                    } else if(config == 'previewtext') {
+
+                        config = 'textarea';
                         
                     } else if(config.substring(0,3) == 'img') {
 
@@ -396,6 +400,14 @@ window.onload = function(e) {
 
                     } else if(config == 'button' || config == 'textarea' || config == 'html' || config == 'url') {
                         
+                        dataType = 'text';
+
+                    } else if(config == 'previewtext') {
+
+                        if(itemSlug == config) {
+                            itemSlug = 'preview_text';
+                        }
+                        name = itemSlug;
                         dataType = 'text';
 
                     } else if(config.substring(0,3) == 'img') {
@@ -635,6 +647,10 @@ window.onload = function(e) {
                 } else if(type == 'textarea') {
 
                     $(this).html("<?= nl2br(" + prefix + key + suffix + "); ?>");
+
+                } else if(type == 'previewtext') {
+
+                    $(this).html("<?= $previewText" + variableSlug + " ?>");
 
                 } else if(type == 'vimeobg') {
 
