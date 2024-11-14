@@ -1,7 +1,9 @@
 
-window.onload = function(e) { 
+window.onload = function(e) {
 
     $(document).ready(function() {
+
+        titleCase = (s) => s.replace(/\b\w/g, c => c.toUpperCase());
 
         $('textarea').attr('maxlength','500000');
 
@@ -548,7 +550,8 @@ window.onload = function(e) {
 
                 if(!key) { key = type.charAt(0).toUpperCase() + type.slice(1); }
 
-                var variableSlug = key.replace(/ /g, "").replace(/-/g, "").replace(/_/g, "").replace(/[^\w-]+/g, "");
+                var variableSlug = key.replace(/-/g, " ").replace(/_/g, " ").replace(/[^\w-]+/g, "");
+                variableSlug = titleCase(variableSlug).replace(/ /g, "");
                 var blockSlug = key.replace(/ /g, "-").replace(/[^\w-]+/g, "");
                 blockSlug = blockSlug.toLowerCase();
                 var amsdSlug = 'amsd_' + blockSlug.replace(/-/g, "_");
