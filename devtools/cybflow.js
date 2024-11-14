@@ -85,7 +85,7 @@ window.onload = function(e) {
 
                             nestedConfig = 'textarea';
                             if(!nestedKey) {
-                                nestedLabel = 'Preview Text';
+                                nestedKey = 'Preview Text';
                             }
 
                         } else if(nestedConfig.substring(0,3) == 'img') {
