@@ -662,7 +662,7 @@ window.onload = function(e) {
 
                 } else if(type == 'previewtext') {
 
-                    $(this).before('\n<? $charLimitedHtmlOr' + variableSlug + ' = false;\nif(' + prefix + key + suffix + ') {\n    $charLimitedHtmlOr' + variableSlug + ' = nl2br(' + prefix + key + suffix + ');\n} else if(strlen(strip_tags(' + prefix + 'html' + suffix + ')) > 2) {\n    $charLimitedHtmlOr' + variableSlug + ' = character_limiter(strip_tags(' + prefix + 'html' + suffix + '), 180);\n}\nif($charLimitedHtmlOr' + variableSlug + ') { ?>\n');
+                    $(this).before('\n<? $charLimitedHtmlOr' + variableSlug + ' = false;\nif(' + prefix + key + suffix + ') {\n    $charLimitedHtmlOr' + variableSlug + ' = nl2br(' + prefix + key + suffix + ');\n} else if(strlen(strip_tags(' + prefix + 'html' + suffix + ')) > 2) {\n    $charLimitedHtmlOr' + variableSlug + ' = character_limiter(strip_tags(' + prefix + 'html' + suffix + '), 180);\n} ?>\n<? if($charLimitedHtmlOr' + variableSlug + ') { ?>\n');
 
                     $(this).html('<?= $charLimitedHtmlOr' + variableSlug + '; ?>');
 
