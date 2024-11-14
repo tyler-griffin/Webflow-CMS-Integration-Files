@@ -81,6 +81,10 @@ window.onload = function(e) {
                                 nestedLabel = 'Icon';
                             }
 
+                        } else if(nestedConfig == 'previewtext') {
+
+                            nestedConfig = 'preview_text';
+
                         } else if(nestedConfig.substring(0,3) == 'img') {
 
                             nestedConfig = 'photo';
