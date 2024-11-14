@@ -87,6 +87,7 @@ window.onload = function(e) {
                             if(!nestedKey) {
                                 nestedKey = 'Preview Text';
                             }
+
                         } else if(nestedConfig.substring(0,3) == 'img') {
 
                             nestedConfig = 'photo';
@@ -413,7 +414,7 @@ window.onload = function(e) {
 
                     } else if(config == 'previewtext') {
 
-                        config = 'textarea'
+                        name = 'textarea';
                         dataType = 'text';
 
                     } else if(config.substring(0,3) == 'img') {
