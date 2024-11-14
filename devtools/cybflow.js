@@ -212,6 +212,9 @@ window.onload = function(e) {
 
                     } else if(config == 'previewtext') {
 
+                        if(itemSlug = config) {
+                            itemSlug = 'preview_text';
+                        }
                         config = 'textarea';
                         
                     } else if(config.substring(0,3) == 'img') {
@@ -647,7 +650,7 @@ window.onload = function(e) {
 
                 } else if(type == 'previewtext') {
 
-                    $(this).html("<?= $previewText" + variableSlug + " ?>");
+                    $(this).html("<?= nl2br(" + prefix + key + suffix + "); ?>");
 
                 } else if(type == 'vimeobg') {
 
