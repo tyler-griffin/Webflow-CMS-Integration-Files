@@ -404,10 +404,7 @@ window.onload = function(e) {
 
                     } else if(config == 'previewtext') {
 
-                        if(itemSlug == config) {
-                            itemSlug = 'preview_text';
-                        }
-                        name = itemSlug;
+                        config = 'textarea'
                         dataType = 'text';
 
                     } else if(config.substring(0,3) == 'img') {
