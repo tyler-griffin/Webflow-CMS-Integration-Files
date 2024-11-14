@@ -83,7 +83,7 @@ window.onload = function(e) {
                                 nestedLabel = 'Icon';
                             }
 
-                        } else if(nestedConfig == 'previewtext') {
+                        } else if(nestedConfig.substring(0,11) == 'previewtext') {
 
                             nestedConfig = 'textarea';
                             if(!nestedKey) {
@@ -219,7 +219,7 @@ window.onload = function(e) {
 
                         config = itemSlug;
 
-                    } else if(config == 'previewtext') {
+                    } else if(config.substring(0,11) == 'previewtext') {
 
                         if(itemSlug = config) {
                             itemSlug = 'preview_text';
@@ -289,6 +289,10 @@ window.onload = function(e) {
                         } else if(additionalSettingsItemConfig == 'list') {
 
                             additionalSettingsItemConfig = additionalSettingsItemSlug;
+
+                        } else if(additionalSettingsItemConfig.substring(0,11) == 'previewtext') {
+
+                            additionalSettingsItemConfig = 'photo';
                             
                         } else if(additionalSettingsItemConfig.substring(0,3) == 'img') {
 
@@ -415,8 +419,7 @@ window.onload = function(e) {
                         dataType = 'text';
 
                     
-
-                    } else if(config == 'previewtext') {
+                    } else if(config.substring(0,11) == 'previewtext') {
 
                         name = 'textarea';
                         dataType = 'text';
@@ -660,9 +663,14 @@ window.onload = function(e) {
 
                     $(this).html("<?= nl2br(" + prefix + key + suffix + "); ?>");
 
-                } else if(type == 'previewtext') {
+                } else if(type.substring(0,11) == 'previewtext') {
 
-                    $(this).before('\n<? $charLimitedHtmlOr' + variableSlug + ' = false;\nif(' + prefix + key + suffix + ') {\n    $charLimitedHtmlOr' + variableSlug + ' = nl2br(' + prefix + key + suffix + ');\n} else if(strlen(strip_tags(' + prefix + 'html' + suffix + ')) > 2) {\n    $charLimitedHtmlOr' + variableSlug + ' = character_limiter(strip_tags(' + prefix + 'html' + suffix + '), 180);\n} ?>\n<? if($charLimitedHtmlOr' + variableSlug + ') { ?>\n');
+                    var htmlCharLimit = type.slice(11);
+                    if(htmlCharLimit == '') {
+                        htmlCharLimit = '200';
+                    }
+
+                    $(this).before('\n<? $charLimitedHtmlOr' + variableSlug + ' = false;\nif(' + prefix + key + suffix + ') {\n    $charLimitedHtmlOr' + variableSlug + ' = nl2br(' + prefix + key + suffix + ');\n} else if(strlen(strip_tags(' + prefix + 'html' + suffix + ')) > 2) {\n    $charLimitedHtmlOr' + variableSlug + ' = character_limiter(strip_tags(' + prefix + 'html' + suffix + '), ' + htmlCharLimit + ');\n} ?>\n<? if($charLimitedHtmlOr' + variableSlug + ') { ?>\n');
 
                     $(this).html('<?= $charLimitedHtmlOr' + variableSlug + '; ?>');
 
