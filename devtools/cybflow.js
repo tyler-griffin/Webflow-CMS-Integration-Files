@@ -474,7 +474,7 @@ window.onload = function(e) {
 
                     amsdTableSQL += '\n    `' + itemSlug + '` ' + dataType + ' DEFAULT NULL,';
 
-                    console.log('test');
+                    console.log(existingAMSDFields);
 
                     if(config.substring(0,11) == 'previewtext') {
                         amsdTableSQL += '\n    `html` text DEFAULT NULL,';
