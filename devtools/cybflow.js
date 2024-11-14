@@ -292,7 +292,7 @@ window.onload = function(e) {
 
                         } else if(additionalSettingsItemConfig.substring(0,11) == 'previewtext') {
 
-                            additionalSettingsItemConfig = 'photo';
+                            additionalSettingsItemConfig = 'textarea';
                             
                         } else if(additionalSettingsItemConfig.substring(0,3) == 'img') {
 
