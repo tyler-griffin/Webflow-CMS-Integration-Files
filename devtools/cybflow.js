@@ -67,7 +67,7 @@ window.onload = function(e) {
 
                         var nestedLabel = '';
 
-                        if(nestedConfig == 'amsd' || nestedConfig == 'profile' || nestedConfig == 'common' || nestedConfig == 'block' || nestedConfig == 'buttontext' || nestedConfig == 'list' || nestedConfig == 'nav' || nestedConfig == 'logo' || nestedConfig == 'footerlogo' || nestedConfig == 'alertbar' || nestedConfig == 'popup' || nestedConfig == 'tag' || nestedConfig == 'if') {
+                        if(nestedConfig == 'amsd' || nestedConfig == 'profile' || nestedConfig == 'common' || nestedConfig == 'block' || nestedConfig == 'buttontext' || nestedConfig == 'list' || nestedConfig == 'nav' || nestedConfig == 'logo' || nestedConfig == 'footerlogo' || nestedConfig == 'alertbar' || nestedConfig == 'popup' || nestedConfig == 'tag' || nestedConfig == 'ifisset') {
 
                             /* Skip these field types */
                             return;
@@ -206,7 +206,7 @@ window.onload = function(e) {
                     var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
                     itemSlug = itemSlug.toLowerCase();
 
-                    if(config == 'amsd' || config == 'profile' || config == 'common' || config == 'block' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag' || config == 'if') {
+                    if(config == 'amsd' || config == 'profile' || config == 'common' || config == 'block' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag' || config == 'ifisset') {
 
                         /* Skip these field types */
                         return;
@@ -277,7 +277,7 @@ window.onload = function(e) {
                         var additionalSettingsItemSlug = additionalSettingsItemKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
                         additionalSettingsItemSlug = additionalSettingsItemSlug.toLowerCase();
 
-                        if(additionalSettingsItemConfig == 'amsd' || additionalSettingsItemConfig == 'profile' || additionalSettingsItemConfig == 'common' || additionalSettingsItemConfig == 'block' || additionalSettingsItemConfig == 'buttontext' || additionalSettingsItemConfig == 'nav' || additionalSettingsItemConfig == 'logo' || additionalSettingsItemConfig == 'footerlogo' || additionalSettingsItemConfig == 'alertbar' || additionalSettingsItemConfig == 'popup' || additionalSettingsItemConfig == 'tag' || additionalSettingsItemConfig == 'if') {
+                        if(additionalSettingsItemConfig == 'amsd' || additionalSettingsItemConfig == 'profile' || additionalSettingsItemConfig == 'common' || additionalSettingsItemConfig == 'block' || additionalSettingsItemConfig == 'buttontext' || additionalSettingsItemConfig == 'nav' || additionalSettingsItemConfig == 'logo' || additionalSettingsItemConfig == 'footerlogo' || additionalSettingsItemConfig == 'alertbar' || additionalSettingsItemConfig == 'popup' || additionalSettingsItemConfig == 'tag' || additionalSettingsItemConfig == 'ifisset') {
 
                             /* Skip these field types */
                             return;
@@ -395,7 +395,7 @@ window.onload = function(e) {
                     var name = config;
                     var dataType = 'varchar(255)';
 
-                    if(config == 'profile' || config == 'common' || config == 'block' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag' || config == 'if') {
+                    if(config == 'profile' || config == 'common' || config == 'block' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag' || config == 'ifisset') {
 
                         /* Skip these field types */
                         return;
@@ -473,6 +473,12 @@ window.onload = function(e) {
                     }
 
                     amsdTableSQL += '\n    `' + itemSlug + '` ' + dataType + ' DEFAULT NULL,';
+
+                    console.log('test');
+
+                    if(config.substring(0,11) == 'previewtext') {
+                        amsdTableSQL += '\n    `html` text DEFAULT NULL,';
+                    }
 
                     if(name == 'title') {
                         amsdTableSQL += '\n    `slug` varchar(255) DEFAULT NULL,';
@@ -641,7 +647,7 @@ window.onload = function(e) {
 
                     $(this).replaceWith('<div class="cybernautic-tag"><? seoCybernauticLogo($cms); ?></div>');
 
-                } else if(type == 'if') {
+                } else if(type == 'ifisset') {
 
                      $(this).before('\n<? if(isset(' + prefix + key + suffix + ')) { ?>');
 
