@@ -412,6 +412,8 @@ window.onload = function(e) {
                         
                         dataType = 'text';
 
+                    
+
                     } else if(config == 'previewtext') {
 
                         name = 'textarea';
@@ -443,7 +445,7 @@ window.onload = function(e) {
 
                     if(config != name && config != '') {
 
-                        if(config == 'list') {
+                        if(config == 'list' || config == 'previewtext') {
 
                             /* Skip */
 
