@@ -550,8 +550,8 @@ window.onload = function(e) {
 
                 if(!key) { key = type.charAt(0).toUpperCase() + type.slice(1); }
 
-                var variableSlug = key.replace(/-/g, " ").replace(/_/g, " ").replace(/[^\w-]+/g, "");
-                variableSlug = titleCase(variableSlug).replace(/ /g, "");
+                var variableSlug = key.replace(/-/g, " ").replace(/_/g, " ");
+                variableSlug = titleCase(variableSlug).replace(/ /g, "").replace(/[^\w-]+/g, "");
                 var blockSlug = key.replace(/ /g, "-").replace(/[^\w-]+/g, "");
                 blockSlug = blockSlug.toLowerCase();
                 var amsdSlug = 'amsd_' + blockSlug.replace(/-/g, "_");
