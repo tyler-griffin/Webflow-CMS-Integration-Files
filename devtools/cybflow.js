@@ -479,6 +479,10 @@ window.onload = function(e) {
 
                     }
 
+                    if(itemSlug == profile_url || itemSlug == profileurl){
+                        itemSlug = 'url';
+                    }
+
                     if(name == '') {
                         name = itemSlug;
                     }
