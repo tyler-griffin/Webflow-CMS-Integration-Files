@@ -522,7 +522,7 @@ window.onload = function(e) {
                     }
 
                     /* Add html field automatically if previewtext or profileurl are used */
-                    if($(this).attr('cybdata') == 'previewtext' || $(this).attr('cybdata') == 'profileurl') {
+                    if(config.substring(0,11) == 'previewtext' || $(this).attr('cybdata') == 'profileurl') {
                         addHtmlField = true;
                     }
                     
