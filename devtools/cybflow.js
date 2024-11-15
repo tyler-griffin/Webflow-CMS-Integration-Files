@@ -286,7 +286,7 @@ window.onload = function(e) {
                         if(!additionalSettingsItemKey) { additionalSettingsItemKey = additionalSettingsItemConfig.charAt(0).toUpperCase() + additionalSettingsItemConfig.slice(1); }
 
                         /* Skip items if an item with the same key has already been added */
-                        if ($.inArray(key, existingAdditionalSettingsFields) != -1) {
+                        if ($.inArray(additionalSettingsItemKey, existingAdditionalSettingsFields) != -1) {
                             return;
                         }
                         existingAdditionalSettingsFields.push(additionalSettingsItemKey);
