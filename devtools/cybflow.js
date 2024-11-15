@@ -479,7 +479,7 @@ window.onload = function(e) {
 
                     }
 
-                    if(itemSlug == profile_url || itemSlug == profileurl){
+                    if(itemSlug == 'profile_url' || itemSlug == 'profileurl'){
                         itemSlug = 'url';
                     }
 
