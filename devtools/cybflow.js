@@ -41,6 +41,7 @@ window.onload = function(e) {
                 $(this).children().not(':first').remove();
 
                 var config = $(this).attr('cybdata');
+
                 var key = $(this).attr('cybkey');
                 if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
 
@@ -193,6 +194,7 @@ window.onload = function(e) {
                 blockBuilderData += '\n            ],';
                 blockBuilderData += '\n            "items" => [';
 
+                var existingBlockBuilderFields = new Array();
                 $(this).find('[cybdata]').each(function() {
 
                     if($(this).parents('[cybdata="list"]').length) {
@@ -210,6 +212,12 @@ window.onload = function(e) {
 
                     var key = $(this).attr('cybkey');
                     if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
+
+                    /* Skip items if an item with the same key has already been added */
+                    if ($.inArray(key, existingBlockBuilderFields) != -1) {
+                        return;
+                    }
+                    existingBlockBuilderFields.push(key);
 
                     var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
                     itemSlug = itemSlug.toLowerCase();
@@ -281,6 +289,10 @@ window.onload = function(e) {
                         hasAdditionalSettings = true;
 
                         var additionalSettingsItemConfig = $(this).attr('cybdata');
+
+                        if(additionalSettingsItemConfig == 'profileurl') {
+                            additionalSettingsItemConfig = 'url';
+                        }
 
                         var additionalSettingsItemKey = $(this).attr('cybkey');
                         if(!additionalSettingsItemKey) { additionalSettingsItemKey = additionalSettingsItemConfig.charAt(0).toUpperCase() + additionalSettingsItemConfig.slice(1); }
@@ -547,6 +559,10 @@ window.onload = function(e) {
                 var prefix = "$DATA['";
                 var suffix = "']";
                 var itemLabel = "LIST_ITEM";
+
+                if(type == 'profileurl') {
+                    type = 'url';
+                }
 
                 if(type == 'block') {
                     /* If there's an AMSD loop inside a block, it becomes an AMSD block and gets a new key from the AMSD loop */
