@@ -384,7 +384,7 @@ window.onload = function(e) {
                     if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
 
                     /* Skip items if an item with the same key has already been added */
-                    if ($.inArray(key, existingAMSDFields) != -1) {
+                    if ($.inArray(key, existingAMSDFields) != -1 || config == 'ifisset') {
                         return;
                     }
                     existingAMSDFields.push(key);
@@ -474,17 +474,20 @@ window.onload = function(e) {
 
                     amsdTableSQL += '\n    `' + itemSlug + '` ' + dataType + ' DEFAULT NULL,';
 
-                    console.log(existingAMSDFields);
-
-                    if(config.substring(0,11) == 'previewtext') {
-                        amsdTableSQL += '\n    `html` text DEFAULT NULL,';
-                    }
-
                     if(name == 'title') {
                         amsdTableSQL += '\n    `slug` varchar(255) DEFAULT NULL,';
                     }
                     
                 });
+
+                /* Adding HTML field automatically if preview text is used */
+                if ($.inArray('Preview Text', existingAMSDFields) != -1) {
+                    if ($.inArray('Html', existingAMSDFields) == -1 && $.inArray('HTML', existingAMSDFields) == -1) {
+                        amsdTableSQL += '\n    `html` text DEFAULT NULL,';
+                    }
+                }
+
+                console.log(existingAMSDFields);
 
                 amsdTableSQL += '\n    `pos` int(11) unsigned NOT NULL DEFAULT 0,';
                 amsdTableSQL += '\n    PRIMARY KEY (`id`)';
