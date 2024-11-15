@@ -269,6 +269,9 @@ window.onload = function(e) {
                 var hasAdditionalSettings = false;
                 var additionalSettingsData = '';
                 if($(this).parents('[cybdata="block"]').length) {
+
+                    var existingAdditionalSettingsFields = new Array();
+
                     $(this).parents('[cybdata="block"]').find('[cybdata]').each(function() {
 
                         if($(this).attr('cybdata') == 'amsd' || $(this).parents('[cybdata="amsd"]').length) {
@@ -281,6 +284,12 @@ window.onload = function(e) {
 
                         var additionalSettingsItemKey = $(this).attr('cybkey');
                         if(!additionalSettingsItemKey) { additionalSettingsItemKey = additionalSettingsItemConfig.charAt(0).toUpperCase() + additionalSettingsItemConfig.slice(1); }
+
+                        /* Skip items if an item with the same key has already been added */
+                        if ($.inArray(key, existingAdditionalSettingsFields) != -1) {
+                            return;
+                        }
+                        existingAdditionalSettingsFields.push(additionalSettingsItemKey);
 
                         var additionalSettingsItemSlug = additionalSettingsItemKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
                         additionalSettingsItemSlug = additionalSettingsItemSlug.toLowerCase();
