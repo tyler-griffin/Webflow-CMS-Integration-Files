@@ -399,6 +399,7 @@ window.onload = function(e) {
                 amsdTableSQL += '\n    `block` int(11) unsigned NOT NULL DEFAULT 0,';
 
                 var existingAMSDFields = new Array();
+                var addHtmlField = false;
                 $(this).find('[cybdata]').each(function() {
 
                     if($(this).parents('[cybdata="list"]').length) {
@@ -511,11 +512,15 @@ window.onload = function(e) {
                     if(name == 'title') {
                         amsdTableSQL += '\n    `slug` varchar(255) DEFAULT NULL,';
                     }
+
+                    /* Add html field automatically if previewtext or profileurl are used */
+                    if($(this).attr('cybdata') == 'previewtext' || $(this).attr('cybdata') == 'profileurl') {
+                        addHtmlField = true;
+                    }
                     
                 });
 
-                /* Adding HTML field automatically if preview text is used */
-                if($.inArray('Preview Text', existingAMSDFields) != -1 || $.inArray('preview text', existingAMSDFields) != -1 || $.inArray('previewtext', existingAMSDFields) != -1) {
+                if(addHtmlField) {
                     if ($.inArray('Html', existingAMSDFields) == -1 && $.inArray('HTML', existingAMSDFields) == -1 && $.inArray('html', existingAMSDFields) == -1) {
                         amsdTableSQL += '\n    `html` text DEFAULT NULL,';
                     }
