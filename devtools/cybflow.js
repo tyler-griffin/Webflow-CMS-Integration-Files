@@ -481,8 +481,8 @@ window.onload = function(e) {
                 });
 
                 /* Adding HTML field automatically if preview text is used */
-                if ($.inArray('Preview Text', existingAMSDFields) != -1) {
-                    if ($.inArray('Html', existingAMSDFields) == -1 && $.inArray('HTML', existingAMSDFields) == -1) {
+                if ($.inArray('Preview Text', existingAMSDFields) != -1 || $.inArray('preview text', existingAMSDFields) != -1 || $.inArray('previewtext', existingAMSDFields) != -1) {
+                    if ($.inArray('Html', existingAMSDFields) == -1 && $.inArray('HTML', existingAMSDFields) == -1 && $.inArray('html', existingAMSDFields) == -1) {
                         amsdTableSQL += '\n    `html` text DEFAULT NULL,';
                     }
                 }
