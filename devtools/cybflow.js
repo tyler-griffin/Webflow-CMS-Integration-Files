@@ -521,8 +521,6 @@ window.onload = function(e) {
                     }
                 }
 
-                console.log(existingAMSDFields);
-
                 amsdTableSQL += '\n    `pos` int(11) unsigned NOT NULL DEFAULT 0,';
                 amsdTableSQL += '\n    PRIMARY KEY (`id`)';
                 amsdTableSQL += '\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;\n\n';
@@ -815,8 +813,7 @@ window.onload = function(e) {
                     if($(this).attr('cybdata') == 'profileurl') {
 
                         $(this).removeAttr("target");
-                        $(this).attr("href","<?= " + prefix + key + suffix + " ?>");
-                        $(this).attr("test123","done");
+                        $(this).attr("href","<?= isset($ITEM->url) ? $ITEM->url : amsdProfileSlug($page, $amsd, $ITEM) ?>");
 
                     } else {
 
