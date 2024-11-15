@@ -730,11 +730,7 @@ window.onload = function(e) {
                         htmlCharLimit = '200';
                     }
 
-                    $(this).before('\n<? $charLimitedHtmlOr' + variableSlug + ' = false;\nif(' + prefix + key + suffix + ') {\n    $charLimitedHtmlOr' + variableSlug + ' = nl2br(' + prefix + key + suffix + ');\n} else if(strlen(strip_tags(' + prefix + 'html' + suffix + ')) > 2) {\n    $charLimitedHtmlOr' + variableSlug + ' = character_limiter(strip_tags(' + prefix + 'html' + suffix + '), ' + htmlCharLimit + ');\n} ?>\n<? if($charLimitedHtmlOr' + variableSlug + ') { ?>\n');
-
-                    $(this).html('<?= $charLimitedHtmlOr' + variableSlug + '; ?>');
-
-                    $(this).after('\n<? } ?>');
+                    $(this).html('<?= isset(' + prefix + key + suffix + ') ? nl2br(' + prefix + key + suffix + ') : character_limiter(strip_tags(' + prefix + 'html' + suffix + '), ' + htmlCharLimit + '); ?>');
 
                 } else if(type == 'vimeobg') {
 
@@ -822,7 +818,7 @@ window.onload = function(e) {
                     if($(this).attr('cybdata') == 'profileurl') {
 
                         $(this).removeAttr("target");
-                        $(this).attr("href","<?= isset($ITEM->url) ? $ITEM->url : amsdProfileSlug($page, $amsd, $ITEM) ?>");
+                        $(this).attr("href","<?= isset($ITEM->url) ? $ITEM->url : amsdProfileSlug($page, $amsd, $ITEM); ?>");
 
                     } else {
 
