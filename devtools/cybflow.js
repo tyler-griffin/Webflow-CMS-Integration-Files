@@ -487,29 +487,33 @@ window.onload = function(e) {
                         name = itemSlug;
                     }
 
-                    if(config != name && config != '') {
+                    if(itemSlug != name) {
 
-                        if(config == 'list' || config == 'previewtext') {
+                        if(config != name && config != '') {
 
-                            /* Skip */
+                            if(config == 'list' || config == 'previewtext') {
 
-                        } else if(config == 'textarea' && itemSlug == 'caption') {
+                                /* Skip */
 
-                            /* Skip */
+                            } else if(config == 'textarea' && itemSlug == 'caption') {
 
-                        } else {
-                            customFieldCount ++;
-                            if(customFieldCount != 1) { customFieldData += '        '; }
-                            customFieldData += 'case "' + itemSlug + '":';
-                            customFieldData += '\n';
-                            customFieldData += '\n            $OUTPUT = $FIELD->build($KEY, [';
-                            customFieldData += '\n                "type" => "' + name + '"';
-                            customFieldData += '\n            ], false);';
-                            customFieldData += '\n';
-                            customFieldData += '\n            break;\n\n';
+                                /* Skip */
+
+                            } else {
+                                customFieldCount ++;
+                                if(customFieldCount != 1) { customFieldData += '        '; }
+                                customFieldData += 'case "' + itemSlug + '":';
+                                customFieldData += '\n';
+                                customFieldData += '\n            $OUTPUT = $FIELD->build($KEY, [';
+                                customFieldData += '\n                "type" => "' + name + '"';
+                                customFieldData += '\n            ], false);';
+                                customFieldData += '\n';
+                                customFieldData += '\n            break;\n\n';
+                            }
+
                         }
 
-                    }
+                }
 
                     amsdTableSQL += '\n    `' + itemSlug + '` ' + dataType + ' DEFAULT NULL,';
 
