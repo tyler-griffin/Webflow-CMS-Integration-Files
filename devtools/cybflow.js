@@ -491,7 +491,7 @@ window.onload = function(e) {
 
                         if(config != name && config != '') {
 
-                            if(config == 'list' || config == 'previewtext') {
+                            if(config == 'list') {
 
                                 /* Skip */
 
