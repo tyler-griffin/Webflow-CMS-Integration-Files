@@ -65,6 +65,10 @@ window.onload = function(e) {
                         var nestedConfig = $(this).attr('cybdata');
                         var nestedKey = $(this).attr('cybkey');
 
+                        if(nestedConfig == 'profileurl') {
+                            nestedConfig = 'url';
+                        }
+
                         var nestedLabel = '';
 
                         if(nestedConfig == 'amsd' || nestedConfig == 'profile' || nestedConfig == 'common' || nestedConfig == 'block' || nestedConfig == 'buttontext' || nestedConfig == 'list' || nestedConfig == 'nav' || nestedConfig == 'logo' || nestedConfig == 'footerlogo' || nestedConfig == 'alertbar' || nestedConfig == 'popup' || nestedConfig == 'tag' || nestedConfig == 'ifisset') {
@@ -199,6 +203,10 @@ window.onload = function(e) {
                     }
 
                     var config = $(this).attr('cybdata');
+
+                    if(config == 'profileurl') {
+                        config = 'url';
+                    }
 
                     var key = $(this).attr('cybkey');
                     if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
@@ -380,6 +388,11 @@ window.onload = function(e) {
                     }
 
                     var config = $(this).attr('cybdata');
+
+                    if(config == 'profileurl') {
+                        config = 'url';
+                    }
+
                     var key = $(this).attr('cybkey');
                     if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
 
@@ -481,7 +494,7 @@ window.onload = function(e) {
                 });
 
                 /* Adding HTML field automatically if preview text is used */
-                if ($.inArray('Preview Text', existingAMSDFields) != -1 || $.inArray('preview text', existingAMSDFields) != -1 || $.inArray('previewtext', existingAMSDFields) != -1) {
+                if($.inArray('Preview Text', existingAMSDFields) != -1 || $.inArray('preview text', existingAMSDFields) != -1 || $.inArray('previewtext', existingAMSDFields) != -1) {
                     if ($.inArray('Html', existingAMSDFields) == -1 && $.inArray('HTML', existingAMSDFields) == -1 && $.inArray('html', existingAMSDFields) == -1) {
                         amsdTableSQL += '\n    `html` text DEFAULT NULL,';
                     }
@@ -774,8 +787,18 @@ window.onload = function(e) {
 
                 } else if(type == 'url') {
 
-                    $(this).removeAttr("target");
-                    $(this).attr("href","<?= " + prefix + key + suffix + " ?>");
+                    if($(this).attr('cybdata') == 'profileurl') {
+
+                        $(this).removeAttr("target");
+                        $(this).attr("href","<?= " + prefix + key + suffix + " ?>");
+                        $(this).attr("test123","done");
+
+                    } else {
+
+                        $(this).removeAttr("target");
+                        $(this).attr("href","<?= " + prefix + key + suffix + " ?>");
+
+                    }
 
                  } else if(type == 'date') {
 
