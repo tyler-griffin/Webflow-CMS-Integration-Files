@@ -6,9 +6,6 @@ ALTER TABLE `amsd_cycling_banner` ADD `buttons` text DEFAULT NULL;
 
 UPDATE `core_pages` SET `exclude_from_nav`='1' WHERE `id`=1;
 
-ALTER TABLE `amsd_standard` DROP COLUMN IF EXISTS `img`;
-ALTER TABLE `amsd_standard` ADD `focused_img` text DEFAULT NULL;
-
 ALTER TABLE `amsd_standard_with_categories` DROP COLUMN IF EXISTS `img`;
 ALTER TABLE `amsd_standard_with_categories` ADD `focused_img` text DEFAULT NULL;
 
