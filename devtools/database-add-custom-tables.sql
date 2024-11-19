@@ -1,18 +1,9 @@
 
 ALTER TABLE `amsd_cycling_banner` DROP COLUMN IF EXISTS `url`;
-IF COL_LENGTH('amsd_cycling_banner', 'buttons') IS NULL
-BEGIN
-    ALTER TABLE `amsd_cycling_banner`
-    ADD `buttons` text DEFAULT NULL
-END
+ALTER TABLE `amsd_cycling_banner` ADD `buttons` text DEFAULT NULL;
 
 UPDATE `core_pages` SET `exclude_from_nav`='1' WHERE `id`=1;
-
-IF COL_LENGTH('amsd_categories', 'icon') IS NULL
-BEGIN
-    ALTER TABLE `amsd_categories`
-    ADD `icon` varchar(255) DEFAULT NULL
-END
+ALTER TABLE `amsd_categories` ADD `icon` varchar(255) DEFAULT NULL;
 
 UPDATE `core_developer_settings` SET `value`='/assets/css/cms.css' WHERE `setting`='contentsCSS';
 UPDATE `core_developer_settings` SET `value`='1' WHERE `setting`='stylesMenuV2';
@@ -60,7 +51,7 @@ UPDATE `core_developer_settings` SET `value`='[{
 CREATE TABLE IF NOT EXISTS `amsd_staff` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `block` int(11) unsigned NOT NULL DEFAULT 0,
-  `category` int(11) unsigned NOT NULL DEFAULT NULL,
+  `category` int(11) unsigned NULL DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `slug` varchar(255) DEFAULT NULL,
   `sub_title` varchar(255) DEFAULT NULL,
