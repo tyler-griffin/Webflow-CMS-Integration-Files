@@ -1,12 +1,16 @@
 
-ALTER TABLE `amsd_cycling_banner` DROP COLUMN IF EXISTS `img`;
 ALTER TABLE `amsd_cycling_banner` DROP COLUMN IF EXISTS `url`;
-ALTER TABLE `amsd_cycling_banner` ADD `banner_image` text DEFAULT NULL;
-ALTER TABLE `amsd_cycling_banner` ADD `buttons` text DEFAULT NULL;
+IF COL_LENGTH('amsd_cycling_banner', 'buttons') IS NULL
+BEGIN
+    ALTER TABLE `amsd_cycling_banner` ADD `buttons` text DEFAULT NULL;
+END
 
 UPDATE `core_pages` SET `exclude_from_nav`='1' WHERE `id`=1;
 
-ALTER TABLE `amsd_categories` ADD `icon` varchar(255) DEFAULT NULL;
+IF COL_LENGTH('amsd_categories', 'icon') IS NULL
+BEGIN
+    ALTER TABLE `amsd_categories` ADD `icon` varchar(255) DEFAULT NULL;
+END
 
 UPDATE `core_developer_settings` SET `value`='/assets/css/cms.css' WHERE `setting`='contentsCSS';
 UPDATE `core_developer_settings` SET `value`='1' WHERE `setting`='stylesMenuV2';
