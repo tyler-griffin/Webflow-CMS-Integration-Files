@@ -8,7 +8,7 @@ if($block->additional_settings['Background Video ID']) {
     <div data-delay="8000" data-animation="cross" class="slider <? if ($backgroundVideoID != '') { ?>with-video-background<? } ?> w-slider" data-autoplay="true" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="800" data-infinite="true">
         <div class="slider-mask w-slider-mask">
             <? foreach($amsd["data"] as $k => $ITEM) { ?>
-            <? $bannerImage = json_decode($ITEM->banner_image); ?>
+            <? $bannerImage = json_decode($ITEM->focused_img); ?>
             <div class="slide w-slide" <? if(isset($bannerImage) && $backgroundVideoID == '') { ?>style="background-position: <?= $bannerImage->config->{'background-position'} ?>; background-image: url('/image/<?= $bannerImage->id ?>/2000');"<? } else if ($backgroundVideoID != '') { ?>style="background-image: none;"<? } ?>>
                 <div class="home-banner-content-outer-wrapper">
                     <div class="home-banner-content-inner-wrapper">
