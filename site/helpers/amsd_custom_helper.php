@@ -311,9 +311,7 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
         case "button_1":
         case "button_2":
-        case "red_button":
-        case "black_button":
- 
+        
             $OUTPUT = $FIELD->build($KEY, [
                 "type" => "button"
             ], false);
