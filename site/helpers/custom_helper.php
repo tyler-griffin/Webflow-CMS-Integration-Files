@@ -209,7 +209,7 @@
 					echo '<div class="w-dropdown dropdown" data-delay="0"' . (M ? '' : ' data-hover="true" ') . '>
 
 							<div class="w-dropdown-toggle nav-link dropdown-nav-link' . $CLASS_ACTIVE . $CLASS_LAST . '">
-								<div class="nav-link-text">' . $ROOT->title . '</div>
+								' . $NAV_LINK_ICON . '<div class="nav-link-text">' . $ROOT->title . '</div>
 								<div class="dropdown-nav-link-arrow w-icon-dropdown-toggle"></div>
 							</div>';
 
