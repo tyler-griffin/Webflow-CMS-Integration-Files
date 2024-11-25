@@ -24,7 +24,7 @@ if(isset($page->settings["Page Banner"])) {
 		<div class="title-content-inner-wrapper">
 			<h1 class="title"><?= $titleText ?></h1>
 			<? if(isset($subtitleText)) { ?><div class="subtitle-text"><?= $subtitleText ?></div><? } ?>
-			<? /* include(FRONTEND . "/partials/amsd-filters.php"); */ ?>
+			<? /* AMSD select/dropdown filters --- include(FRONTEND . "/partials/amsd-filters.php"); */ ?>
 		</div>
 	</div>
 </div>
