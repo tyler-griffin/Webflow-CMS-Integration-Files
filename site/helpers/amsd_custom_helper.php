@@ -97,6 +97,14 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
+        case "all_day":
+
+            $OUTPUT = $FIELD->build($KEY, [
+                "type" => "checkbox"
+            ], false);
+
+            break;
+
         case "textarea":
         case "text_area":
         case "previewtext":
