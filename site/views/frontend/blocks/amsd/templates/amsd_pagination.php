@@ -1,4 +1,5 @@
 
+<? // Add block setting "AMSD Pagination Per Page" block setting with the value set to an integer that is greater than zero. ?>
 
 <? if($amsd["pagination"]["items"]) {
 	$amsdItems = $amsd["pagination"]["items"];
