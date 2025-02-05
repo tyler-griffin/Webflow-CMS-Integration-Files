@@ -541,8 +541,28 @@ function customSortedListBlocks() {
             ],
             "additional_settings" => [
                 [
+                    "key" => "Display Background Video",
+                    "value" => NULL,
+                    "config" => "checkbox"
+                ],
+                [
                     "key" => "Background Video ID",
                     "value" => NULL,
+                    "config" => NULL
+                ],
+                [
+                    "key" => "Autoplay Banners",
+                    "value" => 1,
+                    "config" => "checkbox"
+                ],
+                [
+                    "key" => "Time Between Banners (Milliseconds)",
+                    "value" => "8000",
+                    "config" => NULL
+                ],
+                [
+                    "key" => "Transition Time During Cycling (Milliseconds)",
+                    "value" => "1000",
                     "config" => NULL
                 ]
             ]
