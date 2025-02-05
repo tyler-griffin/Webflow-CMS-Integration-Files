@@ -1,20 +1,18 @@
 <? include(FRONTEND . "/header.php"); ?>
 
 <? // Create variable for title text
-if($page->settings["Title Override"]) {
-	$titleText = $page->settings["Title Override"];
-} else {
-	$titleText = $page->title;
+if($page->settings["Banner Title"]) {
+	$titleText = $page->settings["Banner Title"];
 } ?>
 
 <? // Create variable for subtitle text
-if(isset($page->settings["Subtitle"])) {
-	$subtitleText = $page->settings["Subtitle"];
+if(isset($page->settings["Banner Subtitle"])) {
+	$subtitleText = $page->settings["Banner Subtitle"];
 } ?>
 
 <? // Create variable for interior banner image
-if(isset($page->settings["Page Banner"])) {
-	$interiorBanner = json_decode($page->settings["Page Banner"]);
+if(isset($page->settings["Banner Image"])) {
+	$interiorBanner = json_decode($page->settings["Banner Image"]);
 } else if(isset($COMMON_ITEMS["Default Page Banner Image"])) {
 	$interiorBanner = json_decode($COMMON_ITEMS["Default Page Banner Image"]);
 } ?>
