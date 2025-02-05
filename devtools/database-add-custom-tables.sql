@@ -1,6 +1,7 @@
 
 ALTER TABLE `amsd_cycling_banner` DROP COLUMN IF EXISTS `url`;
 ALTER TABLE `amsd_cycling_banner` ADD `buttons` text DEFAULT NULL;
+ALTER TABLE `amsd_cycling_banner` ADD `active` int(11) DEFAULT 1;
 
 UPDATE `core_pages` SET `exclude_from_nav`='1' WHERE `id`=1;
 ALTER TABLE `amsd_categories` ADD `icon` varchar(255) DEFAULT NULL;
@@ -76,10 +77,10 @@ CREATE TABLE IF NOT EXISTS `amsd_accordion` (
 CREATE TABLE IF NOT EXISTS `amsd_alert_bar` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `block` int(11) unsigned NOT NULL DEFAULT 0,
-  `active` int(11) unsigned DEFAULT NULL,
   `icon` varchar(255) DEFAULT NULL,
   `textarea` text DEFAULT NULL,
   `button` text DEFAULT NULL,
+  `active` int(11) unsigned DEFAULT NULL,
   `pos` int(11) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=DYNAMIC;
@@ -88,9 +89,9 @@ CREATE TABLE IF NOT EXISTS `amsd_alert_bar` (
 CREATE TABLE IF NOT EXISTS `amsd_popup` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `block` int(11) unsigned NOT NULL DEFAULT 0,
-  `active` int(11) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `html` text DEFAULT NULL,
+  `active` int(11) DEFAULT NULL,
   `pos` int(11) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci ROW_FORMAT=DYNAMIC;
