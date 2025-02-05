@@ -777,19 +777,19 @@ function customPageSettingsSchema($pageID = NULL) {
     }
 
     $items[] = [
-        "key" => "Page Banner",
+        "key" => "Banner Title",
+        "value" => $page->title,
+        "config" => "text"
+    ];
+
+    $items[] = [
+        "key" => "Banner Image",
         "value" => NULL,
         "config" => "focused_img"
     ];
 
     $items[] = [
-        "key" => "Title Override",
-        "value" => NULL,
-        "config" => "text"
-    ];
-
-    $items[] = [
-        "key" => "Subtitle",
+        "key" => "Banner Subtitle",
         "value" => NULL,
         "config" => "text"
     ];
