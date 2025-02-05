@@ -1,11 +1,30 @@
 
-<? $backgroundVideoID = '';
-if($block->additional_settings['Background Video ID']) { 
+<?
+
+$backgroundVideoID = '';
+if($block->additional_settings['Background Video ID'] && $block->additional_settings['Display Background Video']) { 
 	$backgroundVideoID = $block->additional_settings['Background Video ID'];
-} ?>
+}
+
+$bannerAutoplay = 'true';
+if(!$block->additional_settings['Autoplay Banners']) {
+    $bannerAutoplay = 'false';
+}
+
+$bannerDelay = '8000';
+if($block->additional_settings['Time Between Banners (Milliseconds)']) {
+    $bannerDelay = $block->additional_settings['Time Between Banners (Milliseconds)'];
+}
+
+$bannerTransition = '800';
+if($block->additional_settings['Transition Time During Cycling (Milliseconds)']) {
+    $bannerTransition = $block->additional_settings['Transition Time During Cycling (Milliseconds)'];
+}
+
+?>
 
 <div class="home-banner-section">
-    <div data-delay="8000" data-animation="cross" class="slider <? if ($backgroundVideoID != '') { ?>with-video-background<? } ?> w-slider" data-autoplay="true" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="800" data-infinite="true">
+    <div data-delay="<?= $bannerDelay ?>" data-animation="cross" class="slider <? if ($backgroundVideoID != '') { ?>with-video-background<? } ?> w-slider" data-autoplay="<?= $bannerAutoplay ?>" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="<?= $bannerTransition ?>" data-infinite="true">
         <div class="slider-mask w-slider-mask">
             <? foreach($amsd["data"] as $k => $ITEM) { ?>
             <? $bannerImage = json_decode($ITEM->focused_img); ?>
@@ -35,7 +54,7 @@ if($block->additional_settings['Background Video ID']) {
         <? } ?>
     </div>
 
-	<? if($backgroundVideoID != '') { ?>
+	<? if($backgroundVideoID != '' && $block->additional_settings['Display Background Video']) { ?>
 
         <? if(mb_strlen($backgroundVideoID) > 10) {
             $backgroundVideoSrc = "https://www.youtube.com/embed/" . $backgroundVideoID . "?autoplay=1&amp;controls=0&amp;rel=0&amp;mute=1&amp;loop=1&amp;playlist=" . $backgroundVideoID;
