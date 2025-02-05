@@ -602,7 +602,6 @@ function customSortedListBlocks() {
             "title" => "Alert Bar",
             "settings" => [
                 ["Heading Read Only", "true"],
-                ["AMSD Limit", 1],
                 ["AMSD Noun", "Alert"],
                 ["Table", "amsd_alert_bar"],
                 ["Hidden", "true"]
