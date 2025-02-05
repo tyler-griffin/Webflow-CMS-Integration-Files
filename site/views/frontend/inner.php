@@ -15,8 +15,8 @@ if(isset($page->settings["Subtitle"])) {
 <? // Create variable for interior banner image
 if(isset($page->settings["Page Banner"])) {
 	$interiorBanner = json_decode($page->settings["Page Banner"]);
-} else if(isset($COMMON_ITEMS["Default Page Banner"])) {
-	$interiorBanner = json_decode($COMMON_ITEMS["Default Page Banner"]);
+} else if(isset($COMMON_ITEMS["Default Page Banner Image"])) {
+	$interiorBanner = json_decode($COMMON_ITEMS["Default Page Banner Image"]);
 } ?>
 
 <div class="title-section" <? if(isset($interiorBanner)) { ?>style="background-position: <?= $interiorBanner->config->{'background-position'} ?>; background-image: url('/image/<?= $interiorBanner->id ?>/2000');"<? } ?>>

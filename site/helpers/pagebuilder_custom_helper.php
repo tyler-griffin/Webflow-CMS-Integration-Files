@@ -503,7 +503,7 @@ function customSortedListBlocks() {
                     "key" => "Last Nav Item Icon",
                     "config" => "icon"
                 ],[
-                    "key" => "Default Page Banner",
+                    "key" => "Default Page Banner Image",
                     "config" => "focused_img"
                 ],[
                     "key" => "Contact Info",
