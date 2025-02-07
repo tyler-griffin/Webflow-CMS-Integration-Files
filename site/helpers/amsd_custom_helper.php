@@ -87,6 +87,26 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
     switch($TYPE) {
 
+        case "key":
+
+            if($BLOCK["settings"]["Table"] == "amsd_strings" && $GRID) { 
+
+                $SUFFIXES = [
+                    "Default Page Banner Image" => 'This image will display if a page does not have a specific banner image applied.',
+                    "Banner Image" => 'If this field is blank, page uses <a href="#/editor/common-items">default banner image</a>.'
+                ];
+
+                if($SUFFIX = value_with_default($SUFFIXES, $ITEM["key"])) {
+
+                    $OUTPUT = $ITEM["key"];
+                    $STRINGS_KEY_LABEL_SUFFIX = $SUFFIX;
+
+                }
+
+            }
+
+            break;
+
         case "value":
 
             if($BLOCK["settings"]["Table"] == "amsd_strings") {

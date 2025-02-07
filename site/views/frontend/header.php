@@ -33,7 +33,7 @@
 
 	<link rel="stylesheet" href="<?= assets("css/cms-frontend-framework.css") ?>" type="text/css" />
 
-	<link rel="stylesheet" type="text/css" href="<?= bustCache("css/cms.css") ?>">
+	<link rel="stylesheet" type="text/css" href="<?= bustCache("scss/cms.scss") ?>">
 
 	<script type="text/javascript" src="<?= assets("js/jquery/3.4.1/jquery.min.js") ?>"></script>
 
