@@ -1,14 +1,8 @@
 
 <?
 
-$backgroundVideoID = '';
-if($block->additional_settings['Background Video ID'] && $block->additional_settings['Display Background Video']) { 
-	$backgroundVideoID = $block->additional_settings['Background Video ID'];
-}
-
-$bannerAutoplay = 'true';
-if(!$block->additional_settings['Autoplay Banners']) {
-    $bannerAutoplay = 'false';
+if($block->additional_settings['Background Video URL'] && $block->additional_settings['Display Background Video']) { 
+    $video = parseVideo($block->additional_settings['Background Video URL']);
 }
 
 $bannerDelay = '8000';
@@ -24,18 +18,18 @@ if($block->additional_settings['Transition Time During Cycling (Milliseconds)'])
 ?>
 
 <div class="home-banner-section">
-    <div data-delay="<?= $bannerDelay ?>" data-animation="cross" class="slider <? if ($backgroundVideoID != '') { ?>with-video-background<? } ?> w-slider" data-autoplay="<?= $bannerAutoplay ?>" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="<?= $bannerTransition ?>" data-infinite="true">
+    <div data-delay="<?= $bannerDelay ?>" data-animation="cross" class="slider <? if (isset($video['id'])) { ?>with-video-background<? } ?> w-slider" data-autoplay="true" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="<?= $bannerTransition ?>" data-infinite="true">
         <div class="slider-mask w-slider-mask">
             <? foreach($amsd["data"] as $k => $ITEM) { ?>
             <? $bannerImage = json_decode($ITEM->focused_img); ?>
-            <div class="slide w-slide" <? if(isset($bannerImage) && $backgroundVideoID == '') { ?>style="background-position: <?= $bannerImage->config->{'background-position'} ?>; background-image: url('/image/<?= $bannerImage->id ?>/2000');"<? } else if ($backgroundVideoID != '') { ?>style="background-image: none;"<? } ?>>
+            <div class="slide w-slide" <? if(isset($bannerImage) && !isset($video['id'])) { ?>style="background-position: <?= $bannerImage->config->{'background-position'} ?>; background-image: url('/image/<?= $bannerImage->id ?>/2000');"<? } else if (isset($video['id'])) { ?>style="background-image: none;"<? } ?>>
                 <div class="home-banner-content-outer-wrapper">
                     <div class="home-banner-content-inner-wrapper">
                         <div class="home-banner-text-large"><?= $ITEM->title ?></div>
                         <div class="home-banner-text-small"><?= nl2br($ITEM->caption); ?></div>
                         <div class="home-banner-buttons-wrapper">
                             <? foreach (json_decode($ITEM->buttons) as $bk => $BUTTON) { ?>
-                            <a href="<?= $BUTTON->url ?>" class="cms-btn <? if(($bk+1)%2 == 0) { ?>cms-btn-outlined-white<? } ?> banner-button"><? if($BUTTON->icon) { ?><span class="button-icon <? if(($bk+1)%2 == 0) { ?>white<? } ?>"><i class="<?= $BUTTON->icon ?>"></i></span> <? } ?><?= $BUTTON->title ?></a>
+                            <a href="<?= $BUTTON->url ?>" class="cms-btn <? if(($bk+1)%2 == 0) { ?>cms-btn-outlined-white<? } ?>"><? if($BUTTON->icon) { ?><span class="button-icon <? if(($bk+1)%2 == 0) { ?>white<? } ?>"><i class="<?= $BUTTON->icon ?>"></i></span> <? } ?><?= $BUTTON->title ?></a>
                             <? } ?>
                         </div>
                     </div>
@@ -54,12 +48,12 @@ if($block->additional_settings['Transition Time During Cycling (Milliseconds)'])
         <? } ?>
     </div>
 
-	<? if($backgroundVideoID != '' && $block->additional_settings['Display Background Video']) { ?>
+	<? if(isset($video['id']) && $block->additional_settings['Display Background Video']) { ?>
 
-        <? if(mb_strlen($backgroundVideoID) > 10) {
-            $backgroundVideoSrc = "https://www.youtube.com/embed/" . $backgroundVideoID . "?autoplay=1&amp;controls=0&amp;rel=0&amp;mute=1&amp;loop=1&amp;playlist=" . $backgroundVideoID;
-        } else {
-            $backgroundVideoSrc = "https://player.vimeo.com/video/" . $backgroundVideoID . "?background=1";
+        <? if($video["host"] == 'youtube') {
+            $backgroundVideoSrc = "https://www.youtube.com/embed/" . $video['id'] . "?autoplay=1&amp;controls=0&amp;rel=0&amp;mute=1&amp;loop=1&amp;playlist=" . $video['id'];
+        } else if($video["host"] == 'vimeo') {
+            $backgroundVideoSrc = "https://player.vimeo.com/video/" . $video['id'] . "?background=1";
         } ?>
 
         <div class="video-background-wrapper-outer visible">
