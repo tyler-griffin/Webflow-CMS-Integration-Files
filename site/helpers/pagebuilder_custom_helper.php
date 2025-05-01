@@ -546,7 +546,7 @@ function customSortedListBlocks() {
                     "config" => "checkbox"
                 ],
                 [
-                    "key" => "Background Video ID",
+                    "key" => "Background Video URL",
                     "value" => NULL,
                     "config" => NULL
                 ],
