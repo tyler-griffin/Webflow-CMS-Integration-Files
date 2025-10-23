@@ -1,6 +1,4 @@
 
-<? $DATA = strings($block->id); ?>
-
 <div class="contact-info-wrapper">
 	<? if($DATA['Address']) { ?>
 		<div class="contact-info-item">

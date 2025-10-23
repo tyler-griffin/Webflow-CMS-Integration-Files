@@ -176,6 +176,16 @@
 			// Loop over main nav items
 			foreach ($C["NAV"] as $k => $ROOT) {
 
+				/*
+				// Logo spacer for when the logo is centered on the navbar
+				if(($k+1) == ((sizeof($C["NAV"])/2) + 1)) {
+					echo '<div class="logo-spacer"></div>';
+				}
+				*/
+
+				//Skip secondary nav items
+				if($ROOT->secondary_nav) { continue; }
+
 				// Nav Link Icon
 				$NAV_LINK_ICON = getPage($ROOT->id)->settings["Nav Icon"];
 				if($NAV_LINK_ICON && $NAV_LINK_ICON != 'null'){
@@ -191,13 +201,8 @@
 				$CLASS_LAST = $ROOT === end($C["NAV"]) ? " last" : "";
 
 				// Set icon for last root items
-				$LAST_ICON = '';
-				$LAST_ITEM_TEXT_PREFIX = '';
-				$LAST_ITEM_TEXT_SUFFIX = '';
 				if($ROOT === end($C["NAV"]) && $COMMON_ITEMS['Last Nav Item Icon']) { 
-					$LAST_ICON = '<div class="last-nav-item-icon"><i class="' . $COMMON_ITEMS["Last Nav Item Icon"] . '"></i></div>';
-					$LAST_ITEM_TEXT_PREFIX = '<div class="last-nav-item-text">';
-					$LAST_ITEM_TEXT_SUFFIX = '</div>';
+					$NAV_LINK_ICON = '<div class="last-nav-item-icon"><i class="' . $COMMON_ITEMS["Last Nav Item Icon"] . '"></i></div>';
 				}
 
 				// Add beginning slash to inner page links
@@ -224,7 +229,7 @@
 				// Item is a single link
 				} else {
 
-					echo '<a class="w-nav-link nav-link' . $CLASS_ACTIVE . '" href="' . $ROOT_LINK . '">' . $NAV_LINK_ICON . '<div class="nav-link-text">' . $ROOT->title . '</div></a>';
+					echo '<a class="w-nav-link nav-link' . $CLASS_ACTIVE . $CLASS_LAST . '" href="' . $ROOT_LINK . '">' . $NAV_LINK_ICON . '<div class="nav-link-text">' . $ROOT->title . '</div></a>';
 
 				}
 

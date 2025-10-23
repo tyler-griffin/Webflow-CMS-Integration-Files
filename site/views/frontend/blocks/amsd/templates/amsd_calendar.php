@@ -19,7 +19,7 @@ if($profile) {
 		} ?>
 		<? if($itemImage) { ?>
 			<div class="profile-image-wrapper <?= $CLASS_STAFF ?>">
-				<div class="amsd-image <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/400');"></div>
+				<div class="amsd-image <?= $CLASS_STAFF ?>" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/600');"></div>
 			</div>
 		<? } ?>
 
@@ -29,7 +29,7 @@ if($profile) {
 			<div class="profile-title-underline"></div>
 
 			
-			<p class="amsd-meta-text-profile-page"><?= date("M j, Y", strtotime($ITEM->start_date)); ?><? if($ITEM->start_time) { ?>  <?= date("g:ia", strtotime($ITEM->start_time)); ?><? } ?><? if($ITEM->end_date && $ITEM->start_date != $ITEM->end_date) { ?> – <?= date("M j, Y", strtotime($ITEM->end_date)); ?><? } else { if($ITEM->end_time) { ?> –<? } ?><? } ?><? if($ITEM->end_time) { ?>  <?= date("g:ia", strtotime($ITEM->end_time)); ?><? } ?></p>
+			<div class="amsd-meta-text-profile-page"><?= date("M j, Y", strtotime($ITEM->start_date)); ?><? if($ITEM->start_time) { ?>, <?= date("g:ia", strtotime($ITEM->start_time)); ?><? } ?><? if($ITEM->end_date && $ITEM->start_date != $ITEM->end_date) { ?> – <?= date("M j, Y", strtotime($ITEM->end_date)); ?><? } else { if($ITEM->end_time) { ?> –<? } ?><? } ?><? if($ITEM->end_time) { ?><? if($ITEM->start_date != $ITEM->end_date) { ?>,<? } ?> <?= date("g:ia", strtotime($ITEM->end_time)); ?><? } ?></div>
 
 		</div>
 
@@ -152,7 +152,7 @@ if($profile) {
 							<div class="calendar-row labels">
 								<? foreach ($calendar['headings'] as $k => $ITEM) { ?>
 									<div class="day label">
-										<p class="calendar-day-label"><?= $ITEM ?></p>
+										<div class="calendar-day-label"><?= $ITEM ?></div>
 									</div>
 								<? } ?>
 							</div>
@@ -161,7 +161,7 @@ if($profile) {
 									<? foreach ($WEEK as $d => $DAY) { ?>
 										<div class="day">
 											<? if($DAY['day'] && $DAY['day'] != 'blank') { ?>
-												<p class="calendar-number-label <? if($DAY['current']) { ?>today<? } ?>"><?= $DAY['day'] ?></p>
+												<div class="calendar-number-label <? if($DAY['current']) { ?>today<? } ?>"><?= $DAY['day'] ?></div>
 											<? } ?>
 											<? if($DAY['events'][0]) { ?>
 												<? foreach($DAY['events'] as $k => $ITEM) { ?>
@@ -225,15 +225,15 @@ if($profile) {
 											}
 											if($itemImage) { ?>
 												<a href="<?= $link ?>" class="amsd-image-link w-inline-block">
-													<div class="amsd-image" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/400');">
+													<div class="amsd-image" style="background-position: <?= $itemImage->config->{'background-position'} ?>; background-image: url('/image/<?= $itemImage->id ?>/600');">
 														<div class="image-hover-overlay"></div>
 													</div>
 												</a>
 											<? } ?>
 											<div class="amsd-text-wrapper">
 												<a href="<?= $link ?>" class="amsd-title-text-link small"><?= $ITEM->event_title ?></a>
-												<p class="amsd-meta-text"><?= date("M j, Y", strtotime($ITEM->start_date)); ?><? if($ITEM->start_time) { ?>  <?= date("g:ia", strtotime($ITEM->start_time)); ?><? } ?><? if($ITEM->end_date && $ITEM->start_date != $ITEM->end_date) { ?> – <?= date("M j, Y", strtotime($ITEM->end_date)); ?><? } else { if($ITEM->end_time) { ?> –<? } ?><? } ?><? if($ITEM->end_time) { ?>  <?= date("g:ia", strtotime($ITEM->end_time)); ?><? } ?><br></p>
-												<p class="amsd-description-text"><?= character_limiter(strip_tags($ITEM->html), 500); ?></p>
+												<div class="amsd-meta-text"><?= date("M j, Y", strtotime($ITEM->start_date)); ?><? if($ITEM->start_time) { ?>, <?= date("g:ia", strtotime($ITEM->start_time)); ?><? } ?><? if($ITEM->end_date && $ITEM->start_date != $ITEM->end_date) { ?> – <?= date("M j, Y", strtotime($ITEM->end_date)); ?><? } else { if($ITEM->end_time) { ?> –<? } ?><? } ?><? if($ITEM->end_time) { ?><? if($ITEM->start_date != $ITEM->end_date) { ?>,<? } ?> <?= date("g:ia", strtotime($ITEM->end_time)); ?><? } ?><br></div>
+												<div class="amsd-description-text"><?= character_limiter(strip_tags($ITEM->html), 500); ?></div>
 												<div class="amsd-button-wrapper">
 													<a href="<?= $link ?>" class="amsd-button" title="<?= $ITEM->event_title ?>">Learn More <span class="button-icon right"><i class="fas fa-chevron-right"></i></span></a>
 												</div>

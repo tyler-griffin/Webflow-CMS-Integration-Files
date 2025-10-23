@@ -1,1 +1,1 @@
-<? include(FRONTEND . "/amsd_standard.php"); ?>
+<? include("amsd_standard.php"); ?>

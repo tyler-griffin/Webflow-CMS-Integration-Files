@@ -255,6 +255,12 @@ function customCreatePageAfter($config, $pageID) {
 
     $page = getPage($pageID);
 
+    foreach ($page->blocks as $PAGE_BLOCK) {
+        if($PAGE_BLOCK->settings['Custom Page Settings'] == 'true') {
+            set_strings($PAGE_BLOCK->id, "Banner Title", str_replace('&amp;', '&', $page->title), "text");
+        }
+    }
+
     switch($type) {
 
         /*
@@ -552,17 +558,17 @@ function customSortedListBlocks() {
                 ],
                 [
                     "key" => "Autoplay Banners",
-                    "value" => 1,
-                    "config" => "checkbox"
+                    "value" => "true",
+                    "config" => "true_false"
                 ],
                 [
-                    "key" => "Time Between Banners (Milliseconds)",
-                    "value" => "8000",
+                    "key" => "Time Between Banners (Seconds)",
+                    "value" => "8",
                     "config" => NULL
                 ],
                 [
-                    "key" => "Transition Time During Cycling (Milliseconds)",
-                    "value" => "1000",
+                    "key" => "Transition Time During Cycling (Seconds)",
+                    "value" => "1",
                     "config" => NULL
                 ]
             ]
@@ -610,7 +616,7 @@ function customSortedListBlocks() {
                 [
                     "active" => 1,
                     "icon" => "fas fa-triangle-exclamation",
-                    "textarea" => 'Lorem ipsum dolor sit amet, eam everti tractatos cu, ea vis brute ullamcorper, nominavi probatus posidonium cu his.',
+                    "alert_text" => 'Lorem ipsum dolor sit amet, eam everti tractatos cu, ea vis brute ullamcorper, nominavi probatus posidonium cu his.',
                     "button" => '{"text":"Learn More","url":"#"}'
                 ]
             ]
@@ -777,7 +783,7 @@ function customPageSettingsSchema($pageID = NULL) {
 
     $items[] = [
         "key" => "Banner Title",
-        "value" => $page->title,
+        "value" => str_replace('&amp;', '&', $page->title),
         "config" => "text"
     ];
 

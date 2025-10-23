@@ -2,6 +2,8 @@
 
 <?
 
+	$PHOTO_SLIDER = false;
+
 	// Use a nice clean variable name
 	$ALBUM = $profile;
 
@@ -17,59 +19,94 @@
 	
 	}
 
+	if($SETTINGS["Album Template"] == "photo-slider") {
+	
+		$PHOTO_SLIDER = true;
+	
+	}
+
 	
 /* ALBUM VIEW ------------------------------------------------- */	
 	
 if($ALBUM) {  ?>
 
-	<div class="album-photos">
+	<? if($PHOTO_SLIDER) { ?>
 
-		<? echo _titleTag($ALBUM["result"][0]->title) ?>
+		<div data-delay="4000" data-animation="cross" class="photo-slider centered w-slider" data-autoplay="true" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="800" data-infinite="true">
+			<div class="w-slider-mask">
 
-		<? if(isset($ALBUM["result"][0]->text) && $ALBUM["result"][0]->text != "") { ?> 
-		<div class="album-text-block">
-			<? echo $ALBUM["result"][0]->text ?>
-		</div>
-		<? } ?>
+				<? foreach($ALBUM["result"][0]->photos as $i => $PHOTO) { ?>
 
-		<? foreach($ALBUM["result"][0]->photos as $i => $PHOTO) { ?> 
+					<div class="photo-slider-slide w-slide" style="background-position: <?= json_decode($PHOTO->focused_img)->config->{'background-position'} ?>; background-image: url('/image/<?= json_decode($PHOTO->focused_img)->id ?>/1000');">
+						<div class="photo-slider-slide-spacer"></div>
+					</div>
 
-			<a class="w-lightbox w-inline-block gallery-image" href="#" style="background-position: <?= json_decode($PHOTO->focused_img)->config->{'background-position'} ?>; background-image: url('/image/<?= json_decode($PHOTO->focused_img)->id ?>/1000');">
-
-				<? if(isset($PHOTO->caption) && $PHOTO->caption != '') { ?>
-					<div class="album-label"><?= $PHOTO->caption ?></div>
 				<? } ?>
 
-				<div class="gallery-image-spacer"><div class="hover-overlay"></div></div>
-
-				<script type="application/json" class="w-json">
-					{
-						"group": "lightbox",
-						"items": [
-						{
-						"type": "image",
-						"thumbnailUrl": "/image/<?= json_decode($PHOTO->focused_img)->id ?>/200",
-						"url": "/image/<?= json_decode($PHOTO->focused_img)->id ?>/1000"<? if(isset($PHOTO->caption) && $PHOTO->caption != '') { ?>,
-						"caption": "<?= $PHOTO->caption ?>"<? } ?>
-						}
-						]
-					}
-				</script>
-
-			</a>
-
-		<? } ?>
-
-		<div class="gallery-image fix-remainder-items"></div>
-		<div class="gallery-image fix-remainder-items"></div>
-		
-		<? if($ALBUM["back"]) { ?>
-			<div class="back-links-wrapper">
-				<a href="<?= $ALBUM["back"] ?>" class="back-link"><span class="button-icon"><i class="fas fa-chevron-left"></i></span> Back to <?= $page->title ?></a>
 			</div>
-		<? } ?>
 
-	</div>
+			<? if(sizeof($ALBUM["result"][0]->photos) > 1) { ?>
+				<div class="photo-slider-arrow w-slider-arrow-left">
+					<div class="w-icon-slider-left"></div>
+				</div>
+				<div class="photo-slider-arrow w-slider-arrow-right">
+					<div class="w-icon-slider-right"></div>
+				</div>
+				<div class="photo-slider-nav w-slider-nav w-round"></div>
+			<? } ?>
+
+		</div>
+
+	<? } else { ?>
+
+		<div class="album-photos">
+
+			<? if(isset($ALBUM["result"][0]->text) && $ALBUM["result"][0]->text != "") { ?> 
+			<div class="album-text-block">
+				<? echo $ALBUM["result"][0]->text ?>
+			</div>
+			<? } ?>
+
+			<? foreach($ALBUM["result"][0]->photos as $i => $PHOTO) { ?> 
+
+				<a class="w-lightbox w-inline-block gallery-image" href="#" style="background-position: <?= json_decode($PHOTO->focused_img)->config->{'background-position'} ?>; background-image: url('/image/<?= json_decode($PHOTO->focused_img)->id ?>/1000');">
+
+					<? if(isset($PHOTO->caption) && $PHOTO->caption != '') { ?>
+						<div class="album-label"><?= $PHOTO->caption ?></div>
+					<? } ?>
+
+					<div class="gallery-image-spacer"><div class="hover-overlay"></div></div>
+
+					<script type="application/json" class="w-json">
+						{
+							"group": "lightbox",
+							"items": [
+							{
+							"type": "image",
+							"thumbnailUrl": "/image/<?= json_decode($PHOTO->focused_img)->id ?>/200",
+							"url": "/image/<?= json_decode($PHOTO->focused_img)->id ?>/1000"<? if(isset($PHOTO->caption) && $PHOTO->caption != '') { ?>,
+							"caption": "<?= $PHOTO->caption ?>"<? } ?>
+							}
+							]
+						}
+					</script>
+
+				</a>
+
+			<? } ?>
+
+			<div class="gallery-image fix-remainder-items"></div>
+			<div class="gallery-image fix-remainder-items"></div>
+			
+			<? if($ALBUM["back"]) { ?>
+				<div class="back-links-wrapper">
+					<a href="<?= $ALBUM["back"] ?>" class="back-link"><span class="button-icon"><i class="fas fa-chevron-left"></i></span> Back to <?= $page->title ?></a>
+				</div>
+			<? } ?>
+
+		</div>
+
+	<? } ?>
 
 <? 
 
@@ -78,12 +115,7 @@ if($ALBUM) {  ?>
 } else {
 
 	// Pull gallery data from block
-	$GALLERY = getBlock($block->id); 
-	
-	// Show block heading if used
-	$HEADING = (isset($SETTINGS["Heading Read Only"]) && $SETTINGS["Heading Read Only"] == "true") ? false : (trim($GALLERY["heading"]) == "" ? false : $GALLERY["heading"]);
-	
-	if($HEADING) { echo _titleTag($HEADING); } 
+	$GALLERY = getBlock($block->id);  
 	
 	?>
 

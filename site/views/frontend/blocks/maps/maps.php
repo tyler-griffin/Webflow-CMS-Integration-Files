@@ -9,7 +9,7 @@
 			
 			if((isset($MAP_BLOCK["settings"]["Heading Read Only"]) && $MAP_BLOCK["settings"]["Heading Read Only"] == "true")) {} else { echo _titleTag($MAP_BLOCK["heading"]); }
 
-			$DIRECTIONS_URL = "https://www.google.com/maps?daddr=" . urlencode($address->address_1 . " " . $address->city . " " . $address->state . " " . $address->zip);
+			$DIRECTIONS_URL = "https://www.google.com/maps?daddr=" . urlencode($address->address_1 . " " . $address->address_2 . " " . $address->city . " " . $address->state . " " . $address->zip);
 			
 		?>
 

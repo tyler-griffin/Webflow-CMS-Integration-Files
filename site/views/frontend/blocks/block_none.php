@@ -1,7 +1,5 @@
-<div>
 
-	<?= _titleTag($page->title) ?>
-
+<div class="text-block">
 	<? printSiteMap(); ?>
-	
 </div>
+

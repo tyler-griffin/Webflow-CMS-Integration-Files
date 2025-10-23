@@ -12,8 +12,8 @@
 					<? if($ITEM->icon && $ITEM->icon != "null") { ?>
 						<span class="alert-icon"><i class="<?= $ITEM->icon ?>"></i></span>
 					<? } ?>
-					<?= nl2br($ITEM->textarea); ?>
-					<? if(json_decode($ITEM->button)->url != '') { ?>
+					<?= $ITEM->alert_text; ?>
+					<? if(json_decode($ITEM->button)->text) { ?>
 						&nbsp;
 						<a class="alert-learn-more-link" href="<?= json_decode($ITEM->button)->url ?>">
 							<div class="alert-learn-more-link-text"><?= json_decode($ITEM->button)->text ?></div>

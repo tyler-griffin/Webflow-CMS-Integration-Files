@@ -43,13 +43,13 @@ if($profile) {
 				<div class="amsd-meta-links-outer-wrapper profile-page">
 					<? if(isset($ITEM->email)) { ?>
 						<div class="amsd-meta-link-wrapper profile-page">
-							<div class="amsd-meta-icon profile page"><i class="fas fa-envelope"></i></div>
+							<div class="amsd-meta-icon profile-page"><i class="fas fa-envelope"></i></div>
 							<a href="mailto:<?= $ITEM->email ?>" class="amsd-meta-link profile-page"><?= $ITEM->email ?></a>
 						</div>
 					<? } ?>
 					<? if(isset($ITEM->phone)) { ?>
 						<div class="amsd-meta-link-wrapper profile-page">
-							<div class="amsd-meta-icon profile page"><i class="fas fa-phone-alt"></i></div>
+							<div class="amsd-meta-icon profile-page"><i class="fas fa-phone-alt"></i></div>
 							<a href="tel:+1<?= $ITEM->phone ?>" class="amsd-meta-link profile-page"><?= $ITEM->phone ?></a>
 						</div>
 					<? } ?>

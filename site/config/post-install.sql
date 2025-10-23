@@ -6,7 +6,7 @@ ALTER TABLE `amsd_cycling_banner` ADD `active` int(11) DEFAULT 1;
 UPDATE `core_pages` SET `exclude_from_nav`='1' WHERE `id`=1;
 ALTER TABLE `amsd_categories` ADD `icon` varchar(255) DEFAULT NULL;
 
-UPDATE `core_developer_settings` SET `value`='/assets/css/cms.css' WHERE `setting`='contentsCSS';
+UPDATE `core_developer_settings` SET `value`='/assets/scss/base.scss' WHERE `setting`='contentsCSS';
 UPDATE `core_developer_settings` SET `value`='1' WHERE `setting`='stylesMenuV2';
 UPDATE `core_developer_settings` SET `value`= NULL WHERE `setting`='showButtonsInStylesMenu';
 UPDATE `core_developer_settings` SET `value`='1' WHERE `setting`='textboxButtonsV2';
@@ -41,7 +41,7 @@ UPDATE `core_developer_settings` SET `value`='[{
 },{
     \"title\": \"Divider\",
     \"class\": \"text-divider\",
-    \"element\": \"div\"  
+    \"element\": \"hr\"  
 },{
     \"title\": \"Call Out Text\",
     \"class\": \"call-out-text\",
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `amsd_alert_bar` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `block` int(11) unsigned NOT NULL DEFAULT 0,
   `icon` varchar(255) DEFAULT NULL,
-  `textarea` text DEFAULT NULL,
+  `alert_text` text DEFAULT NULL,
   `button` text DEFAULT NULL,
   `active` int(11) unsigned DEFAULT NULL,
   `pos` int(11) unsigned NOT NULL DEFAULT 0,

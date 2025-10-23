@@ -62,14 +62,10 @@ if($profile) {
 			<label for="news-select" class="amsd-select-form-label">Filter by Month</label>
 			<div class="form-input select-input-wrapper">
 				<select id="news-select" class="input-field select-input no-floating-label category-filter w-select">
-					<option value="">
-					<? if($ARCHIVE["selected"]) { ?><?= $ARCHIVE["selected"] ?><? } ?><? if(!$ARCHIVE["selected"]) { ?>Recent Posts<? } ?></option>
-					<? if($ARCHIVE["selected"]) { ?><option value="/<?= $page->uri ?>/">Recent Posts</option><? } ?>
+					<option value="/<?= $page->uri ?>">Recent Posts</option>
 					<? foreach($ARCHIVE["dates"] as $date) { ?>
 						<? $MONTH = "$date->text $date->year" ?>
-						<? if($ARCHIVE["selected"] != $MONTH) { ?>
-			    			<option value="/<?= $page->uri ?>/archive/<?= $date->year ?>/<?= $date->month ?>"><?= $MONTH ?></option>
-						<? } ?>
+			    		<option value="/<?= $page->uri ?>/archive/<?= $date->year ?>/<?= $date->month ?>" <? if(isset($ARCHIVE["selected"]) && $ARCHIVE["selected"] == $MONTH) { ?>selected<? } ?>><?= $MONTH ?></option>
 					<? } ?>
 				</select>
 			</div>

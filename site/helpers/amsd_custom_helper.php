@@ -117,6 +117,18 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
+        case "true_false":
+
+            $OUTPUT = $FIELD->build($KEY, [
+                "type" => "select",
+                "options" => [
+                    "true" => "True",
+                    "false" => "False"
+                ]
+            ], false);
+
+            break;
+
         case "all_day":
 
             $OUTPUT = $FIELD->build($KEY, [
@@ -133,6 +145,17 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
             $OUTPUT = $FIELD->build($KEY, [
                 "type" => "textarea",
                 "rich" => true
+            ], false);
+
+            break;
+
+        case "alert_text":
+
+            $OUTPUT = $FIELD->build($KEY, [
+                "type" => "textarea",
+                "attributes" => [
+                    "data-softlimit" => 200
+                ]
             ], false);
 
             break;

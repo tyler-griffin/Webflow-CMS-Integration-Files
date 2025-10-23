@@ -42,15 +42,10 @@
 
         <form>
 
-            <? if(array_key_exists("category", $item)) { ?>
-            <?= $FIELD->build("category"); ?> 
-            <div class="amsd-hr"></div>  
-            <? } ?>
-        
             <?= $FIELD->build(array_key_exists("focused_img", $item) ? "focused_img" : "img", [
                 "label" => "Image"
             ]); ?>
-            
+
             <div class="amsd-hr"></div>
 
             <?= $FIELD->build("event_title", Array(
@@ -111,6 +106,18 @@
     <div class="amsd-hr"></div>
 
     <?= $FIELD->special("recurrence"); ?>
+
+    <div class="amsd-hr"></div>
+
+    <div class="amsd-section table">
+
+        <form>
+            <?= $FIELD->build("location_title"); ?>
+        </form>
+
+    </div>
+
+    <?= $FIELD->special("map"); ?>
 
     <div class="amsd-hr"></div>
     Event Description

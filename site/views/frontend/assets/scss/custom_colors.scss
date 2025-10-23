@@ -1,0 +1,15 @@
+
+
+@each $palette-name, $palette in $map-color-palettes {
+
+    @each $color-name, $color in $palette {
+
+        .cms-btn-#{$color-name} {
+            background-color: map-get($color, 'hex');
+        }
+
+    }
+
+}
+
+
