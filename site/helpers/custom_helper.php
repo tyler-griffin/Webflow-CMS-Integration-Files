@@ -173,6 +173,13 @@
 
 			$COMMON_ITEMS = strings(COMMON_ITEMS_BLOCK_ID);
 
+			// Remove secondary nav menus from the main nav menu so it's easier to tell what the last nav item is
+			foreach ($C["NAV"] as $k => $ROOT) {
+				if(isset($ROOT->secondary_nav) && $ROOT->secondary_nav != null) {
+					unset($C["NAV"][$k]);
+				}
+			}
+
 			// Loop over main nav items
 			foreach ($C["NAV"] as $k => $ROOT) {
 
