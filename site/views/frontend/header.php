@@ -6,7 +6,7 @@
 
 	* Additional configuration is necessary in:
 
-		/assets/css/cms.css
+		/assets/scss/base.scss
 		footer.php
 
 
