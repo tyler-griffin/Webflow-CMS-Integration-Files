@@ -36,7 +36,7 @@ if($profile) {
 			<div class="amsd-title-text"><?= $ITEM->title ?></div>
 
 			<? if(isset($ITEM->sub_title)) { ?>
-				<p class="amsd-meta-text-profile-page"><?= $ITEM->sub_title ?></p>
+				<div class="amsd-meta-text-profile-page"><?= $ITEM->sub_title ?></div>
 			<? } ?>
 
 			<? if(isset($ITEM->email) || isset($ITEM->phone)) { ?>
@@ -165,7 +165,7 @@ if($profile) {
 									<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-title-text-link <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>"><?= $ITEM->title ?></a>
 
 									<? if(isset($ITEM->sub_title)) { ?>
-										<p class="amsd-meta-text <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>"><?= $ITEM->sub_title ?></p>
+										<div class="amsd-meta-text <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>"><?= $ITEM->sub_title ?></div>
 									<? } ?>
 
 									<? if(isset($ITEM->email) || isset($ITEM->phone)) { ?>
@@ -194,7 +194,7 @@ if($profile) {
 										}
 									}
 									if($itemPreviewText) { ?>
-										<p class="amsd-description-text <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>"><?= $itemPreviewText ?></p>
+										<div class="amsd-description-text <?= $CLASS_GRID ?> <?= $CLASS_STAFF ?>"><?= $itemPreviewText ?></div>
 									<? } ?>
 
 									<? if($link) { ?>
