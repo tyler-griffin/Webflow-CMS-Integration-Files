@@ -8,7 +8,7 @@ window.onload = function(e) {
         $('textarea').attr('maxlength','500000');
 
         function makeTitle(slug) {
-            var words = slug.replace(/_/g, '-').split('-');
+            var words = slug.split('-');
             for (var i = 0; i < words.length; i++) {
                 var word = words[i];
                 words[i] = word.charAt(0).toUpperCase() + word.slice(1);
@@ -16,130 +16,7 @@ window.onload = function(e) {
             return words.join(' ');
         }
 
-        var skipTypes = ['amsd', 'profile', 'common', 'block', 'buttontext', 'nav', 'logo', 'footerlogo', 'alertbar', 'popup', 'tag', 'ifisset'];
-
-        function isSkipType(type) {
-            return skipTypes.indexOf(type) !== -1;
-        }
-
-        function makeSlug(str) {
-            return str.replace(/ /g, "_").replace(/[^\w-]+/g, "").toLowerCase();
-        }
-
-        function tokenizeHtml(html) {
-            var tokens = [];
-            var i = 0;
-            while (i < html.length) {
-                while (i < html.length && /\s/.test(html[i])) i++;
-                if (i >= html.length) break;
-
-                if (html.substring(i, i + 2) === '<?') {
-                    var end = html.indexOf('?>', i);
-                    if (end === -1) end = html.length - 2;
-                    tokens.push({ type: 'php', value: html.substring(i, end + 2) });
-                    i = end + 2;
-                } else if (html[i] === '<') {
-                    var j = i + 1;
-                    var inSingleQuote = false;
-                    var inDoubleQuote = false;
-                    while (j < html.length) {
-                        if (html[j] === "'" && !inDoubleQuote) {
-                            inSingleQuote = !inSingleQuote;
-                        } else if (html[j] === '"' && !inSingleQuote) {
-                            inDoubleQuote = !inDoubleQuote;
-                        } else if (html[j] === '>' && !inSingleQuote && !inDoubleQuote) {
-                            break;
-                        }
-                        j++;
-                    }
-                    tokens.push({ type: 'tag', value: html.substring(i, j + 1) });
-                    i = j + 1;
-                } else {
-                    var nextTag = html.length;
-                    for (var j = i; j < html.length; j++) {
-                        if (html[j] === '<') { nextTag = j; break; }
-                    }
-                    var text = html.substring(i, nextTag).trim();
-                    if (text) {
-                        tokens.push({ type: 'text', value: text });
-                    }
-                    i = nextTag;
-                }
-            }
-            return tokens;
-        }
-
-        function formatHtml(html) {
-            var tokens = tokenizeHtml(html.trim());
-            var indent = 0;
-            var output = [];
-            var tab = '    ';
-            var voidElements = ['area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr'];
-
-            for (var i = 0; i < tokens.length; i++) {
-                var token = tokens[i];
-
-                if (token.type === 'php' || token.type === 'text') {
-                    output.push(tab.repeat(indent) + token.value);
-
-                } else if (token.type === 'tag') {
-                    var tag = token.value;
-                    var isClosing = tag.charAt(1) === '/';
-                    var isSelfClosing = tag.slice(-2) === '/>';
-                    var tagNameMatch = tag.match(/^<\/?(\w+)/);
-                    var tagName = tagNameMatch ? tagNameMatch[1].toLowerCase() : '';
-                    var isVoid = voidElements.indexOf(tagName) !== -1;
-
-                    if (isClosing) {
-                        indent--;
-                        if (indent < 0) indent = 0;
-
-                        /* Merge opening tag + single content + closing tag onto one line */
-                        if (tagName && output.length >= 2) {
-                            var contentLine = output[output.length - 1].trim();
-                            var openLine = output[output.length - 2].trim();
-                            if (openLine.match(new RegExp('^<' + tagName + '(\\s|>)')) &&
-                                !contentLine.match(/^<[^?]/)) {
-                                output.splice(output.length - 2, 2);
-                                output.push(tab.repeat(indent) + openLine + contentLine + tag);
-                                continue;
-                            }
-                        }
-
-                        /* Merge empty elements onto one line (only if prev line is a pure opening tag) */
-                        if (tagName && output.length >= 1) {
-                            var prevLine = output[output.length - 1].trim();
-                            if (prevLine.match(new RegExp('^<' + tagName + '(\\s|>)')) && prevLine.indexOf('</') === -1) {
-                                output.pop();
-                                output.push(tab.repeat(indent) + prevLine + tag);
-                                continue;
-                            }
-                        }
-
-                        output.push(tab.repeat(indent) + tag);
-
-                    } else if (isSelfClosing || isVoid) {
-                        output.push(tab.repeat(indent) + tag);
-
-                    } else {
-                        output.push(tab.repeat(indent) + tag);
-                        indent++;
-                    }
-                }
-            }
-
-            return output.join('\n') + '\n';
-        }
-
         $('#parse').click(function(){
-
-            /* Revoke previous Blob URLs to free memory */
-            if (window.blockBlobUrls) {
-                window.blockBlobUrls.forEach(function(url) {
-                    URL.revokeObjectURL(url);
-                });
-            }
-            window.blockBlobUrls = new Array();
 
             window.blockBuilderData = '';
             window.customFieldData = '';
@@ -147,9 +24,6 @@ window.onload = function(e) {
             window.viewFileNames = '';
             window.blocksCount = 0;
             window.customFieldCount = 0;
-            window.existingCustomFields = new Array();
-            window.existingBlockSlugs = new Array();
-            window.blockFiles = new Array();
 
             $('#data-parsing').html($('#input').val());
 
@@ -171,15 +45,12 @@ window.onload = function(e) {
                 var key = $(this).attr('cybkey');
                 if(!key) { key = config.charAt(0).toUpperCase() + config.slice(1); }
 
-                var itemSlug = makeSlug(key);
+                var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                itemSlug = itemSlug.toLowerCase();
+                        
 
                 if($(this).find('[cybdata]').length !== 0) {
-
-                    if ($.inArray(itemSlug, existingCustomFields) != -1) {
-                        return;
-                    }
-                    existingCustomFields.push(itemSlug);
-
+                    
                     customFieldCount ++;
                     if(customFieldCount != 1) { customFieldData += '        '; }
                     customFieldData += 'case "' + itemSlug + '":';
@@ -201,12 +72,12 @@ window.onload = function(e) {
 
                         var nestedLabel = '';
 
-                        if(isSkipType(nestedConfig) || nestedConfig == 'list') {
+                        if(nestedConfig == 'amsd' || nestedConfig == 'profile' || nestedConfig == 'common' || nestedConfig == 'block' || nestedConfig == 'buttontext' || nestedConfig == 'list' || nestedConfig == 'nav' || nestedConfig == 'logo' || nestedConfig == 'footerlogo' || nestedConfig == 'alertbar' || nestedConfig == 'popup' || nestedConfig == 'tag' || nestedConfig == 'ifisset') {
 
                             /* Skip these field types */
                             return;
 
-                        } else if(nestedConfig == '' || nestedConfig == 'title' || nestedConfig == 'text' || nestedConfig == 'txt' || nestedConfig == 'videobg' || nestedConfig == 'vimeobg' || nestedConfig == 'youtubebg') {
+                        } else if(nestedConfig == '' || nestedConfig == 'title' || nestedConfig == 'text' || nestedConfig == 'txt' || nestedConfig == 'videobg') {
 
                             nestedConfig = 'text';
 
@@ -241,7 +112,8 @@ window.onload = function(e) {
                         }
 
                         if(!nestedKey) { nestedKey = nestedConfig; }
-                        var nestedSlug = makeSlug(nestedKey);
+                        var nestedSlug = nestedKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                        nestedSlug = nestedSlug.toLowerCase();
 
                         if(nestedLabel == '') {
                             nestedLabel = makeTitle(nestedKey);
@@ -286,13 +158,15 @@ window.onload = function(e) {
                     return;
                 }
 
+                blocksCount++;
+
                 var title =  '';
                 if($(this).attr('cybkey')) {
                     title = makeTitle($(this).attr('cybkey'));
                 } else {
                     if($(this).attr('class')) {
                         title = makeTitle($(this).attr('class').split(' ')[0]);
-                    }
+                    }  
                 }
                 if(title == '') {
                     title = 'Custom Block';
@@ -301,20 +175,7 @@ window.onload = function(e) {
                 var blockSlug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
                 blockSlug = blockSlug.toLowerCase();
 
-                if ($.inArray(blockSlug, existingBlockSlugs) != -1) {
-                    return;
-                }
-                existingBlockSlugs.push(blockSlug);
-
-                blocksCount++;
-
                 viewFileNames += '/strings/' + blockSlug + '.php<br>';
-                blockFiles.push({
-                    filename: blockSlug + '.php',
-                    displayPath: '/strings/' + blockSlug + '.php',
-                    startMarker: '<?/* Strings Block Template for /blocks/amsd/templates/strings/' + blockSlug + '.php */?>',
-                    endMarker: '<?/* End of Strings Block Template */?>'
-                });
 
                 if(blocksCount != 1) { blockBuilderData += '    '; }
                 blockBuilderData += '$items[] = [';
@@ -358,15 +219,16 @@ window.onload = function(e) {
                     }
                     existingBlockBuilderFields.push(key);
 
-                    var itemSlug = makeSlug(key);
+                    var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                    itemSlug = itemSlug.toLowerCase();
 
-                    if(isSkipType(config)) {
+                    if(config == 'amsd' || config == 'profile' || config == 'common' || config == 'block' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag' || config == 'ifisset') {
 
                         /* Skip these field types */
                         return;
 
-                    } else if(config == '' || config == 'title' || config == 'text' || config == 'txt' || config == 'videobg' || config == 'vimeobg' || config == 'youtubebg') {
-
+                    } else if(config == '' || config == 'title' || config == 'text' || config == 'txt' || config == 'videobg') {
+                        
                         config = '';
 
                     } else if(config == 'list') {
@@ -375,7 +237,7 @@ window.onload = function(e) {
 
                     } else if(config.substring(0,11) == 'previewtext') {
 
-                        if(itemSlug == config) {
+                        if(itemSlug = config) {
                             itemSlug = 'preview_text';
                         }
                         config = 'textarea';
@@ -424,6 +286,8 @@ window.onload = function(e) {
                             return;
                         }
 
+                        hasAdditionalSettings = true;
+
                         var additionalSettingsItemConfig = $(this).attr('cybdata');
 
                         if(additionalSettingsItemConfig == 'profileurl') {
@@ -437,10 +301,12 @@ window.onload = function(e) {
                         if ($.inArray(additionalSettingsItemKey, existingAdditionalSettingsFields) != -1) {
                             return;
                         }
+                        existingAdditionalSettingsFields.push(additionalSettingsItemKey);
 
-                        var additionalSettingsItemSlug = makeSlug(additionalSettingsItemKey);
+                        var additionalSettingsItemSlug = additionalSettingsItemKey.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                        additionalSettingsItemSlug = additionalSettingsItemSlug.toLowerCase();
 
-                        if(isSkipType(additionalSettingsItemConfig)) {
+                        if(additionalSettingsItemConfig == 'amsd' || additionalSettingsItemConfig == 'profile' || additionalSettingsItemConfig == 'common' || additionalSettingsItemConfig == 'block' || additionalSettingsItemConfig == 'buttontext' || additionalSettingsItemConfig == 'nav' || additionalSettingsItemConfig == 'logo' || additionalSettingsItemConfig == 'footerlogo' || additionalSettingsItemConfig == 'alertbar' || additionalSettingsItemConfig == 'popup' || additionalSettingsItemConfig == 'tag' || additionalSettingsItemConfig == 'ifisset') {
 
                             /* Skip these field types */
                             return;
@@ -467,9 +333,6 @@ window.onload = function(e) {
 
                         }
 
-                        hasAdditionalSettings = true;
-                        existingAdditionalSettingsFields.push(additionalSettingsItemKey);
-
                         additionalSettingsData += '\n                [';
                         additionalSettingsData += '\n                    "key" => "' + additionalSettingsItemKey + '",';
                         additionalSettingsData += '\n                    "value" => NULL,';
@@ -479,13 +342,15 @@ window.onload = function(e) {
                     });
                 }
 
+                blocksCount++;
+
                 var title =  '';
                 if($(this).attr('cybkey')) {
                     title = makeTitle($(this).attr('cybkey'));
                 } else {
                     if($(this).attr('class')) {
                         title = makeTitle($(this).attr('class').split(' ')[0]);
-                    }
+                    }  
                 }
                 if(title == '') {
                     title = 'Custom Sorted List Block';
@@ -493,23 +358,9 @@ window.onload = function(e) {
 
                 var blockSlug = title.replace(/ /g, "-").replace(/[^\w-]+/g, "");
                 blockSlug = blockSlug.toLowerCase();
-
-                if ($.inArray(blockSlug, existingBlockSlugs) != -1) {
-                    return;
-                }
-                existingBlockSlugs.push(blockSlug);
-
-                blocksCount++;
-
                 var amsdSlug = 'amsd_' + blockSlug.replace(/-/g, "_");
 
                 viewFileNames += amsdSlug + '.php<br>';
-                blockFiles.push({
-                    filename: amsdSlug + '.php',
-                    displayPath: amsdSlug + '.php',
-                    startMarker: '<?/* AMSD Block Template for /blocks/amsd/templates/' + amsdSlug + '.php */?>',
-                    endMarker: '<?/* End of AMSD Block Template */?>'
-                });
 
                 if(blocksCount != 1) { blockBuilderData += '    '; }
                 blockBuilderData += '$items[] = [';
@@ -573,12 +424,13 @@ window.onload = function(e) {
                     }
                     existingAMSDFields.push(key);
 
-                    var itemSlug = makeSlug(key);
+                    var itemSlug = key.replace(/ /g, "_").replace(/[^\w-]+/g, "");
+                    itemSlug = itemSlug.toLowerCase();
 
                     var name = config;
                     var dataType = 'varchar(255)';
 
-                    if(isSkipType(config)) {
+                    if(config == 'profile' || config == 'common' || config == 'block' || config == 'buttontext' || config == 'nav' || config == 'logo' || config == 'footerlogo' || config == 'alertbar' || config == 'popup' || config == 'tag' || config == 'ifisset') {
 
                         /* Skip these field types */
                         return;
@@ -648,11 +500,6 @@ window.onload = function(e) {
                                 /* Skip */
 
                             } else {
-                                if ($.inArray(itemSlug, existingCustomFields) != -1) {
-                                    return;
-                                }
-                                existingCustomFields.push(itemSlug);
-
                                 customFieldCount ++;
                                 if(customFieldCount != 1) { customFieldData += '        '; }
                                 customFieldData += 'case "' + itemSlug + '":';
@@ -693,6 +540,13 @@ window.onload = function(e) {
 
             });
 
+            if(viewFileNames != '') {
+                viewFileNames = 'Create block template files in: /blocks/amsd/templates/<br>' + viewFileNames;
+                /* Remove last line break */
+                viewFileNames = viewFileNames.slice(0,-4);
+            }
+            $('#view-files-output').html(viewFileNames);
+
             $('#block-builder-data-output').val(blockBuilderData);
             $('#amsd-table-sql-output').val(amsdTableSQL);
             $('#custom-field-data-output').val(customFieldData);
@@ -712,7 +566,6 @@ window.onload = function(e) {
             $('#parsing').find('[cybdata]').each(function() {
 
                 var type = $(this).attr('cybdata');
-                var originalType = type;
                 var key = $(this).attr('cybkey');
                 var prefix = "$DATA['";
                 var suffix = "']";
@@ -864,11 +717,6 @@ window.onload = function(e) {
                     }
 
                     if(type == 'amsd') {
-                        /* If not inside a block, add template markers around the element */
-                        if($(this).parents('[cybdata="block"]').length == 0) {
-                            $(this).before('\n\n<?/* AMSD Block Template for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n<? $DATA = strings($block->id); ?>\n');
-                            $(this).after('\n<?/* End of AMSD Block Template */?>\n\n');
-                        }
                         $(this).children().first().before('\n<?/* AMSD Loop for /blocks/amsd/templates/' + amsdSlug + '.php */?>\n');
                         $(this).children().first().before('<? foreach($amsd["data"] as $k => $ITEM) { ?>\n').after("\n<? } ?>\n\n<?/* End of AMSD Loop */?>\n");
                     } else {
@@ -889,7 +737,7 @@ window.onload = function(e) {
                     $(this).html('<?= isset(' + prefix + key + suffix + ') ? nl2br(' + prefix + key + suffix + ') : character_limiter(strip_tags(' + prefix + 'html' + suffix + '), ' + htmlCharLimit + '); ?>');
 
 
-                } else if(type == 'videobg' || type == 'vimeobg' || type == 'youtubebg') {
+                } else if(type == 'videobg') {
 
                     $(this).replaceWith('<? $video = parseVideo(' + prefix + key + suffix + '); ?>\n<? if($video["host"] == "youtube") { $backgroundVideoSrc = "https://www.youtube.com/embed/" . $video["id"] . "?autoplay=1&amp;controls=0&amp;rel=0&amp;mute=1&amp;loop=1&amp;playlist=" . $video["id"]; } else if($video["host"] == "vimeo") { $backgroundVideoSrc = "https://player.vimeo.com/video/" . $video["id"] . "?background=1"; } ?>\n<? if($video["id"]) { ?>\n<div class="video-background-wrapper-outer visible">\n<div class="video-background-wrapper-inner">\n<div class="video-background">\n<iframe class="cms-video-vimeo" src="<?= $backgroundVideoSrc ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>\n</div>\n</div>\n</div>\n<? } ?>');
 
@@ -928,7 +776,7 @@ window.onload = function(e) {
                 } else if(type == 'email') {
 
                     $(this).removeAttr("target");
-                    $(this).attr("href","mailto:<?= " + prefix + key + suffix + " ?>");
+                    $(this).attr("href","mailto:+<?= " + prefix + key + suffix + " ?>");
                     $(this).html("<?= " + prefix + key + suffix + " ?>");
 
                 } else if(type == 'button') {
@@ -960,11 +808,11 @@ window.onload = function(e) {
                 } else if(type == 'icon') {
 
                     $(this).removeClass('w-embed');
-                    $(this).html('<?= fa_icon(' + prefix + key + suffix + ') ?>');
+                    $(this).html('<i class="<?= ' + prefix + key + suffix + ' ?>">');
 
                 } else if(type == 'url') {
 
-                    if(originalType == 'profileurl') {
+                    if($(this).attr('cybdata') == 'profileurl') {
 
                         $(this).removeAttr("target");
                         $(this).attr("href","<?= isset($ITEM->url) ? $ITEM->url : amsdProfileSlug($page, $amsd, $ITEM); ?>");
@@ -1003,58 +851,7 @@ window.onload = function(e) {
 
             var phpOutput = $('#parsing').html().replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->').replace('{{greaterthan}}', '>');
 
-            $('#php-output').val(formatHtml(phpOutput));
-
-            /* --- Create downloadable block template files --- */
-            if (blockFiles.length > 0) {
-                var downloadLinks = 'Create block template files in: /blocks/amsd/templates/<br>';
-                var zip = new JSZip();
-                var stringsFolder = zip.folder('strings');
-                var hasFiles = false;
-
-                blockFiles.forEach(function(block, index) {
-                    var startIdx = phpOutput.indexOf(block.startMarker);
-                    var endIdx = phpOutput.indexOf(block.endMarker, startIdx);
-                    if (startIdx !== -1 && endIdx !== -1) {
-                        var contentStart = startIdx + block.startMarker.length;
-                        var content = phpOutput.substring(contentStart, endIdx).trim();
-                        content = formatHtml(content);
-
-                        var blob = new Blob([content], { type: 'application/x-php' });
-                        var url = URL.createObjectURL(blob);
-                        blockBlobUrls.push(url);
-                        downloadLinks += '<a href="' + url + '" download="' + block.filename + '">' + block.displayPath + '</a>';
-
-                        /* Add file to zip */
-                        if (block.displayPath.indexOf('/strings/') === 0) {
-                            stringsFolder.file(block.filename, content);
-                        } else {
-                            zip.file(block.filename, content);
-                        }
-                        hasFiles = true;
-                    } else {
-                        downloadLinks += block.displayPath;
-                    }
-                    if (index < blockFiles.length - 1) {
-                        downloadLinks += '<br>';
-                    }
-                });
-
-                /* Generate zip download link */
-                if (hasFiles) {
-                    downloadLinks += '<br><br>';
-                    zip.generateAsync({ type: 'blob' }).then(function(zipBlob) {
-                        var zipUrl = URL.createObjectURL(zipBlob);
-                        blockBlobUrls.push(zipUrl);
-                        downloadLinks += '<a href="' + zipUrl + '" download="templates.zip">Download All (templates.zip)</a>';
-                        $('#view-files-output').html(downloadLinks);
-                    });
-                } else {
-                    $('#view-files-output').html(downloadLinks);
-                }
-            } else {
-                $('#view-files-output').html('');
-            }
+            $('#php-output').val(phpOutput);
 
             $('#parsing').html('');
             $('#php-output').focus();
