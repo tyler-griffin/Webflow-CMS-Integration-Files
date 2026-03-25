@@ -1,1 +1,0 @@
-<? include("amsd_standard.php"); ?>
