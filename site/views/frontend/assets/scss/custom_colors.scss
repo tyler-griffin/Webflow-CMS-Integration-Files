@@ -1,15 +1,10 @@
 
-/* Create classes for text color and bg color */
 
 @each $palette-name, $palette in $map-color-palettes {
 
     @each $color-name, $color in $palette {
 
-        .cms-color-#{$color-name} {
-            color: map-get($color, 'hex');
-        }
-
-        .cms-bg-color-#{$color-name} {
+        .cms-btn-#{$color-name} {
             background-color: map-get($color, 'hex');
         }
 

@@ -6,9 +6,8 @@
 
 	* Additional configuration is necessary in:
 
-		/assets/scss/base.scss
+		/assets/css/cms.css
 		footer.php
-
 
 	* Double check the files below to make sure common variables are correct such as ALERT_BAR_BLOCK_ID, $DEV_CONFIG, $COMMON_ITEMS
 

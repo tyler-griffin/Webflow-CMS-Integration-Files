@@ -29,7 +29,7 @@ if($profile) {
 			<div class="amsd-title-text"><?= $ITEM->title ?></div>
 
 			<? if(isset($ITEM->sub_title)) { ?>
-				<div class="amsd-meta-text-profile-page"><?= $ITEM->sub_title ?></div>
+				<p class="amsd-meta-text-profile-page"><?= $ITEM->sub_title ?></p>
 			<? } ?>
 
 		</div>
@@ -138,12 +138,12 @@ if($profile) {
 
 					<div class="amsd-text-wrapper <?= $CLASS_GRID ?>">
 
-						<div class="amsd-meta-text news-meta-text"><?= date("F j, Y", strtotime($ITEM->publish_date)); ?></div>
+						<p class="amsd-meta-text news-meta-text"><?= date("F j, Y", strtotime($ITEM->publish_date)); ?></p>
 
 						<a <? if($link) { ?>href="<?= $link ?>"<? } ?> class="amsd-title-text-link <?= $CLASS_GRID ?>"><?= $ITEM->title ?></a>
 
 						<? if(isset($ITEM->category) || isset($ITEM->author)) { ?>
-							<div class="amsd-description-text grid">
+							<p class="amsd-description-text grid">
 								<? if(isset($ITEM->category)) { ?>
 									<div class="amsd-meta-text-link"><? if($CATEGORY->icon && $CATEGORY->icon != 'null') { ?><span class="amsd-description-text-icon"><i class="<?= $CATEGORY->icon ?>"></i></span> <? } ?><?= $CATEGORY->title ?></div>
 								<? } ?>
@@ -153,7 +153,7 @@ if($profile) {
 								<? if(isset($ITEM->author)) { ?>
 									<div class="amsd-meta-text-link"><span class="amsd-description-text-icon"><i class="fas fa-user"></i></span> <?= $ITEM->author ?></div>
 								<? } ?>
-							</div>
+							</p>
 						<? } ?>
 
 						<? $itemPreviewText = false;
@@ -163,7 +163,7 @@ if($profile) {
 							$itemPreviewText = character_limiter(strip_tags($ITEM->html), 500);
 						}
 						if(isset($itemPreviewText)) { ?>
-							<div class="amsd-description-text <?= $CLASS_GRID ?>"><?= $itemPreviewText ?></div>
+							<p class="amsd-description-text <?= $CLASS_GRID ?>"><?= $itemPreviewText ?></p>
 						<? } ?>
 
 
