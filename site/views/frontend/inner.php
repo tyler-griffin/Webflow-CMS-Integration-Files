@@ -1,6 +1,7 @@
 <? include(FRONTEND . "/header.php"); ?>
 
 <? // Create variable for title text
+$titleText = $page->title;
 if($page->settings["Banner Title"]) {
 	$titleText = $page->settings["Banner Title"];
 } ?>
@@ -21,9 +22,7 @@ if(isset($page->settings["Banner Image"])) {
 	<div class="title-content-outer-wrapper">
 		<div class="title-content-inner-wrapper">
 
-			<? if($titleText) { ?>
-				<h1 class="title"><?= $titleText ?></h1>
-			<? } ?>
+			<h1 class="title"><?= $titleText ?></h1>
 
 			<? if(isset($subtitleText)) { ?><div class="subtitle-text"><?= $subtitleText ?></div><? } ?>
 

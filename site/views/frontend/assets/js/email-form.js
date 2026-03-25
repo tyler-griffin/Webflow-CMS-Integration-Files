@@ -12,6 +12,9 @@ var EMAIL_FORM = function($FORM) {
 			VALIDATOR["message"](OPTIONS["messages"]["validating"]);
 			
 			var FROM = CONFIG["from"];
+			
+			// Record Audience Builder Conversion
+			if(typeof(report_form_block_conversion) == "function") { report_form_block_conversion(BLOCK_ID); }
 
 			// Post to CMS backend
 			CMS.email.process(BLOCK_ID, $FORM, { 
@@ -26,9 +29,6 @@ var EMAIL_FORM = function($FORM) {
 				} else {
 					
 					if(R["status"] == "success") {
-
-						// Record Audience Builder Conversion
-						if(typeof(report_form_block_conversion) == "function") { report_form_block_conversion(BLOCK_ID); }
 						
 						VALIDATOR["customSuccessMessage"]();
 							

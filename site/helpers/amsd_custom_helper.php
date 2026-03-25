@@ -117,6 +117,36 @@ function field_builder_custom_preset($KEY, $CONFIG, $BLOCK, $ITEM, $GRID, $FILTE
 
             break;
 
+        case "focused_img":
+ 
+            $OUTPUT = $FIELD->build($KEY, [
+                "type" => "focused_img",
+                "label" => "Image"
+            ], false);
+     
+            break;
+
+        case "img":
+ 
+            $OUTPUT = $FIELD->build($KEY, [
+                "type" => "img",
+                "label" => "Image"
+            ], false);
+     
+            break;
+
+        case "img_fit":
+
+            $OUTPUT = $FIELD->build($KEY, [
+                "type" => "select",
+                "options" => [
+                    "contain" => "Fit Entire Image",
+                    "cover" => "Fill Area (Crop as Needed)"
+                ]
+            ], false);
+
+            break;
+
         case "true_false":
 
             $OUTPUT = $FIELD->build($KEY, [
