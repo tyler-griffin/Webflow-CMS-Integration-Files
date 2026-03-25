@@ -16,7 +16,7 @@ window.onload = function(e) {
             return words.join(' ');
         }
 
-        var skipTypes = ['amsd', 'profile', 'common', 'block', 'buttontext', 'nav', 'logo', 'footerlogo', 'alertbar', 'popup', 'tag', 'ifisset'];
+        var skipTypes = ['amsd', 'profile', 'common', 'header', 'footer', 'block', 'buttontext', 'nav', 'logo', 'footerlogo', 'alertbar', 'popup', 'tag', 'ifisset', 'style', 'script'];
 
         function isSkipType(type) {
             return skipTypes.indexOf(type) !== -1;
@@ -131,6 +131,189 @@ window.onload = function(e) {
             return output.join('\n') + '\n';
         }
 
+        function formatCss(css) {
+            var result = '';
+            var indent = 0;
+            var tab = '    ';
+            /* Remove extra whitespace and normalize */
+            css = css.replace(/\s+/g, ' ').trim();
+            for (var i = 0; i < css.length; i++) {
+                var ch = css[i];
+                if (ch === '{') {
+                    result += ' {\n';
+                    indent++;
+                    /* Skip whitespace after { */
+                    while (i + 1 < css.length && css[i + 1] === ' ') i++;
+                } else if (ch === '}') {
+                    indent--;
+                    if (indent < 0) indent = 0;
+                    result = result.replace(/\s+$/, '\n');
+                    result += tab.repeat(indent) + '}\n';
+                    if (indent === 0) result += '\n';
+                    /* Skip whitespace after } */
+                    while (i + 1 < css.length && css[i + 1] === ' ') i++;
+                } else if (ch === ';') {
+                    result += ';\n';
+                    /* Skip whitespace after ; */
+                    while (i + 1 < css.length && css[i + 1] === ' ') i++;
+                } else if (result.slice(-1) === '\n') {
+                    result += tab.repeat(indent) + ch;
+                } else {
+                    result += ch;
+                }
+            }
+            return result.trim() + '\n';
+        }
+
+        function formatJs(js) {
+            var result = '';
+            var indent = 0;
+            var tab = '    ';
+            var inString = false;
+            var stringChar = '';
+            var inLineComment = false;
+            var inBlockComment = false;
+
+            js = js.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+            var lines = js.split('\n');
+
+            for (var l = 0; l < lines.length; l++) {
+                var line = lines[l].trim();
+                if (!line) {
+                    result += '\n';
+                    continue;
+                }
+
+                /* Decrease indent for lines starting with } or ] */
+                if (line.match(/^[}\]]/)) {
+                    indent--;
+                    if (indent < 0) indent = 0;
+                }
+
+                result += tab.repeat(indent) + line + '\n';
+
+                /* Track braces outside of strings and comments for indent */
+                for (var i = 0; i < line.length; i++) {
+                    var ch = line[i];
+                    var next = i + 1 < line.length ? line[i + 1] : '';
+
+                    if (inLineComment) break;
+                    if (inBlockComment) {
+                        if (ch === '*' && next === '/') { inBlockComment = false; i++; }
+                        continue;
+                    }
+                    if (inString) {
+                        if (ch === '\\') { i++; continue; }
+                        if (ch === stringChar) inString = false;
+                        continue;
+                    }
+
+                    if (ch === '/' && next === '/') break;
+                    if (ch === '/' && next === '*') { inBlockComment = true; i++; continue; }
+                    if (ch === '"' || ch === "'" || ch === '`') { inString = true; stringChar = ch; continue; }
+                    if (ch === '{' || ch === '[') indent++;
+                    if (ch === '}' || ch === ']') indent--;
+                }
+                if (indent < 0) indent = 0;
+                inLineComment = false;
+            }
+            return result.trim() + '\n';
+        }
+
+        /* --- Webflow Export Zip Upload --- */
+        $('#zip-upload').on('change', function(e) {
+            var file = e.target.files[0];
+            if (!file) return;
+
+            $('#zip-status').text(' Loading...');
+
+            JSZip.loadAsync(file).then(function(zip) {
+                /* Find index.html in the zip (may be in a subfolder) */
+                var indexFile = null;
+                zip.forEach(function(path, entry) {
+                    if (!entry.dir && path.match(/\/index\.html$/) || path === 'index.html') {
+                        if (!indexFile || path.length < indexFile.length) {
+                            indexFile = path;
+                        }
+                    }
+                });
+
+                if (!indexFile) {
+                    $('#zip-status').text(' Error: No index.html found in zip');
+                    return;
+                }
+
+                /* Determine the base folder path */
+                var basePath = indexFile.replace('index.html', '');
+
+                /* Read index.html first to extract nav links */
+                zip.file(indexFile).async('string').then(function(indexHtml) {
+                    var parser = new DOMParser();
+                    var doc = parser.parseFromString(indexHtml, 'text/html');
+
+                    /* Find all nav links that point to local .html files */
+                    var navEl = doc.querySelector('[cybdata="nav"]');
+                    var linkedPages = [];
+                    if (navEl) {
+                        var links = navEl.querySelectorAll('a[href]');
+                        links.forEach(function(a) {
+                            var href = a.getAttribute('href');
+                            if (href && href.match(/^[^#\/][^:]*\.html$/) && href !== 'index.html' && linkedPages.indexOf(href) === -1) {
+                                linkedPages.push(href);
+                            }
+                        });
+                    }
+
+                    /* Extract the body content from index.html */
+                    var bodyEl = doc.querySelector('body');
+                    var combinedHtml = bodyEl ? bodyEl.innerHTML : indexHtml;
+
+                    /* Load each linked page and extract non-common content */
+                    var pagePromises = linkedPages.map(function(page) {
+                        var pagePath = basePath + page;
+                        var pageFile = zip.file(pagePath);
+                        if (!pageFile) return Promise.resolve('');
+
+                        return pageFile.async('string').then(function(pageHtml) {
+                            var pageDoc = parser.parseFromString(pageHtml, 'text/html');
+                            var pageBody = pageDoc.querySelector('body');
+                            if (!pageBody) return '';
+
+                            /* Remove all common/header/footer sections */
+                            var commonEls = pageBody.querySelectorAll('[cybdata="common"], [cybdata="header"], [cybdata="footer"]');
+                            commonEls.forEach(function(el) { el.remove(); });
+
+                            /* Only return content that has cybdata attributes (skip pages with no CMS content) */
+                            if (pageBody.querySelectorAll('[cybdata]').length === 0) return '';
+
+                            return '\n<!-- Content from Page: ' + page + ' -->\n' + pageBody.innerHTML + '\n<!-- End of Content from Page: ' + page + ' -->\n';
+                        });
+                    });
+
+                    Promise.all(pagePromises).then(function(pageContents) {
+                        var loadedPages = [];
+                        var additionalContent = '';
+                        pageContents.forEach(function(content, index) {
+                            if (content !== '') {
+                                loadedPages.push(linkedPages[index]);
+                                additionalContent += content;
+                            }
+                        });
+                        var fullHtml = combinedHtml + additionalContent;
+
+                        $('#input').val(fullHtml);
+                        var statusText = ' Loaded index.html';
+                        if (loadedPages.length > 0) {
+                            statusText += ' + ' + loadedPages.length + ' linked pages:<br>' + loadedPages.join('<br>');
+                        }
+                        $('#zip-status').html(statusText);
+                    });
+                });
+            }).catch(function(err) {
+                $('#zip-status').text(' Error: ' + err.message);
+            });
+        });
+
         $('#parse').click(function(){
 
             /* Revoke previous Blob URLs to free memory */
@@ -144,6 +327,8 @@ window.onload = function(e) {
             window.blockBuilderData = '';
             window.customFieldData = '';
             window.amsdTableSQL = '';
+            window.customStyles = '';
+            window.customScripts = '';
             window.viewFileNames = '';
             window.blocksCount = 0;
             window.customFieldCount = 0;
@@ -700,7 +885,60 @@ window.onload = function(e) {
 
             /* --- CREATE PHP VIEW FOR TEMPLATE FILE --- */
 
-            $('#parsing').html($('#input').val());
+            var parsingInput = $('#input').val();
+
+            /* Extract cybdata="style" content before DOM injection (browsers consume <style> tags) */
+            /* Use a temporary detached element to parse without the browser consuming styles */
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = parsingInput.replace(/<style/gi, '<pre data-was-style ').replace(/<\/style>/gi, '</pre>');
+            $(tempDiv).find('[cybdata="style"]').each(function() {
+                var styleEls = $(this).is('[data-was-style]') ? $(this) : $(this).find('[data-was-style]');
+                styleEls.each(function() {
+                    var css = $(this).text().trim();
+                    if (css && customStyles.indexOf(css) === -1) {
+                        customStyles += css + '\n\n';
+                    }
+                });
+            });
+            $('#custom-styles-output').val(customStyles.trim() ? formatCss(customStyles) : '');
+
+            /* Create download link for custom styles */
+            if (customStyles.trim()) {
+                var formattedStyles = formatCss(customStyles);
+                var stylesBlob = new Blob([formattedStyles], { type: 'text/scss' });
+                var stylesUrl = URL.createObjectURL(stylesBlob);
+                blockBlobUrls.push(stylesUrl);
+                $('#custom-styles-download').html('<a href="' + stylesUrl + '" download="custom_styles.scss">Download custom_styles.scss</a>');
+            } else {
+                $('#custom-styles-download').html('');
+            }
+
+            /* Extract cybdata="script" content before DOM injection (browsers execute <script> tags) */
+            var tempDivJs = document.createElement('div');
+            tempDivJs.innerHTML = parsingInput.replace(/<script/gi, '<pre data-was-script ').replace(/<\/script>/gi, '</pre>');
+            $(tempDivJs).find('[cybdata="script"]').each(function() {
+                var scriptEls = $(this).is('[data-was-script]') ? $(this) : $(this).find('[data-was-script]');
+                scriptEls.each(function() {
+                    var js = $(this).text().trim();
+                    if (js && customScripts.indexOf(js) === -1) {
+                        customScripts += js + '\n\n';
+                    }
+                });
+            });
+            $('#custom-scripts-output').val(customScripts.trim() ? formatJs(customScripts) : '');
+
+            /* Create download link for custom scripts */
+            if (customScripts.trim()) {
+                var formattedScripts = formatJs(customScripts);
+                var scriptsBlob = new Blob([formattedScripts], { type: 'application/javascript' });
+                var scriptsUrl = URL.createObjectURL(scriptsBlob);
+                blockBlobUrls.push(scriptsUrl);
+                $('#custom-scripts-download').html('<a href="' + scriptsUrl + '" download="scripts.js">Download scripts.js</a>');
+            } else {
+                $('#custom-scripts-download').html('');
+            }
+
+            $('#parsing').html(parsingInput);
 
             $('#parsing').find('[cybkey]').each(function() {
                 // Give a blank cybdata attribute to anything that has a cybkey attribute but no cybdata attribute
@@ -766,7 +1004,12 @@ window.onload = function(e) {
 
                 /* --- DATA TYPES --- */
 
-                if(type == 'buttontext') {
+                if(type == 'style' || type == 'script') {
+
+                    /* Remove from PHP output (content already extracted from raw string) */
+                    $(this).remove();
+
+                } else if(type == 'buttontext') {
 
                     /* Skip */
 
@@ -774,6 +1017,16 @@ window.onload = function(e) {
 
                     $(this).before('\n\n<?/* Common Items Area */?>\n');
                     $(this).after('\n<?/* End of Common Items Area */?>\n\n');
+
+                } else if(type == 'header') {
+
+                    $(this).before('\n\n<?/* Header Content for header.php */?>\n');
+                    $(this).after('\n<?/* End of Header Content */?>\n\n');
+
+                } else if(type == 'footer') {
+
+                    $(this).before('\n\n<?/* Footer Content for footer.php */?>\n');
+                    $(this).after('\n<?/* End of Footer Content */?>\n\n');
 
                 } else if(type == 'block') {
 
@@ -992,7 +1245,7 @@ window.onload = function(e) {
 
             });
 
-            $('#parsing').find('[cybdata="common"]').each(function() {
+            $('#parsing').find('[cybdata="common"], [cybdata="header"], [cybdata="footer"]').each(function() {
                 $(this).find('[cybdata]').each(function() {
                     $(this).html($(this).html().replace(/\$DATA/g,'$COMMON_ITEMS'));
                 });
@@ -1009,7 +1262,8 @@ window.onload = function(e) {
             if (blockFiles.length > 0) {
                 var downloadLinks = 'Create block template files in: /blocks/amsd/templates/<br>';
                 var zip = new JSZip();
-                var stringsFolder = zip.folder('strings');
+                var templatesFolder = zip.folder('views/frontend/blocks/amsd/templates');
+                var stringsFolder = templatesFolder.folder('strings');
                 var hasFiles = false;
 
                 blockFiles.forEach(function(block, index) {
@@ -1029,7 +1283,7 @@ window.onload = function(e) {
                         if (block.displayPath.indexOf('/strings/') === 0) {
                             stringsFolder.file(block.filename, content);
                         } else {
-                            zip.file(block.filename, content);
+                            templatesFolder.file(block.filename, content);
                         }
                         hasFiles = true;
                     } else {
@@ -1040,20 +1294,33 @@ window.onload = function(e) {
                     }
                 });
 
+                /* Add custom styles to zip */
+                if (customStyles.trim()) {
+                    zip.folder('views/frontend/assets/scss').file('custom_styles.scss', formatCss(customStyles));
+                    hasFiles = true;
+                }
+
+                /* Add custom scripts to zip */
+                if (customScripts.trim()) {
+                    zip.folder('views/frontend/assets/js').file('scripts.js', formatJs(customScripts));
+                    hasFiles = true;
+                }
+
                 /* Generate zip download link */
                 if (hasFiles) {
-                    downloadLinks += '<br><br>';
                     zip.generateAsync({ type: 'blob' }).then(function(zipBlob) {
                         var zipUrl = URL.createObjectURL(zipBlob);
                         blockBlobUrls.push(zipUrl);
-                        downloadLinks += '<a href="' + zipUrl + '" download="templates.zip">Download All (templates.zip)</a>';
+                        $('#zip-download-button').html('<a href="' + zipUrl + '" download="site.zip" class="button green w-button">Download Parsed Output (site.zip)</a>');
                         $('#view-files-output').html(downloadLinks);
                     });
                 } else {
                     $('#view-files-output').html(downloadLinks);
+                    $('#zip-download-button').html('');
                 }
             } else {
                 $('#view-files-output').html('');
+                $('#zip-download-button').html('');
             }
 
             $('#parsing').html('');
