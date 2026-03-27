@@ -264,6 +264,7 @@ window.onload = function(e) {
             window.zipAssets = null;
             $('#zip-status').html('');
             $('#zip-upload').val('');
+            $(this).removeClass('drag-and-drop');
         });
 
         /* --- Webflow Export Zip Upload --- */
@@ -423,6 +424,7 @@ window.onload = function(e) {
         $('#zip-upload').on('change', function(e) {
             var file = e.target.files[0];
             if (!file) return;
+            $('#input').addClass('drag-and-drop');
             processZipFile(file);
         });
 
@@ -440,7 +442,6 @@ window.onload = function(e) {
             }
         }).on('drop', function() {
             dragCounter = 0;
-            $('#input').removeClass('drag-and-drop');
         });
 
         /* Drag and drop zip onto the textarea */
@@ -453,6 +454,8 @@ window.onload = function(e) {
             var files = e.originalEvent.dataTransfer.files;
             if (files.length > 0 && files[0].name.match(/\.zip$/i)) {
                 processZipFile(files[0]);
+            } else {
+                $('#input').removeClass('drag-and-drop');
             }
         });
 
