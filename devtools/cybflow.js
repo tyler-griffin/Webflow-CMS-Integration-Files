@@ -5,7 +5,7 @@ window.onload = function(e) {
 
         titleCase = (s) => s.replace(/\b\w/g, c => c.toUpperCase());
 
-        $('textarea').attr('maxlength','500000');
+        $('textarea').removeAttr('maxlength');
 
         function makeTitle(slug) {
             var words = slug.replace(/_/g, '-').split('-');
@@ -16,7 +16,7 @@ window.onload = function(e) {
             return words.join(' ');
         }
 
-        var skipTypes = ['amsd', 'profile', 'common', 'header', 'footer', 'block', 'buttontext', 'nav', 'logo', 'footerlogo', 'alertbar', 'popup', 'tag', 'ifisset', 'style', 'script'];
+        var skipTypes = ['amsd', 'profile', 'common', 'header', 'footer', 'block', 'buttontext', 'nav', 'logo', 'footerlogo', 'alertbar', 'popup', 'tag', 'ifisset', 'style', 'script', 'pagebanner', 'pagetitle', 'pagesubtitle', 'breadcrumbs', 'printblocks', 'inner', 'preloader'];
 
         function isSkipType(type) {
             return skipTypes.indexOf(type) !== -1;
@@ -220,6 +220,17 @@ window.onload = function(e) {
             return result.trim() + '\n';
         }
 
+        /* Stores combined HTML from zip upload, bypassing the textarea */
+        window.zipInputHtml = null;
+
+        /* Clear zip data when user manually edits the textarea */
+        $('#input').on('input', function() {
+            window.zipInputHtml = null;
+            window.zipAssets = null;
+            $('#zip-status').html('');
+            $('#zip-upload').val('');
+        });
+
         /* --- Webflow Export Zip Upload --- */
         $('#zip-upload').on('change', function(e) {
             var file = e.target.files[0];
@@ -301,7 +312,51 @@ window.onload = function(e) {
                         });
                         var fullHtml = combinedHtml + additionalContent;
 
-                        $('#input').val(fullHtml);
+                        window.zipInputHtml = fullHtml;
+                        window.zipAssets = { js: {}, css: {}, images: {}, documents: {} };
+
+                        /* Collect all JS files from the /js folder */
+                        var assetPromises = [];
+                        zip.forEach(function(path, entry) {
+                            if (!entry.dir && path.startsWith(basePath + 'js/') && path.endsWith('.js')) {
+                                var filename = path.substring(path.lastIndexOf('/') + 1);
+                                assetPromises.push(
+                                    entry.async('uint8array').then(function(data) {
+                                        window.zipAssets.js[filename] = data;
+                                    })
+                                );
+                            }
+                            /* Collect all image files from the /images folder */
+                            if (!entry.dir && path.startsWith(basePath + 'images/')) {
+                                var imgFilename = path.substring(path.lastIndexOf('/') + 1);
+                                assetPromises.push(
+                                    entry.async('uint8array').then(function(data) {
+                                        window.zipAssets.images[imgFilename] = data;
+                                    })
+                                );
+                            }
+                            /* Collect all document files from the /documents folder */
+                            if (!entry.dir && path.startsWith(basePath + 'documents/')) {
+                                var docFilename = path.substring(path.lastIndexOf('/') + 1);
+                                assetPromises.push(
+                                    entry.async('uint8array').then(function(data) {
+                                        window.zipAssets.documents[docFilename] = data;
+                                    })
+                                );
+                            }
+                            /* Collect all CSS files from the /css folder */
+                            if (!entry.dir && path.startsWith(basePath + 'css/') && path.endsWith('.css')) {
+                                var cssFilename = path.substring(path.lastIndexOf('/') + 1);
+                                assetPromises.push(
+                                    entry.async('uint8array').then(function(data) {
+                                        window.zipAssets.css[cssFilename] = data;
+                                    })
+                                );
+                            }
+                        });
+                        Promise.all(assetPromises);
+
+                        $('#input').val('(Using zip upload - ' + loadedPages.length + ' linked pages detected)');
                         var statusText = ' Loaded index.html';
                         if (loadedPages.length > 0) {
                             statusText += ' + ' + loadedPages.length + ' linked pages:<br>' + loadedPages.join('<br>');
@@ -335,8 +390,16 @@ window.onload = function(e) {
             window.existingCustomFields = new Array();
             window.existingBlockSlugs = new Array();
             window.blockFiles = new Array();
+            window.innerCaptured = false;
+            window.headerCaptured = false;
+            window.footerCaptured = false;
+            window.preloaderCaptured = false;
+            window.preloaderContent = null;
 
-            $('#data-parsing').html($('#input').val());
+            /* Use zip content if available, otherwise use textarea */
+            var inputHtml = window.zipInputHtml || $('#input').val();
+
+            $('#data-parsing').html(inputHtml);
 
             $('#data-parsing').find('[cybkey]').each(function() {
                 // Give a blank cybdata attribute to anything that has a cybkey attribute but no cybdata attribute
@@ -885,7 +948,7 @@ window.onload = function(e) {
 
             /* --- CREATE PHP VIEW FOR TEMPLATE FILE --- */
 
-            var parsingInput = $('#input').val();
+            var parsingInput = inputHtml;
 
             /* Extract cybdata="style" content before DOM injection (browsers consume <style> tags) */
             /* Use a temporary detached element to parse without the browser consuming styles */
@@ -1004,7 +1067,53 @@ window.onload = function(e) {
 
                 /* --- DATA TYPES --- */
 
-                if(type == 'style' || type == 'script') {
+                if(type == 'preloader') {
+
+                    /* Capture first occurrence content for preloader.php */
+                    if (!window.preloaderCaptured) {
+                        window.preloaderContent = $(this).prop('outerHTML');
+                        window.preloaderCaptured = true;
+                    }
+                    $(this).replaceWith('<? include(FRONTEND . "/partials/preloader.php"); ?>');
+
+                } else if(type == 'inner') {
+
+                    /* Only capture the first inner element for inner.php */
+                    if (!window.innerCaptured) {
+                        $(this).before('\n\n<?/* Inner Content for inner.php */?>\n');
+                        $(this).after('\n<?/* End of Inner Content */?>\n\n');
+                        window.innerCaptured = true;
+                    }
+
+                } else if(type == 'printblocks') {
+
+                    /* Mark content boundaries - children will still be processed by the loop */
+                    $(this).prepend('{{PRINTBLOCKS_START}}');
+                    $(this).append('{{PRINTBLOCKS_END}}');
+
+                } else if(type == 'pagetitle') {
+
+                    $(this).html('<?= $titleText ?>');
+                    $(this).before('<? if(isset($titleText)) { ?>');
+                    $(this).after('<? } ?>');
+
+                } else if(type == 'breadcrumbs') {
+
+                    $(this).replaceWith('<? include(FRONTEND . "/partials/breadcrumbs.php"); ?>');
+
+                } else if(type == 'pagesubtitle') {
+
+                    $(this).html('<?= $subtitleText ?>');
+                    $(this).before('<? if(isset($subtitleText)) { ?>');
+                    $(this).after('<? } ?>');
+
+                } else if(type == 'pagebanner') {
+
+                    /* Add interior banner PHP to the element's opening tag */
+                    $(this).removeAttr('style');
+                    $(this).attr('data-pagebanner', 'true');
+
+                } else if(type == 'style' || type == 'script') {
 
                     /* Remove from PHP output (content already extracted from raw string) */
                     $(this).remove();
@@ -1020,13 +1129,19 @@ window.onload = function(e) {
 
                 } else if(type == 'header') {
 
-                    $(this).before('\n\n<?/* Header Content for header.php */?>\n');
-                    $(this).after('\n<?/* End of Header Content */?>\n\n');
+                    if (!window.headerCaptured) {
+                        $(this).before('\n\n<?/* Header Content for /partials/header-content.php */?>\n');
+                        $(this).after('\n<?/* End of Header Content */?>\n\n');
+                        window.headerCaptured = true;
+                    }
 
                 } else if(type == 'footer') {
 
-                    $(this).before('\n\n<?/* Footer Content for footer.php */?>\n');
-                    $(this).after('\n<?/* End of Footer Content */?>\n\n');
+                    if (!window.footerCaptured) {
+                        $(this).before('\n\n<?/* Footer Content for /partials/footer-content.php */?>\n');
+                        $(this).after('\n<?/* End of Footer Content */?>\n\n');
+                        window.footerCaptured = true;
+                    }
 
                 } else if(type == 'block') {
 
@@ -1254,17 +1369,17 @@ window.onload = function(e) {
             $('#parsing').find('[cybdata]').removeAttr('cybdata');
             $('#parsing').find('[cybkey]').removeAttr('cybkey');
 
-            var phpOutput = $('#parsing').html().replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->').replace('{{greaterthan}}', '>');
+            var phpOutput = $('#parsing').html().replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->').replace('{{greaterthan}}', '>').replace(/="images\//g, '="/assets/images/').replace(/="documents\//g, '="/assets/documents/').replace(/ data-pagebanner="true"/g, ' <?= $interiorBannerStyles ?>');
 
-            $('#php-output').val(formatHtml(phpOutput));
+            /* --- Create downloadable files --- */
+            var downloadLinks = 'Download Individual PHP Files:<br>';
+            var zip = new JSZip();
+            var hasFiles = false;
 
-            /* --- Create downloadable block template files --- */
             if (blockFiles.length > 0) {
-                var downloadLinks = 'Create block template files in: /blocks/amsd/templates/<br>';
-                var zip = new JSZip();
-                var templatesFolder = zip.folder('views/frontend/blocks/amsd/templates');
+                var templateBasePath = '/site/views/frontend/blocks/amsd/templates';
+                var templatesFolder = zip.folder('site/views/frontend/blocks/amsd/templates');
                 var stringsFolder = templatesFolder.folder('strings');
-                var hasFiles = false;
 
                 blockFiles.forEach(function(block, index) {
                     var startIdx = phpOutput.indexOf(block.startMarker);
@@ -1272,12 +1387,14 @@ window.onload = function(e) {
                     if (startIdx !== -1 && endIdx !== -1) {
                         var contentStart = startIdx + block.startMarker.length;
                         var content = phpOutput.substring(contentStart, endIdx).trim();
+                        content = content.replace(/\{\{PRINTBLOCKS_START\}\}[\s\S]*?\{\{PRINTBLOCKS_END\}\}/g, '<? include(FRONTEND . "/partials/print-blocks.php"); ?>');
                         content = formatHtml(content);
 
                         var blob = new Blob([content], { type: 'application/x-php' });
                         var url = URL.createObjectURL(blob);
                         blockBlobUrls.push(url);
-                        downloadLinks += '<a href="' + url + '" download="' + block.filename + '">' + block.displayPath + '</a>';
+                        var fullDisplayPath = block.displayPath.indexOf('/strings/') === 0 ? templateBasePath + block.displayPath : templateBasePath + '/' + block.displayPath;
+                        downloadLinks += '<a href="' + url + '" download="' + block.filename + '">' + fullDisplayPath + '</a>';
 
                         /* Add file to zip */
                         if (block.displayPath.indexOf('/strings/') === 0) {
@@ -1287,23 +1404,128 @@ window.onload = function(e) {
                         }
                         hasFiles = true;
                     } else {
-                        downloadLinks += block.displayPath;
+                        var fullFallbackPath = block.displayPath.indexOf('/strings/') === 0 ? templateBasePath + block.displayPath : templateBasePath + '/' + block.displayPath;
+                        downloadLinks += fullFallbackPath;
                     }
                     if (index < blockFiles.length - 1) {
                         downloadLinks += '<br>';
                     }
                 });
+            }
 
                 /* Add custom styles to zip */
                 if (customStyles.trim()) {
-                    zip.folder('views/frontend/assets/scss').file('custom_styles.scss', formatCss(customStyles));
+                    zip.folder('site/views/frontend/assets/scss').file('custom_styles.scss', formatCss(customStyles));
                     hasFiles = true;
                 }
 
                 /* Add custom scripts to zip */
                 if (customScripts.trim()) {
-                    zip.folder('views/frontend/assets/js').file('scripts.js', formatJs(customScripts));
+                    zip.folder('site/views/frontend/assets/js').file('scripts.js', formatJs(customScripts));
                     hasFiles = true;
+                }
+
+                /* Add header content to zip */
+                var headerStartMarker = '<?/* Header Content for /partials/header-content.php */?>';
+                var headerEndMarker = '<?/* End of Header Content */?>';
+                var headerStartIdx = phpOutput.indexOf(headerStartMarker);
+                var headerEndIdx = phpOutput.indexOf(headerEndMarker, headerStartIdx);
+                if (headerStartIdx !== -1 && headerEndIdx !== -1) {
+                    var headerContent = phpOutput.substring(headerStartIdx + headerStartMarker.length, headerEndIdx).trim();
+                    headerContent = formatHtml(headerContent);
+                    zip.folder('site/views/frontend/partials').file('header-content.php', headerContent);
+                    hasFiles = true;
+
+                    var headerBlob = new Blob([headerContent], { type: 'application/x-php' });
+                    var headerUrl = URL.createObjectURL(headerBlob);
+                    blockBlobUrls.push(headerUrl);
+                    downloadLinks += '<br><a href="' + headerUrl + '" download="header-content.php">/site/views/frontend/partials/header-content.php</a>';
+                }
+
+                /* Add footer content to zip */
+                var footerStartMarker = '<?/* Footer Content for /partials/footer-content.php */?>';
+                var footerEndMarker = '<?/* End of Footer Content */?>';
+                var footerStartIdx = phpOutput.indexOf(footerStartMarker);
+                var footerEndIdx = phpOutput.indexOf(footerEndMarker, footerStartIdx);
+                if (footerStartIdx !== -1 && footerEndIdx !== -1) {
+                    var footerContent = phpOutput.substring(footerStartIdx + footerStartMarker.length, footerEndIdx).trim();
+                    footerContent = formatHtml(footerContent);
+                    zip.folder('site/views/frontend/partials').file('footer-content.php', footerContent);
+                    hasFiles = true;
+
+                    var footerBlob = new Blob([footerContent], { type: 'application/x-php' });
+                    var footerUrl = URL.createObjectURL(footerBlob);
+                    blockBlobUrls.push(footerUrl);
+                    downloadLinks += '<br><a href="' + footerUrl + '" download="footer-content.php">/site/views/frontend/partials/footer-content.php</a>';
+                }
+
+                /* Add preloader content to zip */
+                if (window.preloaderContent) {
+                    var preloaderHtml = window.preloaderContent.replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->').replace(/="images\//g, '="/assets/images/').replace(/="documents\//g, '="/assets/documents/');
+                    preloaderHtml = formatHtml(preloaderHtml);
+                    zip.folder('site/views/frontend/partials').file('preloader.php', preloaderHtml);
+                    hasFiles = true;
+
+                    var preloaderBlob = new Blob([preloaderHtml], { type: 'application/x-php' });
+                    var preloaderUrl = URL.createObjectURL(preloaderBlob);
+                    blockBlobUrls.push(preloaderUrl);
+                    downloadLinks += '<br><a href="' + preloaderUrl + '" download="preloader.php">/site/views/frontend/partials/preloader.php</a>';
+                }
+
+                /* Add inner content to zip */
+                var innerStartMarker = '<?/* Inner Content for inner.php */?>';
+                var innerEndMarker = '<?/* End of Inner Content */?>';
+                var innerStartIdx = phpOutput.indexOf(innerStartMarker);
+                var innerEndIdx = phpOutput.indexOf(innerEndMarker, innerStartIdx);
+                if (innerStartIdx !== -1 && innerEndIdx !== -1) {
+                    var innerContent = phpOutput.substring(innerStartIdx + innerStartMarker.length, innerEndIdx).trim();
+                    innerContent = innerContent.replace(/\{\{PRINTBLOCKS_START\}\}[\s\S]*?\{\{PRINTBLOCKS_END\}\}/g, '<? include(FRONTEND . "/partials/print-blocks.php"); ?>');
+                    innerContent = formatHtml(innerContent);
+                    innerContent = '<? include(FRONTEND . "/header.php"); ?>\n\n' + innerContent.trimEnd() + '\n\n<? include(FRONTEND . "/footer.php"); ?>\n';
+                    zip.folder('site/views/frontend').file('inner.php', innerContent);
+                    hasFiles = true;
+
+                    var innerBlob = new Blob([innerContent], { type: 'application/x-php' });
+                    var innerUrl = URL.createObjectURL(innerBlob);
+                    blockBlobUrls.push(innerUrl);
+                    downloadLinks += '<br><a href="' + innerUrl + '" download="inner.php">/site/views/frontend/inner.php</a>';
+                }
+
+                /* Add JS files from zip upload if available */
+                if (window.zipAssets && window.zipAssets.js) {
+                    var jsFolder = zip.folder('site/views/frontend/assets/js');
+                    Object.keys(window.zipAssets.js).forEach(function(filename) {
+                        jsFolder.file(filename, window.zipAssets.js[filename]);
+                        hasFiles = true;
+                    });
+                }
+
+                /* Add document files from zip upload */
+                if (window.zipAssets && window.zipAssets.documents) {
+                    var documentsFolder = zip.folder('site/views/frontend/assets/documents');
+                    Object.keys(window.zipAssets.documents).forEach(function(filename) {
+                        documentsFolder.file(filename, window.zipAssets.documents[filename]);
+                        hasFiles = true;
+                    });
+                }
+
+                /* Add image files from zip upload */
+                if (window.zipAssets && window.zipAssets.images) {
+                    var imagesFolder = zip.folder('site/views/frontend/assets/images');
+                    Object.keys(window.zipAssets.images).forEach(function(filename) {
+                        imagesFolder.file(filename, window.zipAssets.images[filename]);
+                        hasFiles = true;
+                    });
+                }
+
+                /* Add CSS files from zip upload as .scss */
+                if (window.zipAssets && window.zipAssets.css) {
+                    var scssFolder = zip.folder('site/views/frontend/assets/scss');
+                    Object.keys(window.zipAssets.css).forEach(function(filename) {
+                        var scssFilename = filename.replace(/\.css$/, '.scss');
+                        scssFolder.file(scssFilename, window.zipAssets.css[filename]);
+                        hasFiles = true;
+                    });
                 }
 
                 /* Generate zip download link */
@@ -1311,17 +1533,18 @@ window.onload = function(e) {
                     zip.generateAsync({ type: 'blob' }).then(function(zipBlob) {
                         var zipUrl = URL.createObjectURL(zipBlob);
                         blockBlobUrls.push(zipUrl);
-                        $('#zip-download-button').html('<a href="' + zipUrl + '" download="site.zip" class="button green w-button">Download Parsed Output (site.zip)</a>');
+                        $('#zip-download-button').html('<a href="' + zipUrl + '" download="cybflow.zip" class="button green w-button">Download Parsed Output (cybflow.zip)</a>');
                         $('#view-files-output').html(downloadLinks);
                     });
                 } else {
                     $('#view-files-output').html(downloadLinks);
                     $('#zip-download-button').html('');
                 }
-            } else {
-                $('#view-files-output').html('');
-                $('#zip-download-button').html('');
-            }
+
+            /* Replace printblocks and preloader markers with includes (after template files have been extracted) */
+            phpOutput = phpOutput.replace(/\{\{PRINTBLOCKS_START\}\}[\s\S]*?\{\{PRINTBLOCKS_END\}\}/g, '<? include(FRONTEND . "/partials/print-blocks.php"); ?>');
+
+            $('#php-output').val(formatHtml(phpOutput));
 
             $('#parsing').html('');
             $('#php-output').focus();
