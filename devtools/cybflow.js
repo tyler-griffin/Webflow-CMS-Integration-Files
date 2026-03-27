@@ -26,6 +26,41 @@ window.onload = function(e) {
             return str.replace(/ /g, "_").replace(/[^\w-]+/g, "").toLowerCase();
         }
 
+        function extractGoogleFonts(html) {
+            var fontMatch = html.match(/WebFont\.load\(\{[\s\S]*?families:\s*\[([\s\S]*?)\]/);
+            if (!fontMatch) return null;
+            var familyStrings = fontMatch[1].match(/"([^"]+)"/g);
+            if (!familyStrings) return null;
+            var fontParts = [];
+            familyStrings.forEach(function(raw) {
+                var str = raw.replace(/"/g, '');
+                var parts = str.split(':');
+                var name = parts[0];
+                var urlName = name.replace(/ /g, '+');
+                var weights = parts[1] ? parts[1].split(',') : ['400'];
+                var hasItalic = weights.some(function(w) { return w.indexOf('italic') !== -1; });
+                if (hasItalic) {
+                    var specs = [];
+                    weights.forEach(function(w) {
+                        var isItalic = w.indexOf('italic') !== -1;
+                        var num = w.replace('italic', '');
+                        specs.push((isItalic ? '1' : '0') + ',' + num);
+                    });
+                    specs.sort();
+                    fontParts.push('family=' + urlName + ':ital,wght@' + specs.join(';'));
+                } else {
+                    fontParts.push('family=' + urlName + ':wght@' + weights.join(';'));
+                }
+            });
+            return fontParts.join('&');
+        }
+
+        function extractTypekit(html) {
+            var match = html.match(/use\.typekit\.net\/([a-z0-9]+)\.js/);
+            if (!match) return null;
+            return match[1];
+        }
+
         function tokenizeHtml(html) {
             var tokens = [];
             var i = 0;
@@ -232,10 +267,7 @@ window.onload = function(e) {
         });
 
         /* --- Webflow Export Zip Upload --- */
-        $('#zip-upload').on('change', function(e) {
-            var file = e.target.files[0];
-            if (!file) return;
-
+        function processZipFile(file) {
             $('#zip-status').text(' Loading...');
 
             JSZip.loadAsync(file).then(function(zip) {
@@ -313,7 +345,17 @@ window.onload = function(e) {
                         var fullHtml = combinedHtml + additionalContent;
 
                         window.zipInputHtml = fullHtml;
-                        window.zipAssets = { js: {}, css: {}, images: {}, documents: {} };
+                        window.zipAssets = { js: {}, css: {}, images: {}, documents: {}, fontFiles: {}, fonts: null, typekit: null, wfSite: null, wfPage: null };
+
+                        /* Extract Google Fonts and Typekit from index.html */
+                        window.zipAssets.fonts = extractGoogleFonts(indexHtml);
+                        window.zipAssets.typekit = extractTypekit(indexHtml);
+
+                        /* Extract Webflow site/page IDs */
+                        var wfSiteMatch = indexHtml.match(/data-wf-site="([^"]+)"/);
+                        var wfPageMatch = indexHtml.match(/data-wf-page="([^"]+)"/);
+                        if (wfSiteMatch) window.zipAssets.wfSite = wfSiteMatch[1];
+                        if (wfPageMatch) window.zipAssets.wfPage = wfPageMatch[1];
 
                         /* Collect all JS files from the /js folder */
                         var assetPromises = [];
@@ -344,6 +386,15 @@ window.onload = function(e) {
                                     })
                                 );
                             }
+                            /* Collect all font files from the /fonts folder */
+                            if (!entry.dir && path.startsWith(basePath + 'fonts/')) {
+                                var fontFilename = path.substring(path.lastIndexOf('/') + 1);
+                                assetPromises.push(
+                                    entry.async('uint8array').then(function(data) {
+                                        window.zipAssets.fontFiles[fontFilename] = data;
+                                    })
+                                );
+                            }
                             /* Collect all CSS files from the /css folder */
                             if (!entry.dir && path.startsWith(basePath + 'css/') && path.endsWith('.css')) {
                                 var cssFilename = path.substring(path.lastIndexOf('/') + 1);
@@ -367,6 +418,42 @@ window.onload = function(e) {
             }).catch(function(err) {
                 $('#zip-status').text(' Error: ' + err.message);
             });
+        }
+
+        $('#zip-upload').on('change', function(e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            processZipFile(file);
+        });
+
+        /* Show drag-and-drop class on textarea when dragging a file over the page */
+        var dragCounter = 0;
+        $(document).on('dragenter', function(e) {
+            dragCounter++;
+            if (e.originalEvent.dataTransfer.types.indexOf('Files') !== -1) {
+                $('#input').addClass('drag-and-drop');
+            }
+        }).on('dragleave', function() {
+            dragCounter--;
+            if (dragCounter === 0) {
+                $('#input').removeClass('drag-and-drop');
+            }
+        }).on('drop', function() {
+            dragCounter = 0;
+            $('#input').removeClass('drag-and-drop');
+        });
+
+        /* Drag and drop zip onto the textarea */
+        $('#input').on('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }).on('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var files = e.originalEvent.dataTransfer.files;
+            if (files.length > 0 && files[0].name.match(/\.zip$/i)) {
+                processZipFile(files[0]);
+            }
         });
 
         $('#parse').click(function(){
@@ -395,9 +482,36 @@ window.onload = function(e) {
             window.footerCaptured = false;
             window.preloaderCaptured = false;
             window.preloaderContent = null;
+            window.fontImport = null;
+            window.typekitId = null;
 
             /* Use zip content if available, otherwise use textarea */
             var inputHtml = window.zipInputHtml || $('#input').val();
+
+            /* Extract Google Fonts (from zip assets if available, otherwise from input HTML) */
+            if (window.zipAssets && window.zipAssets.fonts) {
+                window.fontImport = window.zipAssets.fonts;
+            } else {
+                window.fontImport = extractGoogleFonts(inputHtml);
+            }
+
+            /* Extract Typekit (from zip assets if available, otherwise from input HTML) */
+            if (window.zipAssets && window.zipAssets.typekit) {
+                window.typekitId = window.zipAssets.typekit;
+            } else {
+                window.typekitId = extractTypekit(inputHtml);
+            }
+
+            /* Extract Webflow site/page IDs */
+            if (window.zipAssets && window.zipAssets.wfSite) {
+                window.wfSite = window.zipAssets.wfSite;
+                window.wfPage = window.zipAssets.wfPage;
+            } else {
+                var wfSiteMatch = inputHtml.match(/data-wf-site="([^"]+)"/);
+                var wfPageMatch = inputHtml.match(/data-wf-page="([^"]+)"/);
+                window.wfSite = wfSiteMatch ? wfSiteMatch[1] : null;
+                window.wfPage = wfPageMatch ? wfPageMatch[1] : null;
+            }
 
             $('#data-parsing').html(inputHtml);
 
@@ -1369,6 +1483,33 @@ window.onload = function(e) {
             $('#parsing').find('[cybdata]').removeAttr('cybdata');
             $('#parsing').find('[cybkey]').removeAttr('cybkey');
 
+            /* Replace spline/rive URLs with local paths and collect for download */
+            window.externalAssets = [];
+            $('#parsing').find('[data-spline-url]').each(function() {
+                var url = $(this).attr('data-spline-url');
+                if (url.indexOf('documents/') !== -1) return;
+                var filenameMatch = url.match(/\/([^\/]+\.splinecode)$/);
+                if (filenameMatch) {
+                    var filename = filenameMatch[1];
+                    if (window.externalAssets.every(function(s) { return s.filename !== filename; })) {
+                        window.externalAssets.push({ url: url, filename: filename });
+                    }
+                    $(this).attr('data-spline-url', '/assets/documents/' + filename);
+                }
+            });
+            $('#parsing').find('[data-rive-url]').each(function() {
+                var url = $(this).attr('data-rive-url');
+                if (url.indexOf('documents/') !== -1) return;
+                var filenameMatch = url.match(/\/[^\/]*?([a-z0-9_-]+\.riv)$/i);
+                if (filenameMatch) {
+                    var filename = filenameMatch[1];
+                    if (window.externalAssets.every(function(s) { return s.filename !== filename; })) {
+                        window.externalAssets.push({ url: url, filename: filename });
+                    }
+                    $(this).attr('data-rive-url', '/assets/documents/' + filename);
+                }
+            });
+
             var phpOutput = $('#parsing').html().replace(/<!--\?/g, '<?').replace(/\?-->/g, '?>').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/=-->/g, '=>').replace(/--->/g, '->').replace('{{greaterthan}}', '>').replace(/="images\//g, '="/assets/images/').replace(/="documents\//g, '="/assets/documents/').replace(/ data-pagebanner="true"/g, ' <?= $interiorBannerStyles ?>');
 
             /* --- Create downloadable files --- */
@@ -1518,6 +1659,15 @@ window.onload = function(e) {
                     });
                 }
 
+                /* Add font files from zip upload */
+                if (window.zipAssets && window.zipAssets.fontFiles) {
+                    var fontsFolder = zip.folder('site/views/frontend/assets/fonts');
+                    Object.keys(window.zipAssets.fontFiles).forEach(function(filename) {
+                        fontsFolder.file(filename, window.zipAssets.fontFiles[filename]);
+                        hasFiles = true;
+                    });
+                }
+
                 /* Add CSS files from zip upload as .scss */
                 if (window.zipAssets && window.zipAssets.css) {
                     var scssFolder = zip.folder('site/views/frontend/assets/scss');
@@ -1528,18 +1678,100 @@ window.onload = function(e) {
                     });
                 }
 
-                /* Generate zip download link */
-                if (hasFiles) {
-                    zip.generateAsync({ type: 'blob' }).then(function(zipBlob) {
-                        var zipUrl = URL.createObjectURL(zipBlob);
-                        blockBlobUrls.push(zipUrl);
-                        $('#zip-download-button').html('<a href="' + zipUrl + '" download="cybflow.zip" class="button green w-button">Download Parsed Output (cybflow.zip)</a>');
-                        $('#view-files-output').html(downloadLinks);
-                    });
-                } else {
-                    $('#view-files-output').html(downloadLinks);
-                    $('#zip-download-button').html('');
+                /* Generate typography.scss with font imports */
+                var typographyContent = '';
+                if (window.fontImport) {
+                    typographyContent += "@import url('https://fonts.googleapis.com/css2?" + window.fontImport + "');\n";
                 }
+                if (window.typekitId) {
+                    typographyContent += '@import url("https://use.typekit.net/' + window.typekitId + '.css");\n';
+                }
+                if (typographyContent) {
+                    zip.folder('site/views/frontend/assets/scss').file('typography.scss', typographyContent);
+                    hasFiles = true;
+                }
+
+                /* Generate base.scss with imports for all scss files */
+                var scssBaseFolder = zip.folder('site/views/frontend/assets/scss');
+                var scssFiles = [];
+                scssBaseFolder.forEach(function(relativePath, file) {
+                    if (!file.dir && relativePath.indexOf('/') === -1 && relativePath !== 'base.scss') {
+                        scssFiles.push(relativePath);
+                    }
+                });
+                if (scssFiles.length > 0) {
+                    scssFiles.sort(function(a, b) {
+                        function order(f) {
+                            var name = f.replace(/\.scss$/, '');
+                            if (name === 'normalize') return 0;
+                            if (name === 'webflow') return 1;
+                            if (name.endsWith('.webflow')) return 2;
+                            if (name === 'custom_styles') return 4;
+                            return 3;
+                        }
+                        return order(a) - order(b);
+                    });
+                    var baseContent = '@import "typography";\n';
+                    scssFiles.forEach(function(filename) {
+                        var importName = filename.replace(/\.scss$/, '');
+                        baseContent += '@import "' + importName + '";\n';
+                    });
+                    baseContent += '// @import "custom_colors";\n';
+                    scssBaseFolder.file('base.scss', baseContent);
+                    hasFiles = true;
+                }
+
+                /* Generate custom-blocks-data.php */
+                if (blockBuilderData.trim()) {
+                    var formattedBlockData = blockBuilderData.replace(/^    /gm, '').replace(/\t/g, '    ');
+                    zip.folder('site/helpers/partials').file('custom-blocks-data.php', '<?php\n\n' + formattedBlockData);
+                    hasFiles = true;
+                }
+
+                /* Generate custom-amsd-field-data.php */
+                if (customFieldData.trim()) {
+                    var formattedFieldData = customFieldData.replace(/^    /gm, '').replace(/\t/g, '    ').trimEnd();
+                    var fieldFileContent = '<?php\n\nswitch($TYPE) {\n\n    ' + formattedFieldData + '\n}\n';
+                    zip.folder('site/helpers/partials').file('custom-amsd-field-data.php', fieldFileContent);
+                    hasFiles = true;
+                }
+
+                /* Generate webflow-globals.php */
+                if (window.wfSite || window.wfPage) {
+                    var globalsContent = "<?php\n\n";
+                    if (window.wfSite) globalsContent += "$WF_SITE = '" + window.wfSite + "';\n";
+                    if (window.wfPage) globalsContent += "$WF_PAGE = '" + window.wfPage + "';\n";
+                    zip.folder('site/config').file('webflow-globals.php', globalsContent);
+                    hasFiles = true;
+                }
+
+                /* Fetch spline assets and add to zip */
+                var splinePromises = window.externalAssets.map(function(asset) {
+                    return fetch(asset.url).then(function(response) {
+                        if (!response.ok) return null;
+                        return response.arrayBuffer();
+                    }).then(function(data) {
+                        if (data) {
+                            zip.folder('site/views/frontend/assets/documents').file(asset.filename, data);
+                            hasFiles = true;
+                        }
+                    }).catch(function() { /* skip failed fetches */ });
+                });
+
+                /* Generate zip download link (after spline fetches complete) */
+                Promise.all(splinePromises).then(function() {
+                    if (hasFiles) {
+                        zip.generateAsync({ type: 'blob' }).then(function(zipBlob) {
+                            var zipUrl = URL.createObjectURL(zipBlob);
+                            blockBlobUrls.push(zipUrl);
+                            $('#zip-download-button').html('<a href="' + zipUrl + '" download="cybflow.zip" class="button green w-button">Download Parsed Output (cybflow.zip)</a>');
+                            $('#view-files-output').html(downloadLinks);
+                        });
+                    } else {
+                        $('#view-files-output').html(downloadLinks);
+                        $('#zip-download-button').html('');
+                    }
+                });
 
             /* Replace printblocks and preloader markers with includes (after template files have been extracted) */
             phpOutput = phpOutput.replace(/\{\{PRINTBLOCKS_START\}\}[\s\S]*?\{\{PRINTBLOCKS_END\}\}/g, '<? include(FRONTEND . "/partials/print-blocks.php"); ?>');
